@@ -36,11 +36,23 @@ const Dimension = Object.freeze({
     equal: (dimA, dimB) => {
         let basisA = Object.getOwnPropertySymbols(dimA),
             basisB = Object.getOwnPropertySymbols(dimB);
-        if (basisA.length !== basisB.length) {
-            return false;
-        }
         for (let basis of basisA) {
-            if (dimA[basis] !== dimB[basis]) {
+            if (dimA[basis] === 0) {
+                if (dimB[basis] !== 0 && dimB[basis] !== undefined){
+                    return false;
+                }
+            }
+            else if (dimA[basis] !== dimB[basis]) {
+                return false;
+            }
+        }
+        for (let basis of basisB) {
+            if (dimB[basis] === 0) {
+                if (dimA[basis] !== 0 && dimA[basis] !== undefined){
+                    return false;
+                }
+            }
+            else if (dimB[basis] !== dimA[basis]) {
                 return false;
             }
         }
