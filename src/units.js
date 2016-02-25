@@ -284,6 +284,7 @@ class One extends Unit {
 class Synonym extends Unit {
     constructor(name, symbol, unit) {
         super(unit.dimension, name, symbol, unit.factor);
+        this.unit = unit;
     }
 }
 
