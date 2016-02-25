@@ -81,43 +81,43 @@ const Dimension = Object.freeze({
     mul: (dimA, dimB) => {
         let basisA = Object.getOwnPropertySymbols(dimA),
             basisB = Object.getOwnPropertySymbols(dimB);
-        let dim = {};
+        let newDim = {};
         for (let b of basisA) {
-            dim[b] = dimA[b];
+            newDim[b] = dimA[b];
         }
         for (let b of basisB) {
-            if (dim[b] === undefined) {
-                dim[b] = dimB[b];
+            if (newDim[b] === undefined) {
+                newDim[b] = dimB[b];
             }
             else {
-                dim[b] += dimB[b];
-                if (dim[b] === 0) {
-                    delete dim[b];
+                newDim[b] += dimB[b];
+                if (newDim[b] === 0) {
+                    delete newDim[b];
                 }
             }
         }
-        return dim;
+        return newDim;
     },
 
     div: (dimA, dimB) => {
         let basisA = Object.getOwnPropertySymbols(dimA),
             basisB = Object.getOwnPropertySymbols(dimB);
-        let dim = {};
+        let newDim = {};
         for (let b of basisA) {
-            dim[b] = dimA[b];
+            newDim[b] = dimA[b];
         }
         for (let b of basisB) {
-            if (dim[b] === undefined) {
-                dim[b] = -dimB[b];
+            if (newDim[b] === undefined) {
+                newDim[b] = -dimB[b];
             }
             else {
-                dim[b] -= dimB[b];
-                if (dim[b] === 0) {
-                    delete dim[b];
+                newDim[b] -= dimB[b];
+                if (newDim[b] === 0) {
+                    delete newDim[b];
                 }
             }
         }
-        return dim;
+        return newDim;
     }
 });
 
@@ -170,20 +170,20 @@ class Quantity {
         return new Quantity(x.value / y.value, Dimension.div(x.dimension, y.dimension));
     }
 
-    add(q) {
-        return Quantity.add(this, q);
+    add(x) {
+        return Quantity.add(this, x);
     }
 
-    sub(q) {
-        return Quantity.sub(this, q);
+    sub(x) {
+        return Quantity.sub(this, x);
     }
 
-    mul(q) {
-        return Quantity.mul(this, q);
+    mul(x) {
+        return Quantity.mul(this, x);
     }
 
-    div(q) {
-        return Quantity.div(this, q);
+    div(x) {
+        return Quantity.div(this, x);
     }
 
     in(unit) {
