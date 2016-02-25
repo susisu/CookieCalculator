@@ -170,6 +170,22 @@ class Quantity {
         return new Quantity(x.value / y.value, Dimension.div(x.dimension, y.dimension));
     }
 
+    add(q) {
+        return Quantity.add(this, q);
+    }
+
+    sub(q) {
+        return Quantity.sub(this, q);
+    }
+
+    mul(q) {
+        return Quantity.mul(this, q);
+    }
+
+    div(q) {
+        return Quantity.div(this, q);
+    }
+
     in(unit) {
         if (!Dimension.equal(this.dimension, unit.dimension)) {
             throw new Error("dimension mismatch");
