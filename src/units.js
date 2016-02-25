@@ -10,12 +10,15 @@ function endModule() {
         Dimension,
         Quantity,
         Unit,
+        Synonym,
+        Prefactored,
+        UnitMul,
+        UnitDiv,
         Prefix,
         Prefixed,
-
-        BaseUnit,
+        autoPrefix,
         SIPrefix,
-        autoPrefixedUnit
+        SIUnit
     });
 }
 
@@ -51,27 +54,69 @@ const Dimension = Object.freeze({
     equal: (dimA, dimB) => {
         let basisA = Object.getOwnPropertySymbols(dimA),
             basisB = Object.getOwnPropertySymbols(dimB);
-        for (let basis of basisA) {
-            if (dimA[basis] === 0) {
-                if (dimB[basis] !== 0 && dimB[basis] !== undefined){
+        for (let b of basisA) {
+            if (dimA[b] === 0) {
+                if (dimB[b] !== 0 && dimB[b] !== undefined){
                     return false;
                 }
             }
-            else if (dimA[basis] !== dimB[basis]) {
+            else if (dimA[b] !== dimB[b]) {
                 return false;
             }
         }
-        for (let basis of basisB) {
-            if (dimB[basis] === 0) {
-                if (dimA[basis] !== 0 && dimA[basis] !== undefined){
+        for (let b of basisB) {
+            if (dimB[b] === 0) {
+                if (dimA[b] !== 0 && dimA[b] !== undefined){
                     return false;
                 }
             }
-            else if (dimB[basis] !== dimA[basis]) {
+            else if (dimB[b] !== dimA[b]) {
                 return false;
             }
         }
         return true;
+    },
+
+    mul: (dimA, dimB) => {
+        let basisA = Object.getOwnPropertySymbols(dimA),
+            basisB = Object.getOwnPropertySymbols(dimB);
+        let dim = {};
+        for (let b of basisA) {
+            dim[b] = dimA[b];
+        }
+        for (let b of basisB) {
+            if (dim[b] === undefined) {
+                dim[b] = dimB[b];
+            }
+            else {
+                dim[b] += dimB[b];
+                if (dim[b] === 0) {
+                    delete dim[b];
+                }
+            }
+        }
+        return dim;
+    },
+
+    div: (dimA, dimB) => {
+        let basisA = Object.getOwnPropertySymbols(dimA),
+            basisB = Object.getOwnPropertySymbols(dimB);
+        let dim = {};
+        for (let b of basisA) {
+            dim[b] = dimA[b];
+        }
+        for (let b of basisB) {
+            if (dim[b] === undefined) {
+                dim[b] = -dimB[b];
+            }
+            else {
+                dim[b] -= dimB[b];
+                if (dim[b] === 0) {
+                    delete dim[b];
+                }
+            }
+        }
+        return dim;
     }
 });
 
@@ -95,17 +140,40 @@ const DIMENSION_ORDER = [
     Dimension.TIME
 ];
 
+
 class Quantity {
     constructor(value, dimension) {
         this.value      = value;
         this.dimension  = dimension;
     }
 
+    static add(x, y) {
+        if (!Dimension.equal(x.dimension, y.dimension)) {
+            throw new Error("dimension mismatch");
+        }
+        return new Quantity(x.value + y.value, x.dimension);
+    }
+
+    static sub(x, y) {
+        if (!Dimension.equal(x.dimension, y.dimension)) {
+            throw new Error("dimension mismatch");
+        }
+        return new Quantity(x.value - y.value, x.dimension);
+    }
+
+    static mul(x, y) {
+        return new Quantity(x.value * y.value, Dimension.mul(x.dimension, y.dimension));
+    }
+
+    static div(x, y) {
+        return new Quantity(x.value / y.value, Dimension.div(x.dimension, y.dimension));
+    }
+
     in(unit) {
         if (!Dimension.equal(this.dimension, unit.dimension)) {
             throw new Error("dimension mismatch");
         }
-        return this.value / unit.ratio;
+        return this.value / unit.factor;
     }
 
     toStringIn(unit) {
@@ -119,23 +187,74 @@ class Quantity {
         if (!Dimension.equal(this.dimension, unit.dimension)) {
             throw new Error("dimension mismatch");
         }
-        let prefixedUnit = autoPrefixedUnit(this, unit);
+        let prefixedUnit = autoPrefix(this, unit);
         return this.in(prefixedUnit).toString() + " " + prefixedUnit.symbol;
     }
 }
 
+
 class Unit {
-    constructor(dimension, name, symbol, ratio) {
+    constructor(dimension, name, symbol, factor) {
         this.dimension = dimension;
         this.name      = name;
         this.symbol    = symbol;
-        this.ratio     = ratio;
+        this.factor    = factor;
+    }
+
+    toString() {
+        return this.name;
     }
 
     value(value) {
-        return new Quantity(value * this.ratio, this.dimension);
+        return new Quantity(value * this.factor, this.dimension);
     }
 }
+
+class Synonym extends Unit {
+    constructor(name, symbol, unit) {
+        super(unit.dimension, name, symbol, unit.factor);
+    }
+}
+
+class Prefactored extends Unit {
+    constructor(prefactor, unit) {
+        super(
+            unit.dimension,
+            prefactor.toString() + unit.name,
+            prefactor.toString() + unit.symbol,
+            prefactor * unit.factor
+        );
+        this.prefactor = prefactor;
+        this.unit      = unit;
+    }
+}
+
+class UnitMul extends Unit {
+    constructor(unitA, unitB) {
+        super(
+            Dimension.mul(unitA.dimension, unitB.dimension),
+            (unitA instanceof UnitDiv ? "(" + unitA.name + ")" : unitA.name) + " " + unitB.name,
+            (unitA instanceof UnitDiv ? "(" + unitA.symbol + ")" : unitA.symbol) + "." + unitB.symbol,
+            unitA.factor * unitB.factor
+        );
+        this.unitA = unitA;
+        this.unitB = unitB;
+    }
+}
+
+class UnitDiv extends Unit {
+    constructor(unitA, unitB) {
+        super(
+            Dimension.div(unitA.dimension, unitB.dimension),
+            unitA.name + " per " + unitB.name,
+            unitA.symbol + "/" + unitB.symbol,
+            unitA.factor / unitB.factor
+        );
+        this.unitA = unitA;
+        this.unitB = unitB;
+    }
+}
+
 
 class Prefix {
     constructor(name, symbol, factor) {
@@ -145,43 +264,61 @@ class Prefix {
     }
 
     apply(unit) {
+        // TODO: Unit.apply(prefix) ?
+        // apply to the original unit
+        if (unit instanceof Prefactored) {
+            return new Prefactored(unit.prefactor, this.apply(unit.unit));
+        }
+        // apply to the leftmost unit
+        if (unit instanceof UnitMul) {
+            return new UnitMul(this.apply(unit.unitA), unit.unitB);
+        }
+        if (unit instanceof UnitDiv) {
+            return new UnitDiv(this.apply(unit.unitA), unit.unitB);
+        }
+        // auto reduction
+        if (unit instanceof Prefixed) {
+            let factor = this.factor * unit.prefix.factor;
+            let appPrefix = AUTO_PREFIX_LIST.find(prefix => prefix.factor <= factor);
+            if (appPrefix === undefined) {
+                appPrefix = AUTO_PREFIX_LIST[AUTO_PREFIX_LIST.length - 1];
+            }
+            if (appPrefix.name === "") {
+                return unit.unit;
+            }
+            return new Prefixed(appPrefix, unit.unit);
+        }
         return new Prefixed(this, unit);
     }
 }
 
-class Prefixed {
+class Prefixed extends Unit {
     constructor(prefix, unit) {
+        super(
+            unit.dimension,
+            prefix.name + unit.name,
+            prefix.symbol + unit.symbol,
+            prefix.factor * unit.factor
+        );
         this.prefix = prefix;
         this.unit   = unit;
     }
-
-    get dimension() {
-        return this.unit.dimension;
-    }
-
-    get name() {
-        return this.prefix.name + this.unit.name;
-    }
-
-    get symbol() {
-        return this.prefix.symbol + this.unit.symbol;
-    }
-
-    get ratio() {
-        return this.prefix.factor * this.unit.ratio;
-    }
-
-    value(value) {
-        return new Quantity(value * this.ratio, this.dimension);
-    }
 }
 
-const BaseUnit = Object.freeze({
-    NUMBER: new Unit({                       }, "number",    "", 1.0),
-    METER : new Unit({ [Dimension.LENGTH]: 1 },  "meter",   "m", 1.0),
-    GRAM  : new Unit({ [Dimension.MASS]  : 1 },   "gram",   "g", 1.0),
-    SECOND: new Unit({ [Dimension.TIME]  : 1 }, "second", "sec", 1.0)
-});
+function autoPrefix(quantity, unit) {
+    let value = quantity.in(unit);
+    if (value === 0.0) {
+        return unit;
+    }
+    let prefix = AUTO_PREFIX_LIST.find(prefix => prefix.factor <= value);
+    if (prefix === undefined) {
+        prefix = AUTO_PREFIX_LIST[AUTO_PREFIX_LIST.length - 1];
+    }
+    if (prefix.name === "") {
+        return unit;
+    }
+    return prefix.apply(unit);
+}
 
 const SIPrefix = Object.freeze({
     YOTTA: new Prefix("yotta",  "Y", 1e+24),
@@ -226,19 +363,28 @@ const AUTO_PREFIX_LIST = [
     SIPrefix.YOCTO
 ];
 
-function autoPrefixedUnit(quantity, unit) {
-    let value = quantity.in(unit);
-    if (value === 0.0) {
-        return unit;
-    }
-    let prefix = AUTO_PREFIX_LIST.find(prefix => prefix.factor <= value);
-    if (prefix === undefined) {
-        prefix = AUTO_PREFIX_LIST[AUTO_PREFIX_LIST.length - 1];
-    }
-    if (prefix.name === "") {
-        return unit;
-    }
-    return prefix.apply(unit);
-}
+const SIUnit = {
+    MOLE   : new Unit({ [Dimension.AMOUNT]     : 1 },    "mole", "mol", 6.022140857e+23),
+    GRAM   : new Unit({ [Dimension.MASS]       : 1 },    "gram",   "g", 1e-3),
+    METER  : new Unit({ [Dimension.LENGTH]     : 1 },   "meter",   "m", 1.0),
+    SECOND : new Unit({ [Dimension.TIME]       : 1 },  "second", "sec", 1.0),
+    KELVIN : new Unit({ [Dimension.TEMPERATURE]: 1 },  "kelvin",   "K", 1.0),
+    AMPERE : new Unit({ [Dimension.CURRENT]    : 1 },  "ampere",   "A", 1.0),
+    CANDELA: new Unit({ [Dimension.LUMINOUS]   : 1 }, "candela",  "cd", 1.0)
+};
+SIUnit.KILOGRAM = SIPrefix.KILO.apply(SIUnit.GRAM);
+SIUnit.NEWTON   = new Synonym("newton", "N",
+    new UnitDiv(
+        new UnitDiv(
+            new UnitMul(
+                SIUnit.KILOGRAM,
+                SIUnit.METER
+            ),
+            SIUnit.SECOND
+        ),
+        SIUnit.SECOND
+    )
+);
+Object.freeze(SIUnit);
 
 endModule();
