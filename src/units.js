@@ -239,7 +239,7 @@ class Unit {
             return this;
         }
         else if (unit instanceof Prefactored) {
-            return new Prefactored(unit.factor, new UnitMul(this, unit.unit));
+            return new Prefactored(unit.prefactor, new UnitMul(this, unit.unit));
         }
         else {
             return new UnitMul(this, unit);
@@ -251,7 +251,7 @@ class Unit {
             return this;
         }
         else if (unit instanceof Prefactored) {
-            return new Prefactored(1.0 / unit.factor, new UnitDiv(this, unit.unit));
+            return new Prefactored(1.0 / unit.prefactor, new UnitDiv(this, unit.unit));
         }
         else {
             return new UnitDiv(this, unit);
@@ -273,7 +273,7 @@ class One extends Unit {
             return this;
         }
         else if (unit instanceof Prefactored) {
-            return new Prefactored(1.0 / unit.factor, new UnitDiv(this, unit.unit));
+            return new Prefactored(1.0 / unit.prefactor, new UnitDiv(this, unit.unit));
         }
         else {
             return new UnitDiv(this, unit);
@@ -288,23 +288,23 @@ class Synonym extends Unit {
 }
 
 class Prefactored extends Unit {
-    constructor(factor, unit) {
+    constructor(prefactor, unit) {
         super(
             unit.dimension,
-            factor.toString() + unit.name,
-            factor.toString() + unit.symbol,
-            factor * unit.factor
+            prefactor.toString() + unit.name,
+            prefactor.toString() + unit.symbol,
+            prefactor * unit.factor
         );
-        this.factor = factor;
-        this.unit   = unit;
+        this.prefactor = prefactor;
+        this.unit      = unit;
     }
 
     addPrefix(prefix) {
-        return new Prefactored(this.factor, this.unit.addPrefix(prefix));
+        return new Prefactored(this.prefactor, this.unit.addPrefix(prefix));
     }
 
     scale(factor) {
-        return new Prefactored(factor * this.factor, this.unit);
+        return new Prefactored(factor * this.prefactor, this.unit);
     }
 
     mul(unit) {
@@ -312,10 +312,10 @@ class Prefactored extends Unit {
             return this;
         }
         else if (unit instanceof Prefactored) {
-            return new Prefactored(this.factor * unit.factor, new UnitMul(this.unit, unit.unit));
+            return new Prefactored(this.prefactor * unit.prefactor, new UnitMul(this.unit, unit.unit));
         }
         else {
-            return new Prefactored(this.factor, UnitMul(this.unit, unit));
+            return new Prefactored(this.prefactor, UnitMul(this.unit, unit));
         }
     }
 
@@ -324,10 +324,10 @@ class Prefactored extends Unit {
             return this;
         }
         else if (unit instanceof Prefactored) {
-            return new Prefactored(this.factor / unit.factor, new UnitDiv(this.unit, unit.unit));
+            return new Prefactored(this.prefactor / unit.prefactor, new UnitDiv(this.unit, unit.unit));
         }
         else {
-            return new Prefactored(this.factor, UnitDiv(this.unit, unit));
+            return new Prefactored(this.prefactor, UnitDiv(this.unit, unit));
         }
     }
 }
