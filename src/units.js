@@ -208,6 +208,10 @@ class Unit {
     value(value) {
         return new Quantity(value * this.factor, this.dimension);
     }
+
+    addPrefix(prefix) {
+        return new Prefixed(prefix, this);
+    }
 }
 
 class Synonym extends Unit {
@@ -217,15 +221,20 @@ class Synonym extends Unit {
 }
 
 class Prefactored extends Unit {
-    constructor(prefactor, unit) {
+    constructor(factor, unit) {
         super(
             unit.dimension,
-            prefactor.toString() + unit.name,
-            prefactor.toString() + unit.symbol,
-            prefactor * unit.factor
+            factor.toString() + unit.name,
+            factor.toString() + unit.symbol,
+            factor * unit.factor
         );
-        this.prefactor = prefactor;
-        this.unit      = unit;
+        this.factor = factor;
+        this.unit   = unit;
+    }
+
+    addPrefix(prefix) {
+        return new Prefactored(this.factor, this.unit.addPrefix(prefix));
+    }
     }
 }
 
@@ -240,6 +249,10 @@ class UnitMul extends Unit {
         this.unitA = unitA;
         this.unitB = unitB;
     }
+
+    addPrefix(prefix) {
+        return new UnitMul(this.unitA.addPrefix(prefix), this.unitB);
+    }
 }
 
 class UnitDiv extends Unit {
@@ -253,6 +266,10 @@ class UnitDiv extends Unit {
         this.unitA = unitA;
         this.unitB = unitB;
     }
+
+    addPrefix(prefix) {
+        return new UnitDiv(this.unitA.addPrefix(prefix), this.unitB);
+    }
 }
 
 
@@ -263,32 +280,8 @@ class Prefix {
         this.factor = factor;
     }
 
-    apply(unit) {
-        // TODO: Unit.apply(prefix) ?
-        // apply to the original unit
-        if (unit instanceof Prefactored) {
-            return new Prefactored(unit.prefactor, this.apply(unit.unit));
-        }
-        // apply to the leftmost unit
-        if (unit instanceof UnitMul) {
-            return new UnitMul(this.apply(unit.unitA), unit.unitB);
-        }
-        if (unit instanceof UnitDiv) {
-            return new UnitDiv(this.apply(unit.unitA), unit.unitB);
-        }
-        // auto reduction
-        if (unit instanceof Prefixed) {
-            let factor = this.factor * unit.prefix.factor;
-            let appPrefix = AUTO_PREFIX_LIST.find(prefix => prefix.factor <= factor);
-            if (appPrefix === undefined) {
-                appPrefix = AUTO_PREFIX_LIST[AUTO_PREFIX_LIST.length - 1];
-            }
-            if (appPrefix.name === "") {
-                return unit.unit;
-            }
-            return new Prefixed(appPrefix, unit.unit);
-        }
-        return new Prefixed(this, unit);
+    add(unit) {
+        return unit.addPrefix(this);
     }
 }
 
@@ -302,6 +295,18 @@ class Prefixed extends Unit {
         );
         this.prefix = prefix;
         this.unit   = unit;
+    }
+
+    addPrefix(prefix) {
+        let factor = prefix.factor * this.prefix.factor;
+        let appPrefix = AUTO_PREFIX_LIST.find(prefix => prefix.factor <= factor);
+        if (appPrefix === undefined) {
+            appPrefix = AUTO_PREFIX_LIST[AUTO_PREFIX_LIST.length - 1];
+        }
+        if (appPrefix.name === "") {
+            return this.unit;
+        }
+        return new Prefixed(appPrefix, this.unit);
     }
 }
 
@@ -317,7 +322,7 @@ function autoPrefix(quantity, unit) {
     if (prefix.name === "") {
         return unit;
     }
-    return prefix.apply(unit);
+    return unit.addPrefix(prefix);
 }
 
 const SIPrefix = Object.freeze({
@@ -372,7 +377,7 @@ const SIUnit = {
     AMPERE : new Unit({ [Dimension.CURRENT]    : 1 },  "ampere",   "A", 1.0),
     CANDELA: new Unit({ [Dimension.LUMINOUS]   : 1 }, "candela",  "cd", 1.0)
 };
-SIUnit.KILOGRAM = SIPrefix.KILO.apply(SIUnit.GRAM);
+SIUnit.KILOGRAM = SIPrefix.KILO.add(SIUnit.GRAM);
 SIUnit.NEWTON   = new Synonym("newton", "N",
     new UnitDiv(
         new UnitDiv(
