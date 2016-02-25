@@ -18,6 +18,7 @@ function endModule() {
         Prefixed,
         autoPrefix,
         SIPrefix,
+        ONE,
         SIUnit
     });
 }
@@ -40,12 +41,12 @@ const Dimension = Object.freeze({
     CURRENT    : Symbol("current"),
     LUMINOUS   : Symbol("luminous"),
 
-    toString: (dimension) => {
-        let basis = Object.getOwnPropertySymbols(dimension);
+    toString: (dim) => {
+        let basis = Object.getOwnPropertySymbols(dim);
         let str   = "";
         for (let b of DIMENSION_ORDER) {
-            if (dimension[b] !== undefined && dimension[b] !== 0) {
-                str += DIMENSION_SYMBOL[b] + dimension[b].toString();
+            if (dim[b] !== undefined && dim[b] !== 0) {
+                str += DIMENSION_SYMBOL[b] + dim[b].toString();
             }
         }
         return str;
@@ -212,6 +213,56 @@ class Unit {
     addPrefix(prefix) {
         return new Prefixed(prefix, this);
     }
+
+    scale(factor) {
+        return new Prefactored(factor, this);
+    }
+
+    mul(unit) {
+        if (unit instanceof One) {
+            return this;
+        }
+        else if (unit instanceof Prefactored) {
+            return new Prefactored(unit.factor, new UnitMul(this, unit.unit));
+        }
+        else {
+            return new UnitMul(this, unit);
+        }
+    }
+
+    div(unit) {
+        if (unit instanceof One) {
+            return this;
+        }
+        else if (unit instanceof Prefactored) {
+            return new Prefactored(1.0 / unit.factor, new UnitDiv(this, unit.unit));
+        }
+        else {
+            return new UnitDiv(this, unit);
+        }
+    }
+}
+
+class One extends Unit {
+    constructor() {
+        super({}, "1", "", 1.0);
+    }
+
+    mul(unit) {
+        return unit;
+    }
+
+    div(unit) {
+        if (unit instanceof One) {
+            return this;
+        }
+        else if (unit instanceof Prefactored) {
+            return new Prefactored(1.0 / unit.factor, new UnitDiv(this, unit.unit));
+        }
+        else {
+            return new UnitDiv(this, unit);
+        }
+    }
 }
 
 class Synonym extends Unit {
@@ -235,6 +286,33 @@ class Prefactored extends Unit {
     addPrefix(prefix) {
         return new Prefactored(this.factor, this.unit.addPrefix(prefix));
     }
+
+    scale(factor) {
+        return new Prefactored(factor * this.factor, this.unit);
+    }
+
+    mul(unit) {
+        if (unit instanceof One) {
+            return this;
+        }
+        else if (unit instanceof Prefactored) {
+            return new Prefactored(this.factor * unit.factor, new UnitMul(this.unit, unit.unit));
+        }
+        else {
+            return new Prefactored(this.factor, UnitMul(this.unit, unit));
+        }
+    }
+
+    div(unit) {
+        if (unit instanceof One) {
+            return this;
+        }
+        else if (unit instanceof Prefactored) {
+            return new Prefactored(this.factor / unit.factor, new UnitDiv(this.unit, unit.unit));
+        }
+        else {
+            return new Prefactored(this.factor, UnitDiv(this.unit, unit));
+        }
     }
 }
 
@@ -368,6 +446,8 @@ const AUTO_PREFIX_LIST = [
     SIPrefix.YOCTO
 ];
 
+const ONE = new One();
+
 const SIUnit = {
     MOLE   : new Unit({ [Dimension.AMOUNT]     : 1 },    "mole", "mol", 6.022140857e+23),
     GRAM   : new Unit({ [Dimension.MASS]       : 1 },    "gram",   "g", 1e-3),
@@ -379,16 +459,7 @@ const SIUnit = {
 };
 SIUnit.KILOGRAM = SIPrefix.KILO.add(SIUnit.GRAM);
 SIUnit.NEWTON   = new Synonym("newton", "N",
-    new UnitDiv(
-        new UnitDiv(
-            new UnitMul(
-                SIUnit.KILOGRAM,
-                SIUnit.METER
-            ),
-            SIUnit.SECOND
-        ),
-        SIUnit.SECOND
-    )
+        SIUnit.KILOGRAM.mul(SIUnit.METER).div(SIUnit.SECOND).div(SIUnit.SECOND)
 );
 Object.freeze(SIUnit);
 
