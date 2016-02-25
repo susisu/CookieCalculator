@@ -29,9 +29,24 @@ function endModule() {
         }
 */
 const Dimension = Object.freeze({
-    MASS  : Symbol("mass"),
-    LENGTH: Symbol("length"),
-    TIME  : Symbol("time"),
+    AMOUNT     : Symbol("amount"),
+    MASS       : Symbol("mass"),
+    LENGTH     : Symbol("length"),
+    TIME       : Symbol("time"),
+    TEMPERATURE: Symbol("temperature"),
+    CURRENT    : Symbol("current"),
+    LUMINOUS   : Symbol("luminous"),
+
+    toString: (dimension) => {
+        let basis = Object.getOwnPropertySymbols(dimension);
+        let str   = "";
+        for (let b of DIMENSION_ORDER) {
+            if (dimension[b] !== undefined && dimension[b] !== 0) {
+                str += DIMENSION_SYMBOL[b] + dimension[b].toString();
+            }
+        }
+        return str;
+    },
 
     equal: (dimA, dimB) => {
         let basisA = Object.getOwnPropertySymbols(dimA),
@@ -59,6 +74,26 @@ const Dimension = Object.freeze({
         return true;
     }
 });
+
+const DIMENSION_SYMBOL = Object.freeze({
+    [Dimension.AMOUNT]     : "N",
+    [Dimension.MASS]       : "M",
+    [Dimension.LENGTH]     : "L",
+    [Dimension.TIME]       : "T",
+    [Dimension.TEMPERATURE]: "Θ",
+    [Dimension.CURRENT]    : "I",
+    [Dimension.LUMINOUS]   : "J"
+});
+
+const DIMENSION_ORDER = [
+    Dimension.MASS,
+    Dimension.LENGTH,
+    Dimension.CURRENT,
+    Dimension.LUMINOUS,
+    Dimension.AMOUNT,
+    Dimension.TEMPERATURE,
+    Dimension.TIME
+];
 
 class Quantity {
     constructor(value, dimension) {
