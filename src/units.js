@@ -468,7 +468,7 @@ const ONE = new One();
 const SIUnit = {
     MOLE   : new Unit({ [Dimension.AMOUNT]     : 1 },    "mole", "mol", 1.0),
     GRAM   : new Unit({ [Dimension.MASS]       : 1 },    "gram",   "g", 1e-3),
-    METER  : new Unit({ [Dimension.LENGTH]     : 1 },   "meter",   "m", 1.0),
+    METRE  : new Unit({ [Dimension.LENGTH]     : 1 },   "meter",   "m", 1.0),
     SECOND : new Unit({ [Dimension.TIME]       : 1 },  "second",   "s", 1.0),
     KELVIN : new Unit({ [Dimension.TEMPERATURE]: 1 },  "kelvin",   "K", 1.0),
     AMPERE : new Unit({ [Dimension.CURRENT]    : 1 },  "ampere",   "A", 1.0),
