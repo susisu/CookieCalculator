@@ -449,7 +449,7 @@ const AUTO_PREFIX_LIST = [
 const ONE = new One();
 
 const SIUnit = {
-    MOLE   : new Unit({ [Dimension.AMOUNT]     : 1 },    "mole", "mol", 6.022140857e+23),
+    MOLE   : new Unit({ [Dimension.AMOUNT]     : 1 },    "mole", "mol", 1.0),
     GRAM   : new Unit({ [Dimension.MASS]       : 1 },    "gram",   "g", 1e-3),
     METER  : new Unit({ [Dimension.LENGTH]     : 1 },   "meter",   "m", 1.0),
     SECOND : new Unit({ [Dimension.TIME]       : 1 },  "second", "sec", 1.0),
