@@ -201,6 +201,17 @@ class Quantity {
         return this.value / unit.factor;
     }
 
+    inAutoPrefixed(unit) {
+        if (!Dimension.equal(this.dimension, unit.dimension)) {
+            throw new Error("dimension mismatch");
+        }
+        let prefixedUnit = unit.autoPrefixFor(this);
+        return {
+            value: this.in(prefixedUnit),
+            unit : prefixedUnit
+        };
+    }
+
     toStringIn(unit) {
         if (!Dimension.equal(this.dimension, unit.dimension)) {
             throw new Error("dimension mismatch");
