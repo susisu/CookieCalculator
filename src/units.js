@@ -16,7 +16,6 @@ function endModule() {
         UnitDiv,
         Prefix,
         Prefixed,
-        autoPrefix,
         SIPrefix,
         ONE,
         SIUnit
@@ -118,6 +117,15 @@ const Dimension = Object.freeze({
             }
         }
         return newDim;
+    },
+
+    pow: (dim, power) => {
+        let basis = Object.getOwnPropertySymbols(dim);
+        let newDim = {};
+        for (let b of basis) {
+            newDim[b] = dim[b] * power;
+        }
+        return newDim;
     }
 });
 
@@ -144,8 +152,8 @@ const DIMENSION_ORDER = [
 
 class Quantity {
     constructor(value, dimension) {
-        this.value      = value;
-        this.dimension  = dimension;
+        this.value     = value;
+        this.dimension = dimension;
     }
 
     static add(x, y) {
@@ -204,7 +212,7 @@ class Quantity {
         if (!Dimension.equal(this.dimension, unit.dimension)) {
             throw new Error("dimension mismatch");
         }
-        let prefixedUnit = autoPrefix(this, unit);
+        let prefixedUnit = unit.autoPrefixFor(this);
         return this.in(prefixedUnit).toString() + " " + prefixedUnit.symbol;
     }
 }
@@ -230,6 +238,21 @@ class Unit {
         return new Prefixed(prefix, this);
     }
 
+    autoPrefixFor(quantity) {
+        let value = quantity.in(this);
+        if (value === 0.0) {
+            return this;
+        }
+        let prefix = AUTO_PREFIX_LIST.find(prefix => prefix.factor <= value);
+        if (prefix === undefined) {
+            prefix = AUTO_PREFIX_LIST[AUTO_PREFIX_LIST.length - 1];
+        }
+        if (prefix.name === "") {
+            return this;
+        }
+        return this.addPrefix(prefix);
+    }
+
     scale(factor) {
         return new Prefactored(factor, this);
     }
@@ -239,7 +262,7 @@ class Unit {
             return this;
         }
         else if (unit instanceof Prefactored) {
-            return new Prefactored(unit.prefactor, new UnitMul(this, unit.unit));
+            return new Prefactored(unit.prefactor, this.mul(unit.unit));
         }
         else {
             return new UnitMul(this, unit);
@@ -251,11 +274,15 @@ class Unit {
             return this;
         }
         else if (unit instanceof Prefactored) {
-            return new Prefactored(1.0 / unit.prefactor, new UnitDiv(this, unit.unit));
+            return new Prefactored(1.0 / unit.prefactor, this.div(unit.unit));
         }
         else {
             return new UnitDiv(this, unit);
         }
+    }
+
+    pow(power) {
+        return new UnitPow(this, power);
     }
 }
 
@@ -273,11 +300,15 @@ class One extends Unit {
             return this;
         }
         else if (unit instanceof Prefactored) {
-            return new Prefactored(1.0 / unit.prefactor, new UnitDiv(this, unit.unit));
+            return new Prefactored(1.0 / unit.prefactor, this.div(unit.unit));
         }
         else {
-            return new UnitDiv(this, unit);
+            return unit.pow(-1);
         }
+    }
+
+    pow(power) {
+        return this;
     }
 }
 
@@ -331,6 +362,10 @@ class Prefactored extends Unit {
             return new Prefactored(this.prefactor, UnitDiv(this.unit, unit));
         }
     }
+
+    pow(power) {
+        return new Prefactored(Math.pow(this.prefactor, power), new UnitPow(this.unit, power));
+    }
 }
 
 class UnitMul extends Unit {
@@ -348,6 +383,10 @@ class UnitMul extends Unit {
     addPrefix(prefix) {
         return new UnitMul(this.unitA.addPrefix(prefix), this.unitB);
     }
+
+    pow(power) {
+        return new UnitMul(this.unitA.pow(power), this.unitB.pow(power));
+    }
 }
 
 class UnitDiv extends Unit {
@@ -364,6 +403,46 @@ class UnitDiv extends Unit {
 
     addPrefix(prefix) {
         return new UnitDiv(this.unitA.addPrefix(prefix), this.unitB);
+    }
+
+    pow(power) {
+        return new UnitDiv(this.unitA.pow(power), this.unitB.pow(power));
+    }
+}
+
+class UnitPow extends Unit {
+    constructor(unit, power) {
+        super(
+            Dimension.pow(unit.dimension, power),
+            unit.name + "^" + power.toString(),
+            unit.symbol + "^" + power.toString(),
+            Math.pow(unit.factor, power)
+        );
+        this.unit  = unit;
+        this.power = power;
+    }
+
+    addPrefix(prefix) {
+        return new UnitPow(this.unit.addPrefix(prefix), this.power);
+    }
+
+    autoPrefixFor(quantity) {
+        let value = quantity.in(this);
+        if (value === 0.0) {
+            return this;
+        }
+        let prefix = AUTO_PREFIX_LIST.find(prefix => Math.pow(prefix.factor, this.power) <= value);
+        if (prefix === undefined) {
+            prefix = AUTO_PREFIX_LIST[AUTO_PREFIX_LIST.length - 1];
+        }
+        if (prefix.name === "") {
+            return this;
+        }
+        return this.addPrefix(prefix);
+    }
+
+    pow(power) {
+        return new UnitPow(this.unit, this.power * power);
     }
 }
 
@@ -403,21 +482,6 @@ class Prefixed extends Unit {
         }
         return new Prefixed(appPrefix, this.unit);
     }
-}
-
-function autoPrefix(quantity, unit) {
-    let value = quantity.in(unit);
-    if (value === 0.0) {
-        return unit;
-    }
-    let prefix = AUTO_PREFIX_LIST.find(prefix => prefix.factor <= value);
-    if (prefix === undefined) {
-        prefix = AUTO_PREFIX_LIST[AUTO_PREFIX_LIST.length - 1];
-    }
-    if (prefix.name === "") {
-        return unit;
-    }
-    return unit.addPrefix(prefix);
 }
 
 const SIPrefix = Object.freeze({
