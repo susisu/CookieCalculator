@@ -41,12 +41,14 @@ const Dimension = Object.freeze({
     LUMINOUS   : Symbol("luminous"),
 
     toString: (dim) => {
-        let basis = Object.getOwnPropertySymbols(dim);
-        let str   = "";
+        let str = "";
         for (let b of DIMENSION_ORDER) {
             if (dim[b] !== undefined && dim[b] !== 0) {
                 str += DIMENSION_SYMBOL[b] + dim[b].toString();
             }
+        }
+        if (str === "") {
+            str = "1";
         }
         return str;
     },
