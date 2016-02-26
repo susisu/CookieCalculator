@@ -178,6 +178,13 @@ class Quantity {
         return new Quantity(x.value / y.value, Dimension.div(x.dimension, y.dimension));
     }
 
+    static pow(x, y) {
+        if (!Dimension.equal(y.dimension, {})) {
+            throw new Error("dimension mismatch");
+        }
+        return new Quantity(Math.pow(x.value, y.value), Dimension.pow(x.dimension, y.value));
+    }
+
     add(x) {
         return Quantity.add(this, x);
     }
@@ -192,6 +199,10 @@ class Quantity {
 
     div(x) {
         return Quantity.div(this, x);
+    }
+
+    pow(x) {
+        return Quantity.pow(this, x);
     }
 
     in(unit) {
