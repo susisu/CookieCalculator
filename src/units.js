@@ -513,7 +513,12 @@ class Prefixed extends UnitBase {
         if (appPrefix.name === "") {
             return this.unit;
         }
-        return new Prefixed(appPrefix, this.unit);
+        if (factor / appPrefix.factor !== 1.0) {
+            return new Prefactored(factor / appPrefix.factor, new Prefixed(appPrefix, this.unit));
+        }
+        else {
+            return new Prefixed(appPrefix, this.unit);
+        }
     }
 }
 
