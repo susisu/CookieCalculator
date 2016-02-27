@@ -244,12 +244,13 @@ class Quantity {
 }
 
 
-class Unit {
-    constructor(dimension, name, symbol, factor) {
-        this.dimension = dimension;
-        this.name      = name;
-        this.symbol    = symbol;
-        this.factor    = factor;
+class UnitBase {
+    constructor(dimension, name, symbol, factor, prefixPower) {
+        this.dimension   = dimension;
+        this.name        = name;
+        this.symbol      = symbol;
+        this.factor      = factor;
+        this.prefixPower = prefixPower;
     }
 
     toString() {
@@ -269,7 +270,7 @@ class Unit {
         if (value === 0.0) {
             return this;
         }
-        let prefix = AUTO_PREFIX_LIST.find(prefix => prefix.factor <= value);
+        let prefix = AUTO_PREFIX_LIST.find(prefix => Math.pow(prefix.factor, this.prefixPower) <= value);
         if (prefix === undefined) {
             prefix = AUTO_PREFIX_LIST[AUTO_PREFIX_LIST.length - 1];
         }
@@ -312,9 +313,15 @@ class Unit {
     }
 }
 
-class One extends Unit {
+class Unit extends UnitBase {
+    constructor(dimension, name, symbol, factor) {
+        super(dimension, name, symbol, factor, 1);
+    }
+}
+
+class One extends UnitBase {
     constructor() {
-        super({}, "1", "", 1.0);
+        super({}, "1", "", 1.0, 1);
     }
 
     mul(unit) {
@@ -338,20 +345,21 @@ class One extends Unit {
     }
 }
 
-class Synonym extends Unit {
+class Synonym extends UnitBase {
     constructor(name, symbol, unit) {
-        super(unit.dimension, name, symbol, unit.factor);
+        super(unit.dimension, name, symbol, unit.factor, 1);
         this.unit = unit;
     }
 }
 
-class Prefactored extends Unit {
+class Prefactored extends UnitBase {
     constructor(prefactor, unit) {
         super(
             unit.dimension,
             prefactor.toString() + unit.name,
             prefactor.toString() + unit.symbol,
-            prefactor * unit.factor
+            prefactor * unit.factor,
+            unit.prefixPower
         );
         this.prefactor = prefactor;
         this.unit      = unit;
@@ -394,13 +402,14 @@ class Prefactored extends Unit {
     }
 }
 
-class UnitMul extends Unit {
+class UnitMul extends UnitBase {
     constructor(unitA, unitB) {
         super(
             Dimension.mul(unitA.dimension, unitB.dimension),
             (unitA instanceof UnitDiv ? "(" + unitA.name + ")" : unitA.name) + " " + unitB.name,
             (unitA instanceof UnitDiv ? "(" + unitA.symbol + ")" : unitA.symbol) + "." + unitB.symbol,
-            unitA.factor * unitB.factor
+            unitA.factor * unitB.factor,
+            unitA.prefixPower
         );
         this.unitA = unitA;
         this.unitB = unitB;
@@ -415,13 +424,14 @@ class UnitMul extends Unit {
     }
 }
 
-class UnitDiv extends Unit {
+class UnitDiv extends UnitBase {
     constructor(unitA, unitB) {
         super(
             Dimension.div(unitA.dimension, unitB.dimension),
             unitA.name + " per " + unitB.name,
             unitA.symbol + "/" + unitB.symbol,
-            unitA.factor / unitB.factor
+            unitA.factor / unitB.factor,
+            unitA.prefixPower
         );
         this.unitA = unitA;
         this.unitB = unitB;
@@ -436,13 +446,14 @@ class UnitDiv extends Unit {
     }
 }
 
-class UnitPow extends Unit {
+class UnitPow extends UnitBase {
     constructor(unit, power) {
         super(
             Dimension.pow(unit.dimension, power),
             unit.name + "^" + power.toString(),
             unit.symbol + "^" + power.toString(),
-            Math.pow(unit.factor, power)
+            Math.pow(unit.factor, power),
+            unit.prefixPower * power
         );
         this.unit  = unit;
         this.power = power;
@@ -450,21 +461,6 @@ class UnitPow extends Unit {
 
     addPrefix(prefix) {
         return new UnitPow(this.unit.addPrefix(prefix), this.power);
-    }
-
-    autoPrefixFor(quantity) {
-        let value = quantity.in(this);
-        if (value === 0.0) {
-            return this;
-        }
-        let prefix = AUTO_PREFIX_LIST.find(prefix => Math.pow(prefix.factor, this.power) <= value);
-        if (prefix === undefined) {
-            prefix = AUTO_PREFIX_LIST[AUTO_PREFIX_LIST.length - 1];
-        }
-        if (prefix.name === "") {
-            return this;
-        }
-        return this.addPrefix(prefix);
     }
 
     pow(power) {
@@ -485,13 +481,14 @@ class Prefix {
     }
 }
 
-class Prefixed extends Unit {
+class Prefixed extends UnitBase {
     constructor(prefix, unit) {
         super(
             unit.dimension,
             prefix.name + unit.name,
             prefix.symbol + unit.symbol,
-            prefix.factor * unit.factor
+            prefix.factor * unit.factor,
+            unit.prefixPower
         );
         this.prefix = prefix;
         this.unit   = unit;
