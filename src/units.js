@@ -366,8 +366,8 @@ class Prefactored extends UnitBase {
     constructor(prefactor, unit) {
         super(
             unit.dimension,
-            prefactor.toString() + unit.name,
-            prefactor.toString() + unit.symbol,
+            prefactor.toString() + " " + unit.name,
+            "* " + prefactor.toString() + " " + unit.symbol,
             prefactor * unit.factor,
             unit.prefixPower
         );
