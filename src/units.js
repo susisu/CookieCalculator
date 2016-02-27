@@ -86,16 +86,20 @@ const Dimension = Object.freeze({
             basisB = Object.getOwnPropertySymbols(dimB);
         let newDim = {};
         for (let b of basisA) {
-            newDim[b] = dimA[b];
+            if (dimA[b] !== 0) {
+                newDim[b] = dimA[b];
+            }
         }
         for (let b of basisB) {
-            if (newDim[b] === undefined) {
-                newDim[b] = dimB[b];
-            }
-            else {
-                newDim[b] += dimB[b];
-                if (newDim[b] === 0) {
-                    delete newDim[b];
+            if (dimB[b] !== 0) {
+                if (newDim[b] === undefined) {
+                    newDim[b] = dimB[b];
+                }
+                else {
+                    newDim[b] += dimB[b];
+                    if (newDim[b] === 0) {
+                        delete newDim[b];
+                    }
                 }
             }
         }
@@ -107,16 +111,20 @@ const Dimension = Object.freeze({
             basisB = Object.getOwnPropertySymbols(dimB);
         let newDim = {};
         for (let b of basisA) {
-            newDim[b] = dimA[b];
+            if (dimA[b] !== 0) {
+                newDim[b] = dimA[b];
+            }
         }
         for (let b of basisB) {
-            if (newDim[b] === undefined) {
-                newDim[b] = -dimB[b];
-            }
-            else {
-                newDim[b] -= dimB[b];
-                if (newDim[b] === 0) {
-                    delete newDim[b];
+            if (dimB[b] !== 0) {
+                if (newDim[b] === undefined) {
+                    newDim[b] = -dimB[b];
+                }
+                else {
+                    newDim[b] -= dimB[b];
+                    if (newDim[b] === 0) {
+                        delete newDim[b];
+                    }
                 }
             }
         }
@@ -127,7 +135,9 @@ const Dimension = Object.freeze({
         let basis = Object.getOwnPropertySymbols(dim);
         let newDim = {};
         for (let b of basis) {
-            newDim[b] = dim[b] * power;
+            if (dim[b] !== 0) {
+                newDim[b] = dim[b] * power;
+            }
         }
         return newDim;
     }
