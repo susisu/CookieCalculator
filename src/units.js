@@ -9,6 +9,7 @@ function endModule() {
     module.exports = Object.freeze({
         Dimension,
         Quantity,
+        UnitBase,
         Unit,
         One,
         Synonym,
