@@ -8,6 +8,7 @@
 function endModule() {
     module.exports = Object.freeze({
         Dimension,
+        DimensionalError,
         Quantity,
         UnitBase,
         Unit,
@@ -165,6 +166,13 @@ const DIMENSION_ORDER = [
 ];
 
 
+class DimensionalError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = this.constructor.name;
+    }
+}
+
 class Quantity {
     constructor(value, dimension) {
         this.value     = value;
@@ -173,14 +181,18 @@ class Quantity {
 
     static add(x, y) {
         if (!Dimension.equal(x.dimension, y.dimension)) {
-            throw new Error("dimension mismatch");
+            throw new DimensionalError(
+                "cannot add " + Dimension.toString(y.dimension) + " to " + Dimension.toString(x.dimension)
+            );
         }
         return new Quantity(x.value + y.value, x.dimension);
     }
 
     static sub(x, y) {
         if (!Dimension.equal(x.dimension, y.dimension)) {
-            throw new Error("dimension mismatch");
+            throw new DimensionalError(
+                "cannot subtract " + Dimension.toString(y.dimension) + " from " + Dimension.toString(x.dimension)
+            );
         }
         return new Quantity(x.value - y.value, x.dimension);
     }
@@ -195,7 +207,9 @@ class Quantity {
 
     static pow(x, y) {
         if (!Dimension.equal(y.dimension, {})) {
-            throw new Error("dimension mismatch");
+            throw new DimensionalError(
+                "cannot raise to " + Dimension.toString(y.dimension)
+            );
         }
         return new Quantity(Math.pow(x.value, y.value), Dimension.pow(x.dimension, y.value));
     }
@@ -222,14 +236,18 @@ class Quantity {
 
     in(unit) {
         if (!Dimension.equal(this.dimension, unit.dimension)) {
-            throw new Error("dimension mismatch");
+            throw new DimensionalError(
+                "cannot convert " + Dimension.toString(this.dimension) + " into " + Dimension.toString(unit.dimension)
+            );
         }
         return this.value / unit.factor;
     }
 
     inAutoPrefixed(unit) {
         if (!Dimension.equal(this.dimension, unit.dimension)) {
-            throw new Error("dimension mismatch");
+            throw new DimensionalError(
+                "cannot convert " + Dimension.toString(this.dimension) + " into " + Dimension.toString(unit.dimension)
+            );
         }
         let prefixedUnit = unit.autoPrefixFor(this);
         return {
@@ -240,14 +258,18 @@ class Quantity {
 
     toStringIn(unit) {
         if (!Dimension.equal(this.dimension, unit.dimension)) {
-            throw new Error("dimension mismatch");
+            throw new DimensionalError(
+                "cannot convert " + Dimension.toString(this.dimension) + " into " + Dimension.toString(unit.dimension)
+            );
         }
         return this.in(unit).toString() + " " + unit.symbol;
     }
 
     toStringInAutoPrefixed(unit) {
         if (!Dimension.equal(this.dimension, unit.dimension)) {
-            throw new Error("dimension mismatch");
+            throw new DimensionalError(
+                "cannot convert " + Dimension.toString(this.dimension) + " into " + Dimension.toString(unit.dimension)
+            );
         }
         let prefixedUnit = unit.autoPrefixFor(this);
         return this.in(prefixedUnit).toString() + " " + prefixedUnit.symbol;
