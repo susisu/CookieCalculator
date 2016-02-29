@@ -600,8 +600,72 @@ const SIUnit = {
     CANDELA: new Unit({ [Dimension.LUMINOUS]   : 1 }, "candela",  "cd", 1.0)
 };
 SIUnit.KILOGRAM = SIPrefix.KILO.add(SIUnit.GRAM);
-SIUnit.NEWTON   = new Synonym("newton", "N",
-        SIUnit.KILOGRAM.mul(SIUnit.METER).div(SIUnit.SECOND).div(SIUnit.SECOND)
+// derived units
+SIUnit.SQUARE_METRE = SIUnit.METRE.pow(2);
+SIUnit.CUBIC_METRE = SIUnit.METRE.pow(3);
+SIUnit.HERTZ = new Synonym("hertz", "Hz",
+    ONE.div(SIUnit.SECOND)
+);
+SIUnit.NEWTON = new Synonym("newton", "N",
+    SIUnit.KILOGRAM.mul(SIUnit.METRE).div(SIUnit.SECOND.pow(2))
+);
+SIUnit.PASCAL = new Synonym("pascal", "Pa",
+    SIUnit.NEWTON.div(SIUnit.SQUARE_METRE)
+);
+SIUnit.JOULES = new Synonym("joules", "J",
+    SIUnit.NEWTON.mul(SIUnit.METRE)
+);
+SIUnit.WATT = new Synonym("watt", "W",
+    SIUnit.JOULES.div(SIUnit.SECOND)
+);
+SIUnit.COULOMB = new Synonym("coulomb", "C",
+    SIUnit.AMPERE.mul(SIUnit.SECOND)
+);
+SIUnit.VOLT = new Synonym("volt", "V",
+    SIUnit.WATT.div(SIUnit.AMPERE)
+);
+SIUnit.FARAD = new Synonym("farad", "F",
+    SIUnit.COULOMB.div(SIUnit.VOLT)
+);
+SIUnit.OHM = new Synonym("ohm", "Ω",
+    SIUnit.VOLT.div(SIUnit.AMPERE)
+);
+SIUnit.SIEMENS = new Synonym("siemens", "S",
+    SIUnit.AMPERE.div(SIUnit.VOLT)
+);
+SIUnit.WEBER = new Synonym("weber", "Wb",
+    SIUnit.VOLT.mul(SIUnit.SECOND)
+);
+SIUnit.TESLA = new Synonym("tesla", "T",
+    SIUnit.WEBER.div(SIUnit.SQUARE_METRE)
+);
+SIUnit.HENRY = new Synonym("henry", "H",
+    SIUnit.WEBER.div(SIUnit.AMPERE)
+);
+// accepted units
+SIUnit.MINUTE = new Synonym("minute", "min",
+    SIUnit.SECOND.scale(60.0)
+);
+SIUnit.HOUR = new Synonym("hour", "h",
+    SIUnit.SECOND.scale(3600.0)
+);
+SIUnit.DAY = new Synonym("day", "d",
+    SIUnit.SECOND.scale(86400.0)
+);
+SIUnit.HECTARE = new Synonym("hectare", "ha",
+    SIUnit.SQUARE_METRE.scale(1.0e+4)
+);
+SIUnit.LITRE = new Synonym("litre", "L",
+    SIUnit.CUBIC_METRE.scale(1.0e-3)
+);
+SIUnit.TONNE = new Synonym("tonne", "t",
+    SIUnit.KILOGRAM.scale(1.0e+3)
+);
+SIUnit.ASTRONOMICAL_UNIT = new Synonym("astoronomical unit", "au",
+    SIUnit.METRE.scale(1.495978707e+11)
+);
+SIUnit.ELECTRON_VOLT = new Synonym("electron volt", "eV",
+    SIUnit.JOULES.scale(1.602176565e-19)
 );
 Object.freeze(SIUnit);
 
