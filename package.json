@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/susisu/CookieCalculator/issues"
   },
-  "homepage": "https://github.com/susisu/CookieCalculator#readme"
+  "homepage": "https://github.com/susisu/CookieCalculator#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5"
+  }
 }
