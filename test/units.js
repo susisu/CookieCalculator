@@ -784,4 +784,188 @@ describe("Dimension", () => {
             }
         });
     });
+
+    describe(".pow(dim, power)", () => {
+        it("should return 'dim' raised to the power of 'power'", () => {
+            {
+                let p = Dimension.pow({}, 0);
+                expect(Dimension.equal(
+                    p,
+                    {}
+                )).to.be.true;
+            }
+            {
+                let p = Dimension.pow({}, 3);
+                expect(Dimension.equal(
+                    p,
+                    {}
+                )).to.be.true;
+            }
+            {
+                let p = Dimension.pow({}, -3);
+                expect(Dimension.equal(
+                    p,
+                    {}
+                )).to.be.true;
+            }
+            {
+                let p = Dimension.pow({ [Dimension.AMOUNT]: 0 }, 0);
+                expect(Dimension.equal(
+                    p,
+                    {}
+                )).to.be.true;
+            }
+            {
+                let p = Dimension.pow({ [Dimension.AMOUNT]: 0 }, 3);
+                expect(Dimension.equal(
+                    p,
+                    {}
+                )).to.be.true;
+            }
+            {
+                let p = Dimension.pow({ [Dimension.AMOUNT]: 0 }, -3);
+                expect(Dimension.equal(
+                    p,
+                    {}
+                )).to.be.true;
+            }
+            {
+                let p = Dimension.pow(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 0,
+                        [Dimension.LENGTH]     : 0,
+                        [Dimension.TIME]       : 0,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    0
+                );
+                expect(Dimension.equal(
+                    p,
+                    {}
+                )).to.be.true;
+            }
+            {
+                let p = Dimension.pow(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 0,
+                        [Dimension.LENGTH]     : 0,
+                        [Dimension.TIME]       : 0,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    3
+                );
+                expect(Dimension.equal(
+                    p,
+                    {}
+                )).to.be.true;
+            }
+            {
+                let p = Dimension.pow(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 0,
+                        [Dimension.LENGTH]     : 0,
+                        [Dimension.TIME]       : 0,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    -3
+                );
+                expect(Dimension.equal(
+                    p,
+                    {}
+                )).to.be.true;
+            }
+            {
+                let p = Dimension.pow({ [Dimension.AMOUNT]: 2 }, 0);
+                expect(Dimension.equal(
+                    p,
+                    {}
+                )).to.be.true;
+            }
+            {
+                let p = Dimension.pow(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    0
+                );
+                expect(Dimension.equal(
+                    p,
+                    {}
+                )).to.be.true;
+            }
+            {
+                let p = Dimension.pow({ [Dimension.AMOUNT]: 2 }, 3);
+                expect(Dimension.equal(
+                    p,
+                    { [Dimension.AMOUNT]: 6 }
+                )).to.be.true;
+            }
+            {
+                let p = Dimension.pow({ [Dimension.AMOUNT]: 2 }, -3);
+                expect(Dimension.equal(
+                    p,
+                    { [Dimension.AMOUNT]: -6 }
+                )).to.be.true;
+            }
+            {
+                let p = Dimension.pow(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    3
+                );
+                expect(Dimension.equal(
+                    p,
+                    {
+                        [Dimension.MASS]  : 3,
+                        [Dimension.LENGTH]: 6,
+                        [Dimension.TIME]  : -6
+                    }
+                )).to.be.true;
+            }
+            {
+                let p = Dimension.pow(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    -3
+                );
+                expect(Dimension.equal(
+                    p,
+                    {
+                        [Dimension.MASS]  : -3,
+                        [Dimension.LENGTH]: -6,
+                        [Dimension.TIME]  : 6
+                    }
+                )).to.be.true;
+            }
+        });
+    });
 });
