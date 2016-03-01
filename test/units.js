@@ -64,4 +64,326 @@ describe("Dimension", () => {
             })).to.equal("M1L2T-2");
         });
     });
+
+    describe(".equal(dimA, dimB)", () => {
+        it("should return whether dimA and dimB describe the same dimension or not", () => {
+            expect(Dimension.equal({}, {})).to.be.true;
+            expect(Dimension.equal({ [Dimension.AMOUNT]: 0 }, {})).to.be.true;
+            expect(Dimension.equal({}, { [Dimension.AMOUNT]: 0 })).to.be.true;
+            expect(Dimension.equal(
+                {
+                    [Dimension.AMOUNT]     : 0,
+                    [Dimension.MASS]       : 0,
+                    [Dimension.LENGTH]     : 0,
+                    [Dimension.TIME]       : 0,
+                    [Dimension.TEMPERATURE]: 0,
+                    [Dimension.CURRENT]    : 0,
+                    [Dimension.LUMINOUS]   : 0
+                },
+                {}
+            )).to.be.true;
+            expect(Dimension.equal(
+                {},
+                {
+                    [Dimension.AMOUNT]     : 0,
+                    [Dimension.MASS]       : 0,
+                    [Dimension.LENGTH]     : 0,
+                    [Dimension.TIME]       : 0,
+                    [Dimension.TEMPERATURE]: 0,
+                    [Dimension.CURRENT]    : 0,
+                    [Dimension.LUMINOUS]   : 0
+                }
+            )).to.be.true;
+            expect(Dimension.equal(
+                { [Dimension.AMOUNT]: 0 },
+                { [Dimension.MASS]  : 0 }
+            )).to.be.true;
+            expect(Dimension.equal(
+                {
+                    [Dimension.AMOUNT]     : 0,
+                    [Dimension.MASS]       : 0,
+                    [Dimension.LENGTH]     : 0
+                },
+                {
+                    [Dimension.TIME]       : 0,
+                    [Dimension.TEMPERATURE]: 0,
+                    [Dimension.CURRENT]    : 0,
+                    [Dimension.LUMINOUS]   : 0
+                }
+            )).to.be.true;
+
+            expect(Dimension.equal({ [Dimension.AMOUNT]: 1 }, {})).to.be.false;
+            expect(Dimension.equal({}, { [Dimension.AMOUNT]: 1 })).to.be.false;
+            expect(Dimension.equal(
+                {
+                    [Dimension.MASS]       : 1,
+                    [Dimension.LENGTH]     : 2,
+                    [Dimension.TIME]       : -2
+                },
+                {}
+            )).to.be.false;
+            expect(Dimension.equal(
+                {},
+                {
+                    [Dimension.MASS]       : 1,
+                    [Dimension.LENGTH]     : 2,
+                    [Dimension.TIME]       : -2
+                }
+            )).to.be.false;
+            expect(Dimension.equal(
+                {
+                    [Dimension.AMOUNT]     : 0,
+                    [Dimension.MASS]       : 1,
+                    [Dimension.LENGTH]     : 2,
+                    [Dimension.TIME]       : -2,
+                    [Dimension.TEMPERATURE]: 0,
+                    [Dimension.CURRENT]    : 0,
+                    [Dimension.LUMINOUS]   : 0
+                },
+                {}
+            )).to.be.false;
+            expect(Dimension.equal(
+                {},
+                {
+                    [Dimension.AMOUNT]     : 0,
+                    [Dimension.MASS]       : 1,
+                    [Dimension.LENGTH]     : 2,
+                    [Dimension.TIME]       : -2,
+                    [Dimension.TEMPERATURE]: 0,
+                    [Dimension.CURRENT]    : 0,
+                    [Dimension.LUMINOUS]   : 0
+                }
+            )).to.be.false;
+
+            expect(Dimension.equal(
+                { [Dimension.AMOUNT]: 1 },
+                { [Dimension.AMOUNT]: 1 }
+            )).to.be.true;
+            expect(Dimension.equal(
+                {
+                    [Dimension.AMOUNT]     : 0,
+                    [Dimension.MASS]       : 1,
+                    [Dimension.LENGTH]     : 0,
+                    [Dimension.TIME]       : 0,
+                    [Dimension.TEMPERATURE]: 0,
+                    [Dimension.CURRENT]    : 0,
+                    [Dimension.LUMINOUS]   : 0
+                },
+                {
+                    [Dimension.MASS]: 1
+                }
+            )).to.be.true;
+            expect(Dimension.equal(
+                {
+                    [Dimension.MASS]: 1
+                },
+                {
+                    [Dimension.AMOUNT]     : 0,
+                    [Dimension.MASS]       : 1,
+                    [Dimension.LENGTH]     : 0,
+                    [Dimension.TIME]       : 0,
+                    [Dimension.TEMPERATURE]: 0,
+                    [Dimension.CURRENT]    : 0,
+                    [Dimension.LUMINOUS]   : 0
+                }
+            )).to.be.true;
+            expect(Dimension.equal(
+                {
+                    [Dimension.MASS]       : 1,
+                    [Dimension.LENGTH]     : 2,
+                    [Dimension.TIME]       : -2
+                },
+                {
+                    [Dimension.MASS]       : 1,
+                    [Dimension.LENGTH]     : 2,
+                    [Dimension.TIME]       : -2
+                }
+            )).to.be.true;
+            expect(Dimension.equal(
+                {
+                    [Dimension.AMOUNT]     : 0,
+                    [Dimension.MASS]       : 1,
+                    [Dimension.LENGTH]     : 2,
+                    [Dimension.TIME]       : -2,
+                    [Dimension.TEMPERATURE]: 0,
+                    [Dimension.CURRENT]    : 0,
+                    [Dimension.LUMINOUS]   : 0
+                },
+                {
+                    [Dimension.MASS]       : 1,
+                    [Dimension.LENGTH]     : 2,
+                    [Dimension.TIME]       : -2
+                }
+            )).to.be.true;
+            expect(Dimension.equal(
+                {
+                    [Dimension.MASS]       : 1,
+                    [Dimension.LENGTH]     : 2,
+                    [Dimension.TIME]       : -2
+                },
+                {
+                    [Dimension.AMOUNT]     : 0,
+                    [Dimension.MASS]       : 1,
+                    [Dimension.LENGTH]     : 2,
+                    [Dimension.TIME]       : -2,
+                    [Dimension.TEMPERATURE]: 0,
+                    [Dimension.CURRENT]    : 0,
+                    [Dimension.LUMINOUS]   : 0
+                }
+            )).to.be.true;
+            expect(Dimension.equal(
+                {
+                    [Dimension.AMOUNT]     : 1,
+                    [Dimension.MASS]       : 2,
+                    [Dimension.LENGTH]     : 3,
+                    [Dimension.TIME]       : 4,
+                    [Dimension.TEMPERATURE]: 5,
+                    [Dimension.CURRENT]    : 6,
+                    [Dimension.LUMINOUS]   : 7
+                },
+                {
+                    [Dimension.AMOUNT]     : 1,
+                    [Dimension.MASS]       : 2,
+                    [Dimension.LENGTH]     : 3,
+                    [Dimension.TIME]       : 4,
+                    [Dimension.TEMPERATURE]: 5,
+                    [Dimension.CURRENT]    : 6,
+                    [Dimension.LUMINOUS]   : 7
+                }
+            )).to.be.true;
+
+            expect(Dimension.equal(
+                { [Dimension.AMOUNT]: 1 },
+                { [Dimension.MASS]  : 1 }
+            )).to.be.false;
+            expect(Dimension.equal(
+                { [Dimension.MASS]  : 1 },
+                { [Dimension.AMOUNT]: 1 }
+            )).to.be.false;
+            expect(Dimension.equal(
+                {
+                    [Dimension.AMOUNT]     : 1,
+                    [Dimension.MASS]       : 0,
+                    [Dimension.LENGTH]     : 0,
+                    [Dimension.TIME]       : 0,
+                    [Dimension.TEMPERATURE]: 0,
+                    [Dimension.CURRENT]    : 0,
+                    [Dimension.LUMINOUS]   : 0
+                },
+                {
+                    [Dimension.MASS]: 1
+                }
+            )).to.be.false;
+            expect(Dimension.equal(
+                {
+                    [Dimension.MASS]: 1
+                },
+                {
+                    [Dimension.AMOUNT]     : 1,
+                    [Dimension.MASS]       : 0,
+                    [Dimension.LENGTH]     : 0,
+                    [Dimension.TIME]       : 0,
+                    [Dimension.TEMPERATURE]: 0,
+                    [Dimension.CURRENT]    : 0,
+                    [Dimension.LUMINOUS]   : 0
+                }
+            )).to.be.false;
+            expect(Dimension.equal(
+                {
+                    [Dimension.MASS]       : 1,
+                    [Dimension.LENGTH]     : 2,
+                    [Dimension.TIME]       : -2
+                },
+                {
+                    [Dimension.MASS]       : 1,
+                    [Dimension.LENGTH]     : 1,
+                    [Dimension.TIME]       : -2
+                }
+            )).to.be.false;
+            expect(Dimension.equal(
+                {
+                    [Dimension.MASS]       : 1,
+                    [Dimension.LENGTH]     : 1,
+                    [Dimension.TIME]       : -2
+                },
+                {
+                    [Dimension.MASS]       : 1,
+                    [Dimension.LENGTH]     : 2,
+                    [Dimension.TIME]       : -2
+                }
+            )).to.be.false;
+            expect(Dimension.equal(
+                {
+                    [Dimension.AMOUNT]     : 0,
+                    [Dimension.MASS]       : 1,
+                    [Dimension.LENGTH]     : 2,
+                    [Dimension.TIME]       : -2,
+                    [Dimension.TEMPERATURE]: 0,
+                    [Dimension.CURRENT]    : 0,
+                    [Dimension.LUMINOUS]   : 0
+                },
+                {
+                    [Dimension.MASS]       : 1,
+                    [Dimension.LENGTH]     : 1,
+                    [Dimension.TIME]       : -2
+                }
+            )).to.be.false;
+            expect(Dimension.equal(
+                {
+                    [Dimension.MASS]       : 1,
+                    [Dimension.LENGTH]     : 1,
+                    [Dimension.TIME]       : -2
+                },
+                {
+                    [Dimension.AMOUNT]     : 0,
+                    [Dimension.MASS]       : 1,
+                    [Dimension.LENGTH]     : 2,
+                    [Dimension.TIME]       : -2,
+                    [Dimension.TEMPERATURE]: 0,
+                    [Dimension.CURRENT]    : 0,
+                    [Dimension.LUMINOUS]   : 0
+                }
+            )).to.be.false;
+            expect(Dimension.equal(
+                {
+                    [Dimension.AMOUNT]     : 1,
+                    [Dimension.MASS]       : 2,
+                    [Dimension.LENGTH]     : 3,
+                    [Dimension.TIME]       : 4,
+                    [Dimension.TEMPERATURE]: 5,
+                    [Dimension.CURRENT]    : 6,
+                    [Dimension.LUMINOUS]   : 7
+                },
+                {
+                    [Dimension.AMOUNT]     : -1,
+                    [Dimension.MASS]       : -2,
+                    [Dimension.LENGTH]     : -3,
+                    [Dimension.TIME]       : -4,
+                    [Dimension.TEMPERATURE]: -5,
+                    [Dimension.CURRENT]    : -6,
+                    [Dimension.LUMINOUS]   : -7
+                }
+            )).to.be.false;
+            expect(Dimension.equal(
+                {
+                    [Dimension.AMOUNT]     : -1,
+                    [Dimension.MASS]       : -2,
+                    [Dimension.LENGTH]     : -3,
+                    [Dimension.TIME]       : -4,
+                    [Dimension.TEMPERATURE]: -5,
+                    [Dimension.CURRENT]    : -6,
+                    [Dimension.LUMINOUS]   : -7
+                },
+                {
+                    [Dimension.AMOUNT]     : 1,
+                    [Dimension.MASS]       : 2,
+                    [Dimension.LENGTH]     : 3,
+                    [Dimension.TIME]       : 4,
+                    [Dimension.TEMPERATURE]: 5,
+                    [Dimension.CURRENT]    : 6,
+                    [Dimension.LUMINOUS]   : 7
+                }
+            )).to.be.false;
+        });
+    });
 });
