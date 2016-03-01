@@ -14,7 +14,7 @@ describe("Dimension", () => {
     let Dimension = units.Dimension;
 
     describe(".toString(dim)", () => {
-        it("should return \"1\" when dim is non dimensional", () => {
+        it("should return \"1\" when 'dim' is non dimensional", () => {
             expect(Dimension.toString({})).to.equal("1");
             expect(Dimension.toString({ [Dimension.AMOUNT]: 0 })).to.equal("1");
             expect(Dimension.toString({
@@ -28,7 +28,7 @@ describe("Dimension", () => {
             })).to.equal("1");
         });
 
-        it("should return a string describing the dimension", () => {
+        it("should return a string describing the dimension 'dim'", () => {
             expect(Dimension.toString({ [Dimension.AMOUNT]     : 1 })).to.equal("N1");
             expect(Dimension.toString({ [Dimension.MASS]       : 1 })).to.equal("M1");
             expect(Dimension.toString({ [Dimension.LENGTH]     : 1 })).to.equal("L1");
@@ -66,7 +66,7 @@ describe("Dimension", () => {
     });
 
     describe(".equal(dimA, dimB)", () => {
-        it("should return whether dimA and dimB describe the same dimension or not", () => {
+        it("should return whether 'dimA' and 'dimB' describe the same dimension or not", () => {
             expect(Dimension.equal({}, {})).to.be.true;
             expect(Dimension.equal({ [Dimension.AMOUNT]: 0 }, {})).to.be.true;
             expect(Dimension.equal({}, { [Dimension.AMOUNT]: 0 })).to.be.true;
