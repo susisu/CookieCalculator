@@ -54,13 +54,6 @@ describe("Dimension", () => {
             })).to.equal("M1L2T-2");
 
             expect(Dimension.toString({
-                [Dimension.AMOUNT]: 0,
-                [Dimension.MASS]  : 1,
-                [Dimension.LENGTH]: 2,
-                [Dimension.TIME]  : -2,
-            })).to.equal("M1L2T-2");
-
-            expect(Dimension.toString({
                 [Dimension.AMOUNT]     : 0,
                 [Dimension.MASS]       : 1,
                 [Dimension.LENGTH]     : 2,
