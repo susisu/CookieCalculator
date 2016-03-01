@@ -585,4 +585,203 @@ describe("Dimension", () => {
             }
         });
     });
+
+    describe(".div(dimA, dimB)", () => {
+        it("should return the quotient of 'dimA' and 'dimB'", () => {
+            {
+                let q = Dimension.div({}, {});
+                expect(Dimension.equal(q, {})).to.be.true;
+            }
+            {
+                let q = Dimension.div(
+                    {},
+                    {
+                        [Dimension.AMOUNT]: 1
+                    }
+                );
+                expect(Dimension.equal(
+                    q,
+                    {
+                        [Dimension.AMOUNT]: -1
+                    }
+                )).to.be.true;
+            }
+            {
+                let q = Dimension.div(
+                    {
+                        [Dimension.AMOUNT]: 1
+                    },
+                    {}
+                );
+                expect(Dimension.equal(
+                    q,
+                    {
+                        [Dimension.AMOUNT]: 1
+                    }
+                )).to.be.true;
+            }
+            {
+                let q = Dimension.div(
+                    {
+                        [Dimension.AMOUNT]     : 1,
+                        [Dimension.MASS]       : 2,
+                        [Dimension.LENGTH]     : 3,
+                        [Dimension.TIME]       : 4,
+                        [Dimension.TEMPERATURE]: 5,
+                        [Dimension.CURRENT]    : 6,
+                        [Dimension.LUMINOUS]   : 7
+                    },
+                    {}
+                );
+                expect(Dimension.equal(
+                    q,
+                    {
+                        [Dimension.AMOUNT]     : 1,
+                        [Dimension.MASS]       : 2,
+                        [Dimension.LENGTH]     : 3,
+                        [Dimension.TIME]       : 4,
+                        [Dimension.TEMPERATURE]: 5,
+                        [Dimension.CURRENT]    : 6,
+                        [Dimension.LUMINOUS]   : 7
+                    }
+                )).to.be.true;
+            }
+            {
+                let q = Dimension.div(
+                    {},
+                    {
+                        [Dimension.AMOUNT]     : 1,
+                        [Dimension.MASS]       : 2,
+                        [Dimension.LENGTH]     : 3,
+                        [Dimension.TIME]       : 4,
+                        [Dimension.TEMPERATURE]: 5,
+                        [Dimension.CURRENT]    : 6,
+                        [Dimension.LUMINOUS]   : 7
+                    }
+                );
+                expect(Dimension.equal(
+                    q,
+                    {
+                        [Dimension.AMOUNT]     : -1,
+                        [Dimension.MASS]       : -2,
+                        [Dimension.LENGTH]     : -3,
+                        [Dimension.TIME]       : -4,
+                        [Dimension.TEMPERATURE]: -5,
+                        [Dimension.CURRENT]    : -6,
+                        [Dimension.LUMINOUS]   : -7
+                    }
+                )).to.be.true;
+            }
+            {
+                let q = Dimension.div(
+                    { [Dimension.AMOUNT]: 1 },
+                    { [Dimension.AMOUNT]: 2 }
+                );
+                expect(Dimension.equal(
+                    q,
+                    { [Dimension.AMOUNT]: -1 }
+                )).to.be.true;
+            }
+            {
+                let q = Dimension.div(
+                    { [Dimension.AMOUNT]: 2 },
+                    { [Dimension.AMOUNT]: 1 }
+                );
+                expect(Dimension.equal(
+                    q,
+                    { [Dimension.AMOUNT]: 1 }
+                )).to.be.true;
+            }
+            {
+                let q = Dimension.div(
+                    { [Dimension.AMOUNT]: 1 },
+                    { [Dimension.MASS]  : 1 }
+                );
+                expect(Dimension.equal(
+                    q,
+                    {
+                        [Dimension.AMOUNT]: 1,
+                        [Dimension.MASS]  : -1
+                    }
+                )).to.be.true;
+            }
+            {
+                let q = Dimension.div(
+                    { [Dimension.MASS]  : 1 },
+                    { [Dimension.AMOUNT]: 1 }
+                );
+                expect(Dimension.equal(
+                    q,
+                    {
+                        [Dimension.AMOUNT]: -1,
+                        [Dimension.MASS]  : 1
+                    }
+                )).to.be.true;
+            }
+            {
+                let q = Dimension.div(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    {
+                        [Dimension.AMOUNT]     : -1,
+                        [Dimension.MASS]       : 0,
+                        [Dimension.LENGTH]     : 0,
+                        [Dimension.TIME]       : 0,
+                        [Dimension.TEMPERATURE]: -1,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    }
+                );
+                expect(Dimension.equal(
+                    q,
+                    {
+                        [Dimension.AMOUNT]     : 1,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 1
+                    }
+                )).to.be.true;
+            }
+            {
+                let q = Dimension.div(
+                    {
+                        [Dimension.AMOUNT]     : -1,
+                        [Dimension.MASS]       : 0,
+                        [Dimension.LENGTH]     : 0,
+                        [Dimension.TIME]       : 0,
+                        [Dimension.TEMPERATURE]: -1,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    }
+                );
+                expect(Dimension.equal(
+                    q,
+                    {
+                        [Dimension.AMOUNT]     : -1,
+                        [Dimension.MASS]       : -1,
+                        [Dimension.LENGTH]     : -2,
+                        [Dimension.TIME]       : 2,
+                        [Dimension.TEMPERATURE]: -1
+                    }
+                )).to.be.true;
+            }
+        });
+    });
 });
