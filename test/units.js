@@ -1906,6 +1906,7 @@ describe("Quantity", () => {
 
 describe("UnitBase", () => {
     let UnitBase = units.UnitBase;
+    let Dimension = units.Dimension;
 
     describe("#toString()", () => {
         it("should return its name", () => {
@@ -1915,7 +1916,78 @@ describe("UnitBase", () => {
     });
 
     describe("#value(value)", () => {
-        it("should return a quantity in the unit");
+        it("should return a quantity in the unit", () => {
+            {
+                let unit = new UnitBase({}, "test unit", "?", 1.0, 1);
+                let x = unit.value(2.0);
+                expect(x.value).to.equal(2.0);
+                expect(Dimension.equal(x.dimension, {})).to.be.true;
+            }
+            {
+                let unit = new UnitBase({}, "test unit", "?", 3.0, 1);
+                let x = unit.value(2.0);
+                expect(x.value).to.equal(6.0);
+                expect(Dimension.equal(x.dimension, {})).to.be.true;
+            }
+            {
+                let unit = new UnitBase({ [Dimension.AMOUNT]: 1 }, "test unit", "?", 1.0, 1);
+                let x = unit.value(2.0);
+                expect(x.value).to.equal(2.0);
+                expect(Dimension.equal(x.dimension, { [Dimension.AMOUNT]: 1 })).to.be.true;
+            }
+            {
+                let unit = new UnitBase({ [Dimension.AMOUNT]: 1 }, "test unit", "?", 3.0, 1);
+                let x = unit.value(2.0);
+                expect(x.value).to.equal(6.0);
+                expect(Dimension.equal(x.dimension, { [Dimension.AMOUNT]: 1 })).to.be.true;
+            }
+            {
+                let unit = new UnitBase(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    "test unit", "?", 1.0, 1);
+                let x = unit.value(2.0);
+                expect(x.value).to.equal(2.0);
+                expect(Dimension.equal(
+                    x.dimension,
+                    {
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2
+                    }
+                )).to.be.true;
+            }
+            {
+                let unit = new UnitBase(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    "test unit", "?", 3.0, 1);
+                let x = unit.value(2.0);
+                expect(x.value).to.equal(6.0);
+                expect(Dimension.equal(
+                    x.dimension,
+                    {
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2
+                    }
+                )).to.be.true;
+            }
+        });
     });
 
     describe("#addPrefix(prefix)", () => {
