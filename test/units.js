@@ -1903,3 +1903,42 @@ describe("Quantity", () => {
         it("should return a string describing the quantity in the auto-prefixed 'unit'");
     });
 });
+
+describe("UnitBase", () => {
+    let UnitBase = units.UnitBase;
+
+    describe("#toString()", () => {
+        it("should return its name", () => {
+            let unit = new UnitBase({}, "test unit", "?", 1.0, 1);
+            expect(unit.toString()).to.equal("test unit");
+        });
+    });
+
+    describe("#value(value)", () => {
+        it("should return a quantity in the unit");
+    });
+
+    describe("#addPrefix(prefix)", () => {
+        it("should return the prefixed version of the unit");
+    });
+
+    describe("#autoPrefixFor(quantity)", () => {
+        it("should return the auto-prefixed version of the unit reasonable for 'quantity'");
+    });
+
+    describe("#scale(factor)", () => {
+        it("should return the scaled version of the unit");
+    });
+
+    describe("#mul(unit)", () => {
+        it("should return the product unit of this and 'unit'");
+    });
+
+    describe("#div(unit)", () => {
+        it("should return the quotient unit of this and 'unit'");
+    });
+
+    describe("#pow(power)", () => {
+        it("should return the powered unit by 'power'");
+    });
+});
