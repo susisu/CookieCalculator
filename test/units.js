@@ -1886,4 +1886,20 @@ describe("Quantity", () => {
             }
         });
     });
+
+    describe("#in(unit)", () => {
+        it("should return the converted value in 'unit'");
+    });
+
+    describe("#inAutoPrefixed(unit)", () => {
+        it("should return the pair of the auto-prefixed version of 'unit' and the converted value in it");
+    });
+
+    describe("#toStringIn(unit)", () => {
+        it("should return a string describing the quantity in 'unit'");
+    });
+
+    describe("#toStringInAutoPrefixed(unit)", () => {
+        it("should return a string describing the quantity in the auto-prefixed 'unit'");
+    });
 });
