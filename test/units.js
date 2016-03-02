@@ -1386,4 +1386,188 @@ describe("Quantity", () => {
             }
         });
     });
+
+    describe(".mul(x, y)", () => {
+        it("should return the product of 'x' and 'y'", () => {
+            {
+                let x = new Quantity(2, {});
+                let y = new Quantity(3, {});
+                let p = Quantity.mul(x, y);
+                expect(p.value).to.equal(6);
+                expect(Dimension.equal(p.dimension, {})).to.be.true;
+            }
+            {
+                let x = new Quantity(2, { [Dimension.AMOUNT]: 1 });
+                let y = new Quantity(3, {});
+                let p = Quantity.mul(x, y);
+                expect(p.value).to.equal(6);
+                expect(Dimension.equal(
+                    p.dimension,
+                    { [Dimension.AMOUNT]: 1 }
+                )).to.be.true;
+            }
+            {
+                let x = new Quantity(2, {});
+                let y = new Quantity(3, { [Dimension.AMOUNT]: 1 });
+                let p = Quantity.mul(x, y);
+                expect(p.value).to.equal(6);
+                expect(Dimension.equal(
+                    p.dimension,
+                    { [Dimension.AMOUNT]: 1 }
+                )).to.be.true;
+            }
+            {
+                let x = new Quantity(2, { [Dimension.AMOUNT]: 1 });
+                let y = new Quantity(3, { [Dimension.MASS]  : 2 });
+                let p = Quantity.mul(x, y);
+                expect(p.value).to.equal(6);
+                expect(Dimension.equal(
+                    p.dimension,
+                    {
+                        [Dimension.AMOUNT]: 1,
+                        [Dimension.MASS]  : 2
+                    }
+                )).to.be.true;
+            }
+            {
+                let x = new Quantity(2, { [Dimension.MASS]  : 2 });
+                let y = new Quantity(3, { [Dimension.AMOUNT]: 1 });
+                let p = Quantity.mul(x, y);
+                expect(p.value).to.equal(6);
+                expect(Dimension.equal(
+                    p.dimension,
+                    {
+                        [Dimension.AMOUNT]: 1,
+                        [Dimension.MASS]  : 2
+                    }
+                )).to.be.true;
+            }
+            {
+                let x = new Quantity(
+                    2,
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    }
+                );
+                let y = new Quantity(3, {});
+                let p = Quantity.mul(x, y);
+                expect(p.value).to.equal(6);
+                expect(Dimension.equal(
+                    p.dimension,
+                    {
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2
+                    }
+                )).to.be.true;
+            }
+            {
+                let x = new Quantity(2, {});
+                let y = new Quantity(
+                    3,
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    }
+                );
+                let p = Quantity.mul(x, y);
+                expect(p.value).to.equal(6);
+                expect(Dimension.equal(
+                    p.dimension,
+                    {
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2
+                    }
+                )).to.be.true;
+            }
+            {
+                let x = new Quantity(
+                    2,
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    }
+                );
+                let y = new Quantity(
+                    3,
+                    {
+                        [Dimension.AMOUNT]     : 1,
+                        [Dimension.MASS]       : 0,
+                        [Dimension.LENGTH]     : 0,
+                        [Dimension.TIME]       : 0,
+                        [Dimension.TEMPERATURE]: 1,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    }
+                );
+                let p = Quantity.mul(x, y);
+                expect(p.value).to.equal(6);
+                expect(Dimension.equal(
+                    p.dimension,
+                    {
+                        [Dimension.AMOUNT]     : 1,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 1
+                    }
+                )).to.be.true;
+            }
+            {
+                let x = new Quantity(
+                    2,
+                    {
+                        [Dimension.AMOUNT]     : 1,
+                        [Dimension.MASS]       : 0,
+                        [Dimension.LENGTH]     : 0,
+                        [Dimension.TIME]       : 0,
+                        [Dimension.TEMPERATURE]: 1,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    }
+                );
+                let y = new Quantity(
+                    3,
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    }
+                );
+                let p = Quantity.mul(x, y);
+                expect(p.value).to.equal(6);
+                expect(Dimension.equal(
+                    p.dimension,
+                    {
+                        [Dimension.AMOUNT]     : 1,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 1
+                    }
+                )).to.be.true;
+            }
+        });
+    });
 });
