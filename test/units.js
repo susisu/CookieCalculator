@@ -1907,6 +1907,8 @@ describe("Quantity", () => {
 describe("Unit", () => {
     let Unit = units.Unit;
     let Dimension = units.Dimension;
+    let Prefix = units.Prefix;
+    let Prefixed = units.Prefixed;
 
     describe("constructor(dimension, name, symbol, factor)", () => {
         {
@@ -2032,7 +2034,14 @@ describe("Unit", () => {
     });
 
     describe("#addPrefix(prefix)", () => {
-        it("should return the prefixed version of the unit");
+        it("should return the prefixed version of the unit", () => {
+            let unit = new Unit({}, "test unit", "?", 2.0);
+            let prefix = new Prefix("test prefix", "!", 3.0);
+            let prefixed = unit.addPrefix(prefix);
+            expect(prefixed).to.be.instanceOf(Prefixed);
+            expect(prefixed.unit).to.equal(unit);
+            expect(prefixed.prefix).to.equal(prefix);
+        });
     });
 
     describe("#autoPrefixFor(quantity)", () => {
