@@ -1180,4 +1180,210 @@ describe("Quantity", () => {
             }
         });
     });
+
+    describe(".sub(x, y)", () => {
+        it("should return the difference of 'x' and 'y'", () => {
+            {
+                let x = new Quantity(1, {});
+                let y = new Quantity(2, {});
+                let s = Quantity.sub(x, y);
+                expect(s.value).equal(-1);
+                expect(Dimension.equal(s.dimension, {})).to.be.true;
+            }
+            {
+                let x = new Quantity(1, { [Dimension.AMOUNT]: 0 });
+                let y = new Quantity(2, {});
+                let s = Quantity.sub(x, y);
+                expect(s.value).equal(-1);
+                expect(Dimension.equal(s.dimension, {})).to.be.true;
+            }
+            {
+                let x = new Quantity(1, {});
+                let y = new Quantity(2, { [Dimension.AMOUNT]: 0 });
+                let s = Quantity.sub(x, y);
+                expect(s.value).equal(-1);
+                expect(Dimension.equal(s.dimension, {})).to.be.true;
+            }
+            {
+                let x = new Quantity(1, { [Dimension.AMOUNT]: 1 });
+                let y = new Quantity(2, { [Dimension.AMOUNT]: 1 });
+                let s = Quantity.sub(x, y);
+                expect(s.value).equal(-1);
+                expect(Dimension.equal(s.dimension, { [Dimension.AMOUNT]: 1 })).to.be.true;
+            }
+            {
+                let x = new Quantity(
+                    1,
+                    {
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2
+                    }
+                );
+                let y = new Quantity(
+                    2,
+                    {
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2
+                    }
+                );
+                let s = Quantity.sub(x, y);
+                expect(s.value).equal(-1);
+                expect(Dimension.equal(
+                    s.dimension,
+                    {
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2
+                    }
+                )).to.be.true;
+            }
+            {
+                let x = new Quantity(
+                    1,
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    }
+                );
+                let y = new Quantity(
+                    2,
+                    {
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2
+                    }
+                );
+                let s = Quantity.sub(x, y);
+                expect(s.value).equal(-1);
+                expect(Dimension.equal(
+                    s.dimension,
+                    {
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2
+                    }
+                )).to.be.true;
+            }
+            {
+                let x = new Quantity(
+                    1,
+                    {
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2
+                    }
+                );
+                let y = new Quantity(
+                    2,
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    }
+                );
+                let s = Quantity.sub(x, y);
+                expect(s.value).equal(-1);
+                expect(Dimension.equal(
+                    s.dimension,
+                    {
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2
+                    }
+                )).to.be.true;
+            }
+            {
+                let x = new Quantity(
+                    1,
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    }
+                );
+                let y = new Quantity(
+                    2,
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    }
+                );
+                let s = Quantity.sub(x, y);
+                expect(s.value).equal(-1);
+                expect(Dimension.equal(
+                    s.dimension,
+                    {
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2
+                    }
+                )).to.be.true;
+            }
+        });
+
+        it("should throw DimensionalError if the dimensions of 'x' and 'y' are inconsistent", () => {
+            {
+                let x = new Quantity(1, { [Dimension.AMOUNT]: 1 });
+                let y = new Quantity(2, {});
+                expect(() => { Quantity.sub(x, y); }).to.throw(DimensionalError);
+            }
+            {
+                let x = new Quantity(1, {});
+                let y = new Quantity(2, { [Dimension.AMOUNT]: 1 });
+                expect(() => { Quantity.sub(x, y); }).to.throw(DimensionalError);
+            }
+            {
+                let x = new Quantity(1, { [Dimension.AMOUNT]: 1});
+                let y = new Quantity(2, { [Dimension.MASS]  : 1 });
+                expect(() => { Quantity.sub(x, y); }).to.throw(DimensionalError);
+            }
+            {
+                let x = new Quantity(
+                    1,
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 1,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    }
+                );
+                let y = new Quantity(
+                    2,
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    }
+                );
+                expect(() => { Quantity.sub(x, y); }).to.throw(DimensionalError);
+            }
+        });
+    });
 });
