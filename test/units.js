@@ -1904,13 +1904,13 @@ describe("Quantity", () => {
     });
 });
 
-describe("UnitBase", () => {
-    let UnitBase = units.UnitBase;
+describe("Unit", () => {
+    let Unit = units.Unit;
     let Dimension = units.Dimension;
 
     describe("#toString()", () => {
         it("should return its name", () => {
-            let unit = new UnitBase({}, "test unit", "?", 1.0, 1);
+            let unit = new Unit({}, "test unit", "?", 1.0);
             expect(unit.toString()).to.equal("test unit");
         });
     });
@@ -1918,31 +1918,31 @@ describe("UnitBase", () => {
     describe("#value(value)", () => {
         it("should return a quantity in the unit", () => {
             {
-                let unit = new UnitBase({}, "test unit", "?", 1.0, 1);
+                let unit = new Unit({}, "test unit", "?", 1.0);
                 let x = unit.value(2.0);
                 expect(x.value).to.equal(2.0);
                 expect(Dimension.equal(x.dimension, {})).to.be.true;
             }
             {
-                let unit = new UnitBase({}, "test unit", "?", 3.0, 1);
+                let unit = new Unit({}, "test unit", "?", 3.0);
                 let x = unit.value(2.0);
                 expect(x.value).to.equal(6.0);
                 expect(Dimension.equal(x.dimension, {})).to.be.true;
             }
             {
-                let unit = new UnitBase({ [Dimension.AMOUNT]: 1 }, "test unit", "?", 1.0, 1);
+                let unit = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit", "?", 1.0);
                 let x = unit.value(2.0);
                 expect(x.value).to.equal(2.0);
                 expect(Dimension.equal(x.dimension, { [Dimension.AMOUNT]: 1 })).to.be.true;
             }
             {
-                let unit = new UnitBase({ [Dimension.AMOUNT]: 1 }, "test unit", "?", 3.0, 1);
+                let unit = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit", "?", 3.0);
                 let x = unit.value(2.0);
                 expect(x.value).to.equal(6.0);
                 expect(Dimension.equal(x.dimension, { [Dimension.AMOUNT]: 1 })).to.be.true;
             }
             {
-                let unit = new UnitBase(
+                let unit = new Unit(
                     {
                         [Dimension.AMOUNT]     : 0,
                         [Dimension.MASS]       : 1,
@@ -1952,7 +1952,7 @@ describe("UnitBase", () => {
                         [Dimension.CURRENT]    : 0,
                         [Dimension.LUMINOUS]   : 0
                     },
-                    "test unit", "?", 1.0, 1);
+                    "test unit", "?", 1.0);
                 let x = unit.value(2.0);
                 expect(x.value).to.equal(2.0);
                 expect(Dimension.equal(
@@ -1965,7 +1965,7 @@ describe("UnitBase", () => {
                 )).to.be.true;
             }
             {
-                let unit = new UnitBase(
+                let unit = new Unit(
                     {
                         [Dimension.AMOUNT]     : 0,
                         [Dimension.MASS]       : 1,
@@ -1975,7 +1975,7 @@ describe("UnitBase", () => {
                         [Dimension.CURRENT]    : 0,
                         [Dimension.LUMINOUS]   : 0
                     },
-                    "test unit", "?", 3.0, 1);
+                    "test unit", "?", 3.0);
                 let x = unit.value(2.0);
                 expect(x.value).to.equal(6.0);
                 expect(Dimension.equal(
