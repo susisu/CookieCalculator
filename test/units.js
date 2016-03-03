@@ -1889,18 +1889,22 @@ describe("Quantity", () => {
 
     describe("#in(unit)", () => {
         it("should return the converted value in 'unit'");
+        it("should throw DimensionalError if the dimension of 'unit' is inconsistent");
     });
 
     describe("#inAutoPrefixed(unit)", () => {
         it("should return the pair of the auto-prefixed version of 'unit' and the converted value in it");
+        it("should throw DimensionalError if the dimension of 'unit' is inconsistent");
     });
 
     describe("#toStringIn(unit)", () => {
         it("should return a string describing the quantity in 'unit'");
+        it("should throw DimensionalError if the dimension of 'unit' is inconsistent");
     });
 
     describe("#toStringInAutoPrefixed(unit)", () => {
         it("should return a string describing the quantity in the auto-prefixed 'unit'");
+        it("should throw DimensionalError if the dimension of 'unit' is inconsistent");
     });
 });
 
