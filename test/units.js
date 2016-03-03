@@ -1905,10 +1905,12 @@ describe("Quantity", () => {
 });
 
 describe("Unit", () => {
-    let Unit = units.Unit;
-    let Dimension = units.Dimension;
-    let Prefix = units.Prefix;
-    let Prefixed = units.Prefixed;
+    let Unit             = units.Unit;
+    let Dimension        = units.Dimension;
+    let DimensionalError = units.DimensionalError;
+    let Quantity         = units.Quantity;
+    let Prefix           = units.Prefix;
+    let Prefixed         = units.Prefixed;
 
     describe("constructor(dimension, name, symbol, factor)", () => {
         {
@@ -2045,7 +2047,62 @@ describe("Unit", () => {
     });
 
     describe("#autoPrefixFor(quantity)", () => {
-        it("should return the auto-prefixed version of the unit reasonable for 'quantity'");
+        it("should return the auto-prefixed version of the unit reasonable for 'quantity'", () => {
+            for (let e = -24; e <= 26; e++) {
+                for (let i = 1; i <= 9; i++) {
+                    let unit = new Unit({}, "test unit", "?", 1.0);
+                    let x = new Quantity(i * Math.pow(10.0, e), {});
+                    let prefixed = unit.autoPrefixFor(x);
+                    let v = x.in(prefixed);
+                    expect(v).to.be.at.least(1.0).and.below(1.0e3);
+                }
+            }
+        });
+
+        it("should throw DimensionalError if the dimensions are consistent", () => {
+            {
+                let unit = new Unit({}, "test unit", "?", 1.0);
+                let x = new Quantity(3.14, { [Dimension.AMOUNT]: 1 });
+                expect(() => { unit.autoPrefixFor(x); }).to.throw(DimensionalError);
+            }
+            {
+                let unit = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit", "?", 1.0);
+                let x = new Quantity(3.14, {});
+                expect(() => { unit.autoPrefixFor(x); }).to.throw(DimensionalError);
+            }
+            {
+                let unit = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit", "?", 1.0);
+                let x = new Quantity(3.14, { [Dimension.AMOUNT]: 2 });
+                expect(() => { unit.autoPrefixFor(x); }).to.throw(DimensionalError);
+            }
+            {
+                let unit = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit", "?", 1.0);
+                let x = new Quantity(3.14, { [Dimension.MASS]: 1 });
+                expect(() => { unit.autoPrefixFor(x); }).to.throw(DimensionalError);
+            }
+
+            {
+                let unit = new Unit(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    }
+                    , "test unit", "?", 1.0);
+                let x = new Quantity(
+                    3.14,
+                    {
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 1,
+                        [Dimension.TIME]       : -2
+                    });
+                expect(() => { unit.autoPrefixFor(x); }).to.throw(DimensionalError);
+            }
+        });
     });
 
     describe("#scale(factor)", () => {
