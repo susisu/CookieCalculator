@@ -1915,6 +1915,7 @@ describe("Unit", () => {
     let Quantity         = units.Quantity;
     let Prefactored      = units.Prefactored;
     let UnitMul          = units.UnitMul;
+    let UnitDiv          = units.UnitDiv;
     let Prefix           = units.Prefix;
     let Prefixed         = units.Prefixed;
 
@@ -2133,7 +2134,14 @@ describe("Unit", () => {
     });
 
     describe("#div(unit)", () => {
-        it("should return the quotient unit of this and 'unit'");
+        it("should return the quotient unit of this and 'unit'", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let quot = unitA.div(unitB);
+            expect(quot).to.be.instanceOf(UnitDiv);
+            expect(quot.unitA).to.equal(unitA);
+            expect(quot.unitB).to.equal(unitB);
+        });
     });
 
     describe("#pow(power)", () => {
