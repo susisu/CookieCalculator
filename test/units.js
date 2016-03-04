@@ -1914,6 +1914,7 @@ describe("Unit", () => {
     let DimensionalError = units.DimensionalError;
     let Quantity         = units.Quantity;
     let Prefactored      = units.Prefactored;
+    let UnitMul          = units.UnitMul;
     let Prefix           = units.Prefix;
     let Prefixed         = units.Prefixed;
 
@@ -2121,7 +2122,14 @@ describe("Unit", () => {
     });
 
     describe("#mul(unit)", () => {
-        it("should return the product unit of this and 'unit'");
+        it("should return the product unit of this and 'unit'", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let prod = unitA.mul(unitB);
+            expect(prod).to.be.instanceOf(UnitMul);
+            expect(prod.unitA).to.equal(unitA);
+            expect(prod.unitB).to.equal(unitB);
+        });
     });
 
     describe("#div(unit)", () => {
