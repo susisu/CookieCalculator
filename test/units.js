@@ -1913,6 +1913,7 @@ describe("Unit", () => {
     let Dimension        = units.Dimension;
     let DimensionalError = units.DimensionalError;
     let Quantity         = units.Quantity;
+    let Prefactored      = units.Prefactored;
     let Prefix           = units.Prefix;
     let Prefixed         = units.Prefixed;
 
@@ -2110,7 +2111,13 @@ describe("Unit", () => {
     });
 
     describe("#scale(factor)", () => {
-        it("should return the scaled version of the unit");
+        it("should return the scaled version of the unit", () => {
+            let unit = new Unit({}, "test unit", "?", 1.0);
+            let scaled = unit.scale(3.0);
+            expect(scaled).to.be.instanceOf(Prefactored);
+            expect(scaled.prefactor).to.equal(3.0);
+            expect(scaled.unit).to.equal(unit);
+        });
     });
 
     describe("#mul(unit)", () => {
