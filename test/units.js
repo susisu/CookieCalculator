@@ -1920,44 +1920,46 @@ describe("Unit", () => {
     let Prefixed         = units.Prefixed;
 
     describe("constructor(dimension, name, symbol, factor)", () => {
-        {
-            let unit = new Unit({}, "test unit", "?", 1.0);
-            expect(Dimension.equal(unit.dimension, {})).to.be.true;
-            expect(unit.name).to.equal("test unit");
-            expect(unit.symbol).to.equal("?");
-            expect(unit.factor).to.equal(1.0);
-        }
-        {
-            let unit = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit 2", "!", 2.0);
-            expect(Dimension.equal(unit.dimension, { [Dimension.AMOUNT]: 1 })).to.be.true;
-            expect(unit.name).to.equal("test unit 2");
-            expect(unit.symbol).to.equal("!");
-            expect(unit.factor).to.equal(2.0);
-        }
-       {
-            let unit = new Unit(
-                {
-                    [Dimension.AMOUNT]     : 0,
-                    [Dimension.MASS]       : 1,
-                    [Dimension.LENGTH]     : 2,
-                    [Dimension.TIME]       : -2,
-                    [Dimension.TEMPERATURE]: 0,
-                    [Dimension.CURRENT]    : 0,
-                    [Dimension.LUMINOUS]   : 0
-                },
-                "test unit", "?", 1.0);
-            expect(Dimension.equal(
-                unit.dimension,
-                {
-                    [Dimension.MASS]       : 1,
-                    [Dimension.LENGTH]     : 2,
-                    [Dimension.TIME]       : -2
-                }
-            )).to.be.true;
-            expect(unit.name).to.equal("test unit");
-            expect(unit.symbol).to.equal("?");
-            expect(unit.factor).to.equal(1.0);
-        }
+        it("should create a new Unit instance", () => {
+            {
+                let unit = new Unit({}, "test unit", "?", 1.0);
+                expect(Dimension.equal(unit.dimension, {})).to.be.true;
+                expect(unit.name).to.equal("test unit");
+                expect(unit.symbol).to.equal("?");
+                expect(unit.factor).to.equal(1.0);
+            }
+            {
+                let unit = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit 2", "!", 2.0);
+                expect(Dimension.equal(unit.dimension, { [Dimension.AMOUNT]: 1 })).to.be.true;
+                expect(unit.name).to.equal("test unit 2");
+                expect(unit.symbol).to.equal("!");
+                expect(unit.factor).to.equal(2.0);
+            }
+            {
+                let unit = new Unit(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    "test unit", "?", 1.0);
+                expect(Dimension.equal(
+                    unit.dimension,
+                    {
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2
+                    }
+                )).to.be.true;
+                expect(unit.name).to.equal("test unit");
+                expect(unit.symbol).to.equal("?");
+                expect(unit.factor).to.equal(1.0);
+            }
+        });
     });
 
     describe("#toString()", () => {
