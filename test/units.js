@@ -1916,6 +1916,7 @@ describe("Unit", () => {
     let Prefactored      = units.Prefactored;
     let UnitMul          = units.UnitMul;
     let UnitDiv          = units.UnitDiv;
+    let UnitPow          = units.UnitPow;
     let Prefix           = units.Prefix;
     let Prefixed         = units.Prefixed;
 
@@ -2147,6 +2148,12 @@ describe("Unit", () => {
     });
 
     describe("#pow(power)", () => {
-        it("should return the powered unit by 'power'");
+        it("should return the powered unit by 'power'", () => {
+            let unit = new Unit({}, "test unit", "?", 1.0);
+            let pow = unit.pow(3);
+            expect(pow).to.be.instanceOf(UnitPow);
+            expect(pow.unit).to.equal(unit);
+            expect(pow.power).to.equal(3);
+        });
     });
 });
