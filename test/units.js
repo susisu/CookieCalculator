@@ -2172,4 +2172,11 @@ describe("One", () => {
             expect(one.factor).to.equal(1.0);
         });
     });
+
+    //  describe("#toString()", () => {
+    //     it("should return its name \"1\"", () => {
+    //         let one = new One();
+    //         expect(one.toString()).to.equal("1");
+    //     });
+    // });
 });
