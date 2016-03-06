@@ -2157,3 +2157,19 @@ describe("Unit", () => {
         });
     });
 });
+
+describe("One", () => {
+    let One = units.One;
+    let Dimension = units.Dimension;
+
+    describe("constructor()", () => {
+        it("should create a new One instance", () => {
+            let one = new One();
+            expect(one).to.be.instanceOf(One);
+            expect(Dimension.equal(one.dimension, {})).to.be.true;
+            expect(one.name).to.equal("1");
+            expect(one.symbol).to.equal("");
+            expect(one.factor).to.equal(1.0);
+        });
+    });
+});
