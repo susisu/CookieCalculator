@@ -1975,24 +1975,28 @@ describe("Unit", () => {
             {
                 let unit = new Unit({}, "test unit", "?", 1.0);
                 let x = unit.value(2.0);
+                expect(x).to.instanceOf(Quantity);
                 expect(x.value).to.equal(2.0);
                 expect(Dimension.equal(x.dimension, {})).to.be.true;
             }
             {
                 let unit = new Unit({}, "test unit", "?", 3.0);
                 let x = unit.value(2.0);
+                expect(x).to.instanceOf(Quantity);
                 expect(x.value).to.equal(6.0);
                 expect(Dimension.equal(x.dimension, {})).to.be.true;
             }
             {
                 let unit = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit", "?", 1.0);
                 let x = unit.value(2.0);
+                expect(x).to.instanceOf(Quantity);
                 expect(x.value).to.equal(2.0);
                 expect(Dimension.equal(x.dimension, { [Dimension.AMOUNT]: 1 })).to.be.true;
             }
             {
                 let unit = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit", "?", 3.0);
                 let x = unit.value(2.0);
+                expect(x).to.instanceOf(Quantity);
                 expect(x.value).to.equal(6.0);
                 expect(Dimension.equal(x.dimension, { [Dimension.AMOUNT]: 1 })).to.be.true;
             }
@@ -2009,6 +2013,7 @@ describe("Unit", () => {
                     },
                     "test unit", "?", 1.0);
                 let x = unit.value(2.0);
+                expect(x).to.instanceOf(Quantity);
                 expect(x.value).to.equal(2.0);
                 expect(Dimension.equal(
                     x.dimension,
@@ -2032,6 +2037,7 @@ describe("Unit", () => {
                     },
                     "test unit", "?", 3.0);
                 let x = unit.value(2.0);
+                expect(x).to.instanceOf(Quantity);
                 expect(x.value).to.equal(6.0);
                 expect(Dimension.equal(
                     x.dimension,
