@@ -2159,8 +2159,9 @@ describe("Unit", () => {
 });
 
 describe("One", () => {
-    let One = units.One;
+    let One       = units.One;
     let Dimension = units.Dimension;
+    let Quantity  = units.Quantity;
 
     describe("constructor()", () => {
         it("should create a new One instance", () => {
@@ -2173,10 +2174,20 @@ describe("One", () => {
         });
     });
 
-    //  describe("#toString()", () => {
-    //     it("should return its name \"1\"", () => {
-    //         let one = new One();
-    //         expect(one.toString()).to.equal("1");
-    //     });
-    // });
+    describe("#toString()", () => {
+        it("should return its name \"1\"", () => {
+            let one = new One();
+            expect(one.toString()).to.equal("1");
+        });
+    });
+
+    describe("#value(value)", () => {
+        it("should return a quantity that is just a number", () => {
+            let one = new One();
+            let x = one.value(2);
+            expect(x).to.instanceOf(Quantity);
+            expect(x.value).to.equal(2);
+            expect(Dimension.equal(x.dimension, {})).to.be.true;
+        });
+    });
 });
