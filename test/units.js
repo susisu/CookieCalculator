@@ -2168,6 +2168,8 @@ describe("One", () => {
     let One       = units.One;
     let Dimension = units.Dimension;
     let Quantity  = units.Quantity;
+    let Prefix    = units.Prefix;
+    let Prefixed  = units.Prefixed;
 
     describe("constructor()", () => {
         it("should create a new One instance", () => {
@@ -2194,6 +2196,17 @@ describe("One", () => {
             expect(x).to.instanceOf(Quantity);
             expect(x.value).to.equal(2);
             expect(Dimension.equal(x.dimension, {})).to.be.true;
+        });
+    });
+
+    describe("#addPrefix(prefix)", () => {
+        it("should return the prefixed version of the unit", () => {
+            let one = new One();
+            let prefix = new Prefix("test prefix", "!", 3.0);
+            let prefixed = one.addPrefix(prefix);
+            expect(prefixed).to.be.instanceOf(Prefixed);
+            expect(prefixed.unit).to.equal(one);
+            expect(prefixed.prefix).to.equal(prefix);
         });
     });
 });
