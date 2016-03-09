@@ -2165,11 +2165,12 @@ describe("Unit", () => {
 });
 
 describe("One", () => {
-    let One       = units.One;
-    let Dimension = units.Dimension;
-    let Quantity  = units.Quantity;
-    let Prefix    = units.Prefix;
-    let Prefixed  = units.Prefixed;
+    let One              = units.One;
+    let Dimension        = units.Dimension;
+    let DimensionalError = units.DimensionalError;
+    let Quantity         = units.Quantity;
+    let Prefix           = units.Prefix;
+    let Prefixed         = units.Prefixed;
 
     describe("constructor()", () => {
         it("should create a new One instance", () => {
@@ -2207,6 +2208,44 @@ describe("One", () => {
             expect(prefixed).to.be.instanceOf(Prefixed);
             expect(prefixed.unit).to.equal(one);
             expect(prefixed.prefix).to.equal(prefix);
+        });
+    });
+
+    describe("#autoPrefixFor(quantity)", () => {
+        it("should return the auto-prefixed version of the unit reasonable for 'quantity'", () => {
+            for (let e = -24; e <= 26; e++) {
+                for (let i = 1; i <= 9; i++) {
+                    let one = new One();
+                    let x = new Quantity(i * Math.pow(10.0, e), {});
+                    let prefixed = one.autoPrefixFor(x);
+                    let v = x.in(prefixed);
+                    expect(v).to.be.at.least(1.0).and.below(1.0e3);
+                }
+            }
+        });
+
+        it("should throw DimensionalError if the dimensions are consistent", () => {
+            {
+                let one = new One();
+                let x = new Quantity(3.14, { [Dimension.AMOUNT]: 1 });
+                expect(() => { one.autoPrefixFor(x); }).to.throw(DimensionalError);
+            }
+            {
+                let one = new One();
+                let x = new Quantity(
+                    3.14,
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    }
+                );
+                expect(() => { one.autoPrefixFor(x); }).to.throw(DimensionalError);
+            }
         });
     });
 });
