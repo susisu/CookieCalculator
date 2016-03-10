@@ -1913,6 +1913,7 @@ describe("Unit", () => {
     let Dimension        = units.Dimension;
     let DimensionalError = units.DimensionalError;
     let Quantity         = units.Quantity;
+    let One              = units.One;
     let Prefactored      = units.Prefactored;
     let UnitMul          = units.UnitMul;
     let UnitDiv          = units.UnitDiv;
@@ -2132,6 +2133,25 @@ describe("Unit", () => {
     });
 
     describe("#mul(unit)", () => {
+        it("should return the unit if 'unit' is a One", () => {
+            let unit = new Unit({}, "test unit", "?", 1.0);
+            let one = new One();
+            let prod = unit.mul(one);
+            expect(prod).to.equal(unit);
+        });
+
+        it("should return the prefactored product of this and the original unit of 'unit' if 'unit' is a Prefactored", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let pref = new Prefactored(3.0, unitB);
+            let prod = unitA.mul(pref);
+            expect(prod).to.be.instanceOf(Prefactored);
+            expect(prod.prefactor).to.equal(3.0);
+            expect(prod.unit).to.be.instanceOf(UnitMul);
+            expect(prod.unit.unitA).to.equal(unitA);
+            expect(prod.unit.unitB).to.equal(unitB);
+        });
+
         it("should return the product unit of this and 'unit'", () => {
             let unitA = new Unit({}, "test unit 1", "?", 1.0);
             let unitB = new Unit({}, "test unit 2", "!", 2.0);
@@ -2143,6 +2163,25 @@ describe("Unit", () => {
     });
 
     describe("#div(unit)", () => {
+        it("should return the unit if 'unit' is a One", () => {
+            let unit = new Unit({}, "test unit", "?", 1.0);
+            let one = new One();
+            let quot = unit.div(one);
+            expect(quot).to.equal(unit);
+        });
+
+        it("should return the prefactored quotient of this and the original unit of 'unit' if 'unit' is a Prefactored", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let pref = new Prefactored(4.0, unitB);
+            let quot = unitA.div(pref);
+            expect(quot).to.be.instanceOf(Prefactored);
+            expect(quot.prefactor).to.equal(0.25);
+            expect(quot.unit).to.be.instanceOf(UnitDiv);
+            expect(quot.unit.unitA).to.equal(unitA);
+            expect(quot.unit.unitB).to.equal(unitB);
+        });
+
         it("should return the quotient unit of this and 'unit'", () => {
             let unitA = new Unit({}, "test unit 1", "?", 1.0);
             let unitB = new Unit({}, "test unit 2", "!", 2.0);
