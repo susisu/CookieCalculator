@@ -2255,8 +2255,8 @@ describe("One", () => {
             let one = new One();
             let scaled = one.scale(3.0);
             expect(scaled).to.be.instanceOf(Prefactored);
-            expect(scaled.unit).to.be.equal(one);
-            expect(scaled.prefactor).to.be.equal(3.0);
+            expect(scaled.unit).to.equal(one);
+            expect(scaled.prefactor).to.equal(3.0);
         });
     });
 });
