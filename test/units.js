@@ -2208,6 +2208,7 @@ describe("One", () => {
     let Dimension        = units.Dimension;
     let DimensionalError = units.DimensionalError;
     let Quantity         = units.Quantity;
+    let Unit             = units.Unit;
     let Prefactored      = units.Prefactored;
     let Prefix           = units.Prefix;
     let Prefixed         = units.Prefixed;
@@ -2296,6 +2297,30 @@ describe("One", () => {
             expect(scaled).to.be.instanceOf(Prefactored);
             expect(scaled.unit).to.equal(one);
             expect(scaled.prefactor).to.equal(3.0);
+        });
+    });
+
+    describe("#mul(unit)", () => {
+        it("should return 'unit'", () => {
+            {
+                let one = new One();
+                let unit = new One();
+                let prod = one.mul(unit);
+                expect(prod).to.equal(unit);
+            }
+            {
+                let one = new One();
+                let unit = new Unit({}, "test unit", "?", 1.0);
+                let pref = new Prefactored(2.0, unit);
+                let prod = one.mul(pref);
+                expect(prod).to.equal(pref);
+            }
+            {
+                let one = new One();
+                let unit = new Unit({}, "test unit", "?", 1.0);
+                let prod = one.mul(unit);
+                expect(prod).to.equal(unit);
+            }
         });
     });
 });
