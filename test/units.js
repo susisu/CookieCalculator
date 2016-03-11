@@ -2210,6 +2210,7 @@ describe("One", () => {
     let Quantity         = units.Quantity;
     let Unit             = units.Unit;
     let Prefactored      = units.Prefactored;
+    let UnitPow          = units.UnitPow;
     let Prefix           = units.Prefix;
     let Prefixed         = units.Prefixed;
 
@@ -2320,6 +2321,36 @@ describe("One", () => {
                 let unit = new Unit({}, "test unit", "?", 1.0);
                 let prod = one.mul(unit);
                 expect(prod).to.equal(unit);
+            }
+        });
+    });
+
+    describe("#div(unit)", () => {
+        it("should return the inverse of 'unit'", () => {
+            {
+                let one = new One();
+                let unit = new One();
+                let quot = one.div(unit);
+                expect(quot).to.be.an.instanceOf(One);
+            }
+            {
+                let one = new One();
+                let unit = new Unit({}, "test unit", "?", 1.0);
+                let pref = new Prefactored(2.0, unit);
+                let quot = one.div(pref);
+                expect(quot).to.be.an.instanceOf(Prefactored);
+                expect(quot.prefactor).to.equal(0.5);
+                expect(quot.unit).to.be.an.instanceOf(UnitPow);
+                expect(quot.unit.unit).to.equal(unit);
+                expect(quot.unit.power).to.equal(-1);
+            }
+            {
+                let one = new One();
+                let unit = new Unit({}, "test unit", "?", 1.0);
+                let quot = one.div(unit);
+                expect(quot).to.be.an.instanceOf(UnitPow);
+                expect(quot.unit).to.equal(unit);
+                expect(quot.power).to.equal(-1);
             }
         });
     });
