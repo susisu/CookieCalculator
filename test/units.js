@@ -2057,7 +2057,7 @@ describe("Unit", () => {
             let unit = new Unit({}, "test unit", "?", 2.0);
             let prefix = new Prefix("test prefix", "!", 3.0);
             let prefixed = unit.addPrefix(prefix);
-            expect(prefixed).to.be.instanceOf(Prefixed);
+            expect(prefixed).to.be.an.instanceOf(Prefixed);
             expect(prefixed.unit).to.equal(unit);
             expect(prefixed.prefix).to.equal(prefix);
         });
@@ -2126,7 +2126,7 @@ describe("Unit", () => {
         it("should return the scaled version of the unit", () => {
             let unit = new Unit({}, "test unit", "?", 1.0);
             let scaled = unit.scale(3.0);
-            expect(scaled).to.be.instanceOf(Prefactored);
+            expect(scaled).to.be.an.instanceOf(Prefactored);
             expect(scaled.prefactor).to.equal(3.0);
             expect(scaled.unit).to.equal(unit);
         });
@@ -2145,9 +2145,9 @@ describe("Unit", () => {
             let unitB = new Unit({}, "test unit 2", "!", 2.0);
             let pref = new Prefactored(3.0, unitB);
             let prod = unitA.mul(pref);
-            expect(prod).to.be.instanceOf(Prefactored);
+            expect(prod).to.be.an.instanceOf(Prefactored);
             expect(prod.prefactor).to.equal(3.0);
-            expect(prod.unit).to.be.instanceOf(UnitMul);
+            expect(prod.unit).to.be.an.instanceOf(UnitMul);
             expect(prod.unit.unitA).to.equal(unitA);
             expect(prod.unit.unitB).to.equal(unitB);
         });
@@ -2156,7 +2156,7 @@ describe("Unit", () => {
             let unitA = new Unit({}, "test unit 1", "?", 1.0);
             let unitB = new Unit({}, "test unit 2", "!", 2.0);
             let prod = unitA.mul(unitB);
-            expect(prod).to.be.instanceOf(UnitMul);
+            expect(prod).to.be.an.instanceOf(UnitMul);
             expect(prod.unitA).to.equal(unitA);
             expect(prod.unitB).to.equal(unitB);
         });
@@ -2175,9 +2175,9 @@ describe("Unit", () => {
             let unitB = new Unit({}, "test unit 2", "!", 2.0);
             let pref = new Prefactored(4.0, unitB);
             let quot = unitA.div(pref);
-            expect(quot).to.be.instanceOf(Prefactored);
+            expect(quot).to.be.an.instanceOf(Prefactored);
             expect(quot.prefactor).to.equal(0.25);
-            expect(quot.unit).to.be.instanceOf(UnitDiv);
+            expect(quot.unit).to.be.an.instanceOf(UnitDiv);
             expect(quot.unit.unitA).to.equal(unitA);
             expect(quot.unit.unitB).to.equal(unitB);
         });
@@ -2186,7 +2186,7 @@ describe("Unit", () => {
             let unitA = new Unit({}, "test unit 1", "?", 1.0);
             let unitB = new Unit({}, "test unit 2", "!", 2.0);
             let quot = unitA.div(unitB);
-            expect(quot).to.be.instanceOf(UnitDiv);
+            expect(quot).to.be.an.instanceOf(UnitDiv);
             expect(quot.unitA).to.equal(unitA);
             expect(quot.unitB).to.equal(unitB);
         });
@@ -2196,7 +2196,7 @@ describe("Unit", () => {
         it("should return the powered unit by 'power'", () => {
             let unit = new Unit({}, "test unit", "?", 1.0);
             let pow = unit.pow(3);
-            expect(pow).to.be.instanceOf(UnitPow);
+            expect(pow).to.be.an.instanceOf(UnitPow);
             expect(pow.unit).to.equal(unit);
             expect(pow.power).to.equal(3);
         });
@@ -2216,7 +2216,7 @@ describe("One", () => {
     describe("constructor()", () => {
         it("should create a new One instance", () => {
             let one = new One();
-            expect(one).to.be.instanceOf(One);
+            expect(one).to.be.an.instanceOf(One);
             expect(Dimension.equal(one.dimension, {})).to.be.true;
             expect(one.name).to.equal("1");
             expect(one.symbol).to.equal("");
@@ -2246,7 +2246,7 @@ describe("One", () => {
             let one = new One();
             let prefix = new Prefix("test prefix", "!", 3.0);
             let prefixed = one.addPrefix(prefix);
-            expect(prefixed).to.be.instanceOf(Prefixed);
+            expect(prefixed).to.be.an.instanceOf(Prefixed);
             expect(prefixed.unit).to.equal(one);
             expect(prefixed.prefix).to.equal(prefix);
         });
@@ -2294,7 +2294,7 @@ describe("One", () => {
         it("should return the scaled version of the unit", () => {
             let one = new One();
             let scaled = one.scale(3.0);
-            expect(scaled).to.be.instanceOf(Prefactored);
+            expect(scaled).to.be.an.instanceOf(Prefactored);
             expect(scaled.unit).to.equal(one);
             expect(scaled.prefactor).to.equal(3.0);
         });
