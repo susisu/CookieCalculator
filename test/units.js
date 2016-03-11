@@ -1929,6 +1929,7 @@ describe("Unit", () => {
                 expect(unit.name).to.equal("test unit");
                 expect(unit.symbol).to.equal("?");
                 expect(unit.factor).to.equal(1.0);
+                expect(unit.prefixPower).to.equal(1);
             }
             {
                 let unit = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit 2", "!", 2.0);
@@ -1936,6 +1937,7 @@ describe("Unit", () => {
                 expect(unit.name).to.equal("test unit 2");
                 expect(unit.symbol).to.equal("!");
                 expect(unit.factor).to.equal(2.0);
+                expect(unit.prefixPower).to.equal(1);
             }
             {
                 let unit = new Unit(
@@ -1960,6 +1962,7 @@ describe("Unit", () => {
                 expect(unit.name).to.equal("test unit");
                 expect(unit.symbol).to.equal("?");
                 expect(unit.factor).to.equal(1.0);
+                expect(unit.prefixPower).to.equal(1);
             }
         });
     });
@@ -2222,6 +2225,7 @@ describe("One", () => {
             expect(one.name).to.equal("1");
             expect(one.symbol).to.equal("");
             expect(one.factor).to.equal(1.0);
+            expect(one.prefixPower).to.equal(1);
         });
     });
 
@@ -2387,6 +2391,7 @@ describe("Synonym", () => {
                 expect(syn.name).to.equal("synonym");
                 expect(syn.symbol).to.equal("!");
                 expect(syn.factor).to.equal(1.0);
+                expect(syn.prefixPower).to.equal(1);
             }
             {
                 let unit = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit 2", "!", 2.0);
@@ -2395,6 +2400,7 @@ describe("Synonym", () => {
                 expect(syn.name).to.equal("synonym 2");
                 expect(syn.symbol).to.equal("!");
                 expect(syn.factor).to.equal(2.0);
+                expect(syn.prefixPower).to.equal(1);
             }
             {
                 let unit = new Unit(
@@ -2420,6 +2426,7 @@ describe("Synonym", () => {
                 expect(syn.name).to.equal("synonym");
                 expect(syn.symbol).to.equal("!");
                 expect(syn.factor).to.equal(1.0);
+                expect(syn.prefixPower).to.equal(1);
             }
         });
     });
