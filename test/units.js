@@ -2354,4 +2354,12 @@ describe("One", () => {
             }
         });
     });
+
+    describe("#pow(power)", () => {
+        it("should return a One", () => {
+            let one = new One();
+            let pow = one.pow(3);
+            expect(pow).to.be.an.instanceOf(One);
+        });
+    });
 });
