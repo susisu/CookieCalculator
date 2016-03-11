@@ -2306,7 +2306,7 @@ describe("One", () => {
                 let one = new One();
                 let unit = new One();
                 let prod = one.mul(unit);
-                expect(prod).to.equal(unit);
+                expect(prod).to.be.an.instanceOf(One);
             }
             {
                 let one = new One();
