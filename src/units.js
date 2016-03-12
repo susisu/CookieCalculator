@@ -411,10 +411,10 @@ class Prefactored extends UnitBase {
             return this;
         }
         else if (unit instanceof Prefactored) {
-            return new Prefactored(this.prefactor * unit.prefactor, new UnitMul(this.unit, unit.unit));
+            return new Prefactored(this.prefactor * unit.prefactor, this.unit.mul(unit.unit));
         }
         else {
-            return new Prefactored(this.prefactor, new UnitMul(this.unit, unit));
+            return new Prefactored(this.prefactor, this.unit.mul(unit));
         }
     }
 
@@ -423,15 +423,15 @@ class Prefactored extends UnitBase {
             return this;
         }
         else if (unit instanceof Prefactored) {
-            return new Prefactored(this.prefactor / unit.prefactor, new UnitDiv(this.unit, unit.unit));
+            return new Prefactored(this.prefactor / unit.prefactor, this.unit.div(unit.unit));
         }
         else {
-            return new Prefactored(this.prefactor, new UnitDiv(this.unit, unit));
+            return new Prefactored(this.prefactor, this.unit.div(unit));
         }
     }
 
     pow(power) {
-        return new Prefactored(Math.pow(this.prefactor, power), new UnitPow(this.unit, power));
+        return new Prefactored(Math.pow(this.prefactor, power), this.unit.pow(power));
     }
 }
 
