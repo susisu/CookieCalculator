@@ -1925,6 +1925,7 @@ describe("Unit", () => {
         it("should create a new Unit instance", () => {
             {
                 let unit = new Unit({}, "test unit", "?", 1.0);
+                expect(unit).to.be.an.instanceOf(Unit);
                 expect(Dimension.equal(unit.dimension, {})).to.be.true;
                 expect(unit.name).to.equal("test unit");
                 expect(unit.symbol).to.equal("?");
@@ -1933,6 +1934,7 @@ describe("Unit", () => {
             }
             {
                 let unit = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit 2", "!", 2.0);
+                expect(unit).to.be.an.instanceOf(Unit);
                 expect(Dimension.equal(unit.dimension, { [Dimension.AMOUNT]: 1 })).to.be.true;
                 expect(unit.name).to.equal("test unit 2");
                 expect(unit.symbol).to.equal("!");
@@ -1951,6 +1953,7 @@ describe("Unit", () => {
                         [Dimension.LUMINOUS]   : 0
                     },
                     "test unit", "?", 1.0);
+                expect(unit).to.be.an.instanceOf(Unit);
                 expect(Dimension.equal(
                     unit.dimension,
                     {
@@ -2373,6 +2376,7 @@ describe("Synonym", () => {
     let Dimension        = units.Dimension;
     let DimensionalError = units.DimensionalError;
     let Quantity         = units.Quantity;
+    let UnitBase         = units.UnitBase;
     let Unit             = units.Unit;
     let One              = units.One;
     let Prefactored      = units.Prefactored;
@@ -2385,8 +2389,9 @@ describe("Synonym", () => {
     describe("constructor(name, symbol, unit)", () => {
         it("should create a new Synonym instance", () => {
             {
-                let unit = new Unit({}, "test unit", "?", 1.0);
+                let unit = new UnitBase({}, "test unit", "?", 1.0, 1);
                 let syn = new Synonym("synonym", "!", unit);
+                expect(syn).to.be.an.instanceOf(Synonym);
                 expect(Dimension.equal(syn.dimension, {})).to.be.true;
                 expect(syn.name).to.equal("synonym");
                 expect(syn.symbol).to.equal("!");
@@ -2394,7 +2399,7 @@ describe("Synonym", () => {
                 expect(syn.prefixPower).to.equal(1);
             }
             {
-                let unit = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit 2", "!", 2.0);
+                let unit = new UnitBase({ [Dimension.AMOUNT]: 1 }, "test unit 2", "!", 2.0, 3);
                 let syn = new Synonym("synonym 2", "!", unit);
                 expect(Dimension.equal(syn.dimension, { [Dimension.AMOUNT]: 1 })).to.be.true;
                 expect(syn.name).to.equal("synonym 2");
@@ -2403,7 +2408,7 @@ describe("Synonym", () => {
                 expect(syn.prefixPower).to.equal(1);
             }
             {
-                let unit = new Unit(
+                let unit = new UnitBase(
                     {
                         [Dimension.AMOUNT]     : 0,
                         [Dimension.MASS]       : 1,
@@ -2413,7 +2418,7 @@ describe("Synonym", () => {
                         [Dimension.CURRENT]    : 0,
                         [Dimension.LUMINOUS]   : 0
                     },
-                    "test unit", "?", 1.0);
+                    "test unit", "?", 1.0, 1);
                 let syn = new Synonym("synonym", "!", unit);
                 expect(Dimension.equal(
                     syn.dimension,
@@ -2697,6 +2702,7 @@ describe("Prefactored", () => {
     let Dimension        = units.Dimension;
     let DimensionalError = units.DimensionalError;
     let Quantity         = units.Quantity;
+    let UnitBase         = units.UnitBase;
     let Unit             = units.Unit;
     let One              = units.One;
     let UnitMul          = units.UnitMul;
@@ -2707,13 +2713,51 @@ describe("Prefactored", () => {
 
     describe("constructor(prefactor, unit)", () => {
         it("should create a new Prefactored instance", () => {
-            let unit = new Unit({}, "test unit", "?", 2.0);
-            let pref = new Prefactored(3.0, unit);
-            expect(pref).to.be.an.instanceOf(Prefactored);
-            expect(pref.name).to.equal("3 test unit");
-            expect(pref.symbol).to.equal("* 3 ?");
-            expect(pref.factor).to.equal(6.0);
-            expect(pref.prefixPower).to.equal(1);
+            {
+                let unit = new UnitBase({}, "test unit", "?", 1.0, 1);
+                let pref = new Prefactored(3.0, unit);
+                expect(pref).to.be.an.instanceOf(Prefactored);
+                expect(Dimension.equal(pref.dimension, {})).to.be.true;
+                expect(pref.name).to.equal("3 test unit");
+                expect(pref.symbol).to.equal("* 3 ?");
+                expect(pref.factor).to.equal(3.0);
+                expect(pref.prefixPower).to.equal(1);
+            }
+            {
+                let unit = new UnitBase({ [Dimension.AMOUNT]: 1 }, "test unit 2", "!", 2.0, 3);
+                let pref = new Prefactored(3.0, unit);
+                expect(Dimension.equal(pref.dimension, { [Dimension.AMOUNT]: 1 })).to.be.true;
+                expect(pref.name).to.equal("3 test unit 2");
+                expect(pref.symbol).to.equal("* 3 !");
+                expect(pref.factor).to.equal(6.0);
+                expect(pref.prefixPower).to.equal(3);
+            }
+            {
+                let unit = new UnitBase(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    "test unit", "?", 1.0, 1);
+                let pref = new Prefactored(3.0, unit);
+                expect(Dimension.equal(
+                    pref.dimension,
+                    {
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2
+                    }
+                )).to.be.true;
+                expect(pref.name).to.equal("3 test unit");
+                expect(pref.symbol).to.equal("* 3 ?");
+                expect(pref.factor).to.equal(3.0);
+                expect(pref.prefixPower).to.equal(1);
+            }
         });
     });
 
