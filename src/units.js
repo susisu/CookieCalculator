@@ -414,7 +414,7 @@ class Prefactored extends UnitBase {
             return new Prefactored(this.prefactor * unit.prefactor, new UnitMul(this.unit, unit.unit));
         }
         else {
-            return new Prefactored(this.prefactor, UnitMul(this.unit, unit));
+            return new Prefactored(this.prefactor, new UnitMul(this.unit, unit));
         }
     }
 
@@ -426,7 +426,7 @@ class Prefactored extends UnitBase {
             return new Prefactored(this.prefactor / unit.prefactor, new UnitDiv(this.unit, unit.unit));
         }
         else {
-            return new Prefactored(this.prefactor, UnitDiv(this.unit, unit));
+            return new Prefactored(this.prefactor, new UnitDiv(this.unit, unit));
         }
     }
 
