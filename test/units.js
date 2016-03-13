@@ -3124,4 +3124,13 @@ describe("UnitMul", () => {
             }
         });
     });
+
+    describe("#toString()", () => {
+        it("should return its name", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let prod = new UnitMul(unitA, unitB);
+            expect(prod.toString()).to.equal("test unit 1 test unit 2");
+        });
+    });
 });
