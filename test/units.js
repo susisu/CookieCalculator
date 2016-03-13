@@ -3029,3 +3029,99 @@ describe("Prefactored", () => {
         });
     });
 });
+
+describe("UnitMul", () => {
+    let UnitMul          = units.UnitMul;
+    let Dimension        = units.Dimension;
+    let DimensionalError = units.DimensionalError;
+    let Quantity         = units.Quantity;
+    let UnitBase         = units.UnitBase;
+    let Unit             = units.Unit;
+    let One              = units.One;
+    let Prefactored      = units.Prefactored;
+    let UnitDiv          = units.UnitDiv;
+    let UnitPow          = units.UnitPow;
+    let Prefix           = units.Prefix;
+    let Prefixed         = units.Prefixed;
+
+    describe("constructor(prefactor, unit)", () => {
+        it("should create a new Prefactored instance", () => {
+            {
+                let unitA = new UnitBase({}, "test unit 1", "?", 1.0, 1);
+                let unitB = new UnitBase({}, "test unit 2", "!", 2.0, 2);
+                let prod = new UnitMul(unitA, unitB);
+                expect(prod).to.be.an.instanceOf(UnitMul);
+                expect(prod.unitA).to.equal(unitA);
+                expect(prod.unitB).to.equal(unitB);
+                expect(Dimension.equal(prod.dimension, {})).to.be.true;
+                expect(prod.name).to.equal("test unit 1 test unit 2");
+                expect(prod.symbol).to.equal("?.!");
+                expect(prod.factor).to.equal(2.0);
+                expect(prod.prefixPower).to.equal(1);
+            }
+            {
+                let unitA = new UnitBase({ [Dimension.AMOUNT]: 1 }, "test 1", "!", 2.0, 2);
+                let unitB = new UnitBase({ [Dimension.MASS]  : 1 }, "test 2", "?", 3.0, 1);
+                let prod = new UnitMul(unitA, unitB);
+                expect(prod).to.be.an.instanceOf(UnitMul);
+                expect(prod.unitA).to.equal(unitA);
+                expect(prod.unitB).to.equal(unitB);
+                expect(Dimension.equal(
+                    prod.dimension,
+                    {
+                        [Dimension.AMOUNT]: 1,
+                        [Dimension.MASS]  : 1
+                    }
+                )).to.be.true;
+                expect(prod.name).to.equal("test 1 test 2");
+                expect(prod.symbol).to.equal("!.?");
+                expect(prod.factor).to.equal(6.0);
+                expect(prod.prefixPower).to.equal(2);
+            }
+            {
+                let unitA = new UnitBase(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    "test unit 1", "?", 1.0, 1
+                );
+                let unitB = new UnitBase(
+                    {
+                        [Dimension.AMOUNT]     : 1,
+                        [Dimension.MASS]       : 0,
+                        [Dimension.LENGTH]     : 0,
+                        [Dimension.TIME]       : 0,
+                        [Dimension.TEMPERATURE]: 1,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    "test unit 2", "!", 2.0, 2
+                );
+                let prod = new UnitMul(unitA, unitB);
+                expect(prod).to.be.an.instanceOf(UnitMul);
+                expect(prod.unitA).to.equal(unitA);
+                expect(prod.unitB).to.equal(unitB);
+                expect(Dimension.equal(
+                    prod.dimension,
+                    {
+                        [Dimension.AMOUNT]     : 1,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 1
+                    }
+                )).to.be.true;
+                expect(prod.name).to.equal("test unit 1 test unit 2");
+                expect(prod.symbol).to.equal("?.!");
+                expect(prod.factor).to.equal(2.0);
+                expect(prod.prefixPower).to.equal(1);
+            }
+        });
+    });
+});
