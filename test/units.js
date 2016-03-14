@@ -3308,4 +3308,16 @@ describe("UnitMul", () => {
             }
         });
     });
+
+    describe("#scale(factor)", () => {
+        it("should return the scaled version of the unit", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let prod = new UnitMul(unitA, unitB);
+            let scaled = prod.scale(3.0);
+            expect(scaled).to.be.an.instanceOf(Prefactored);
+            expect(scaled.prefactor).to.equal(3.0);
+            expect(scaled.unit).to.equal(prod);
+        });
+    });
 });
