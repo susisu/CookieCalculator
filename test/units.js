@@ -3320,4 +3320,40 @@ describe("UnitMul", () => {
             expect(scaled.unit).to.equal(prod);
         });
     });
+
+    describe("#mul(unit)", () => {
+        it("should return the unit if 'unit' is a One", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let prod1 = new UnitMul(unitA, unitB);
+            let one = new One();
+            let prod2 = prod1.mul(one);
+            expect(prod2).to.equal(prod1);
+        });
+
+        it("should return the prefactored product of this and the original unit of 'unit' if 'unit' is a Prefactored", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let prod1 = new UnitMul(unitA, unitB);
+            let unitC = new Unit({}, "test unit 3", "_", 3.0);
+            let pref = new Prefactored(3.0, unitC);
+            let prod2 = prod1.mul(pref);
+            expect(prod2).to.be.an.instanceOf(Prefactored);
+            expect(prod2.prefactor).to.equal(3.0);
+            expect(prod2.unit).to.be.an.instanceOf(UnitMul);
+            expect(prod2.unit.unitA).to.equal(prod1);
+            expect(prod2.unit.unitB).to.equal(unitC);
+        });
+
+        it("should return the product unit of this and 'unit'", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let prod1 = new UnitMul(unitA, unitB);
+            let unitC = new Unit({}, "test unit 3", "_", 3.0);
+            let prod2 = prod1.mul(unitC);
+            expect(prod2).to.be.an.instanceOf(UnitMul);
+            expect(prod2.unitA).to.equal(prod1);
+            expect(prod2.unitB).to.equal(unitC);
+        });
+    });
 });
