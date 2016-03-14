@@ -3409,3 +3409,383 @@ describe("UnitMul", () => {
         });
     });
 });
+
+describe("UnitDiv", () => {
+    let UnitDiv          = units.UnitDiv;
+    let Dimension        = units.Dimension;
+    let DimensionalError = units.DimensionalError;
+    let Quantity         = units.Quantity;
+    let UnitBase         = units.UnitBase;
+    let Unit             = units.Unit;
+    let One              = units.One;
+    let Prefactored      = units.Prefactored;
+    let UnitMul          = units.UnitMul;
+    let UnitPow          = units.UnitPow;
+    let Prefix           = units.Prefix;
+    let Prefixed         = units.Prefixed;
+
+    describe("constructor(prefactor, unit)", () => {
+        it("should create a new Prefactored instance", () => {
+            {
+                let unitA = new UnitBase({}, "test unit 1", "?", 1.0, 1);
+                let unitB = new UnitBase({}, "test unit 2", "!", 2.0, 2);
+                let quot = new UnitDiv(unitA, unitB);
+                expect(quot).to.be.an.instanceOf(UnitDiv);
+                expect(quot.unitA).to.equal(unitA);
+                expect(quot.unitB).to.equal(unitB);
+                expect(Dimension.equal(quot.dimension, {})).to.be.true;
+                expect(quot.name).to.equal("test unit 1 per test unit 2");
+                expect(quot.symbol).to.equal("?/!");
+                expect(quot.factor).to.equal(0.5);
+                expect(quot.prefixPower).to.equal(1);
+            }
+            {
+                let unitA = new UnitBase({ [Dimension.AMOUNT]: 1 }, "test 1", "!", 3.0, 2);
+                let unitB = new UnitBase({ [Dimension.MASS]  : 1 }, "test 2", "?", 2.0, 1);
+                let quot = new UnitDiv(unitA, unitB);
+                expect(quot).to.be.an.instanceOf(UnitDiv);
+                expect(quot.unitA).to.equal(unitA);
+                expect(quot.unitB).to.equal(unitB);
+                expect(Dimension.equal(
+                    quot.dimension,
+                    {
+                        [Dimension.AMOUNT]: 1,
+                        [Dimension.MASS]  : -1
+                    }
+                )).to.be.true;
+                expect(quot.name).to.equal("test 1 per test 2");
+                expect(quot.symbol).to.equal("!/?");
+                expect(quot.factor).to.equal(1.5);
+                expect(quot.prefixPower).to.equal(2);
+            }
+            {
+                let unitA = new UnitBase(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    "test unit 1", "?", 1.0, 1
+                );
+                let unitB = new UnitBase(
+                    {
+                        [Dimension.AMOUNT]     : 1,
+                        [Dimension.MASS]       : 0,
+                        [Dimension.LENGTH]     : 0,
+                        [Dimension.TIME]       : 0,
+                        [Dimension.TEMPERATURE]: 1,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    "test unit 2", "!", 2.0, 2
+                );
+                let quot = new UnitDiv(unitA, unitB);
+                expect(quot).to.be.an.instanceOf(UnitDiv);
+                expect(quot.unitA).to.equal(unitA);
+                expect(quot.unitB).to.equal(unitB);
+                expect(Dimension.equal(
+                    quot.dimension,
+                    {
+                        [Dimension.AMOUNT]     : -1,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: -1
+                    }
+                )).to.be.true;
+                expect(quot.name).to.equal("test unit 1 per test unit 2");
+                expect(quot.symbol).to.equal("?/!");
+                expect(quot.factor).to.equal(0.5);
+                expect(quot.prefixPower).to.equal(1);
+            }
+        });
+    });
+
+    describe("#toString()", () => {
+        it("should return its name", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let quot = new UnitDiv(unitA, unitB);
+            expect(quot.toString()).to.equal("test unit 1 per test unit 2");
+        });
+    });
+
+    describe("#value(value)", () => {
+        it("should return a quantity in the unit", () => {
+            {
+                let unitA = new Unit({}, "test unit 1", "?", 1.0);
+                let unitB = new Unit({}, "test unit 2", "!", 2.0);
+                let quot = new UnitDiv(unitA, unitB);
+                let x = quot.value(3.0);
+                expect(x).to.instanceOf(Quantity);
+                expect(x.value).to.equal(1.5);
+                expect(Dimension.equal(x.dimension, {})).to.be.true;
+            }
+            {
+                let unitA = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit 1", "?", 3.0);
+                let unitB = new Unit({ [Dimension.MASS]  : 1 }, "test unit 2", "!", 2.0);
+                let quot = new UnitDiv(unitA, unitB);
+                let x = quot.value(4.0);
+                expect(x).to.instanceOf(Quantity);
+                expect(x.value).to.equal(6.0);
+                expect(Dimension.equal(
+                    x.dimension,
+                    {
+                        [Dimension.AMOUNT]: 1,
+                        [Dimension.MASS]  : -1
+                    }
+                )).to.be.true;
+            }
+            {
+                let unitA = new Unit(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    "test unit 1", "?", 1.0
+                );
+                let unitB = new Unit(
+                    {
+                        [Dimension.AMOUNT]     : 1,
+                        [Dimension.MASS]       : 0,
+                        [Dimension.LENGTH]     : 0,
+                        [Dimension.TIME]       : 0,
+                        [Dimension.TEMPERATURE]: 1,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    "test unit 2", "!", 2.0
+                );
+                let quot = new UnitDiv(unitA, unitB);
+                let x = quot.value(3.0);
+                expect(x).to.instanceOf(Quantity);
+                expect(x.value).to.equal(1.5);
+                expect(Dimension.equal(
+                    x.dimension,
+                    {
+                        [Dimension.AMOUNT]     : -1,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: -1,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    }
+                )).to.be.true;
+            }
+        });
+    });
+
+    describe("#addPrefix(prefix)", () => {
+        it("should return the prefixed version of the unit", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let quot = new UnitDiv(unitA, unitB);
+            let prefix = new Prefix("test prefix", "_", 3.0);
+            let prefixed = quot.addPrefix(prefix);
+            expect(prefixed).to.be.an.instanceOf(UnitDiv);
+            expect(prefixed.unitA).to.be.an.instanceOf(Prefixed);
+            expect(prefixed.unitA.prefix).to.equal(prefix);
+            expect(prefixed.unitA.unit).to.equal(unitA);
+            expect(prefixed.unitB).to.equal(unitB);
+        });
+    });
+
+    describe("#autoPrefixFor(quantity)", () => {
+        it("should return the auto-prefixed version of the unit reasonable for 'quantity'", () => {
+            for (let e = -24; e <= 26; e++) {
+                for (let i = 1; i <= 9; i++) {
+                    let unitA = new Unit({}, "test unit 1", "?", 2.0);
+                    let unitB = new Unit({}, "test unit 2", "!", 2.0);
+                    let quot = new UnitDiv(unitA, unitB);
+                    let x = new Quantity(i * Math.pow(10.0, e), {});
+                    let prefixed = quot.autoPrefixFor(x);
+                    let v = x.in(prefixed);
+                    expect(v).to.be.at.least(1.0).and.below(1.0e3);
+                }
+            }
+        });
+
+        it("should throw DimensionalError if the dimensions are consistent", () => {
+            {
+                let unitA = new Unit({}, "test unit 1", "?", 1.0);
+                let unitB = new Unit({}, "test unit 2", "!", 2.0);
+                let quot = new UnitDiv(unitA, unitB);
+                let x = new Quantity(3.14, { [Dimension.AMOUNT]: 1 });
+                expect(() => { quot.autoPrefixFor(x); }).to.throw(DimensionalError);
+            }
+            {
+                let unitA = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit 1", "?", 1.0);
+                let unitB = new Unit({}, "test unit 2", "!", 2.0);
+                let quot = new UnitDiv(unitA, unitB);
+                let x = new Quantity(3.14, {});
+                expect(() => { quot.autoPrefixFor(x); }).to.throw(DimensionalError);
+            }
+            {
+                let unitA = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit 1", "?", 1.0);
+                let unitB = new Unit({ [Dimension.MASS]  : 1 }, "test unit 2", "!", 2.0);
+                let quot = new UnitDiv(unitA, unitB);
+                let x = new Quantity(3.14, {});
+                expect(() => { quot.autoPrefixFor(x); }).to.throw(DimensionalError);
+            }
+            {
+                let unitA = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit 1", "?", 1.0);
+                let unitB = new Unit({}, "test unit 2", "!", 2.0);
+                let quot = new UnitDiv(unitA, unitB);
+                let x = new Quantity(3.14, { [Dimension.AMOUNT]: 2 });
+                expect(() => { quot.autoPrefixFor(x); }).to.throw(DimensionalError);
+            }
+            {
+                let unitA = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit 1", "?", 1.0);
+                let unitB = new Unit({}, "test unit 2", "!", 2.0);
+                let quot = new UnitDiv(unitA, unitB);
+                let x = new Quantity(3.14, { [Dimension.MASS]: 1 });
+                expect(() => { quot.autoPrefixFor(x); }).to.throw(DimensionalError);
+            }
+            {
+                let unitA = new Unit(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    "test unit 1", "?", 1.0
+                );
+                let unitB = new Unit(
+                    {
+                        [Dimension.AMOUNT]     : 1,
+                        [Dimension.MASS]       : 0,
+                        [Dimension.LENGTH]     : 0,
+                        [Dimension.TIME]       : 0,
+                        [Dimension.TEMPERATURE]: 1,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    "test unit 2", "!", 2.0
+                );
+                let quot = new UnitDiv(unitA, unitB);
+                let x = new Quantity(
+                    3.14,
+                    {
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 1,
+                        [Dimension.TIME]       : -2
+                    });
+                expect(() => { quot.autoPrefixFor(x); }).to.throw(DimensionalError);
+            }
+        });
+    });
+
+    describe("#scale(factor)", () => {
+        it("should return the scaled version of the unit", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let quot = new UnitDiv(unitA, unitB);
+            let scaled = quot.scale(3.0);
+            expect(scaled).to.be.an.instanceOf(Prefactored);
+            expect(scaled.prefactor).to.equal(3.0);
+            expect(scaled.unit).to.equal(quot);
+        });
+    });
+
+    describe("#mul(unit)", () => {
+        it("should return the unit if 'unit' is a One", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let quot = new UnitDiv(unitA, unitB);
+            let one = new One();
+            let prod = quot.mul(one);
+            expect(prod).to.equal(quot);
+        });
+
+        it("should return the prefactored product of this and the original unit of 'unit' if 'unit' is a Prefactored", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let quot = new UnitDiv(unitA, unitB);
+            let unitC = new Unit({}, "test unit 3", "_", 3.0);
+            let pref = new Prefactored(3.0, unitC);
+            let prod = quot.mul(pref);
+            expect(prod).to.be.an.instanceOf(Prefactored);
+            expect(prod.prefactor).to.equal(3.0);
+            expect(prod.unit).to.be.an.instanceOf(UnitMul);
+            expect(prod.unit.unitA).to.equal(quot);
+            expect(prod.unit.unitB).to.equal(unitC);
+        });
+
+        it("should return the product unit of this and 'unit'", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let quot = new UnitDiv(unitA, unitB);
+            let unitC = new Unit({}, "test unit 3", "_", 3.0);
+            let prod = quot.mul(unitC);
+            expect(prod).to.be.an.instanceOf(UnitMul);
+            expect(prod.unitA).to.equal(quot);
+            expect(prod.unitB).to.equal(unitC);
+        });
+    });
+
+    describe("#div(unit)", () => {
+        it("should return the unit if 'unit' is a One", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let quot1 = new UnitDiv(unitA, unitB);
+            let one = new One();
+            let quot2 = quot1.div(one);
+            expect(quot2).to.equal(quot1);
+        });
+
+        it("should return the prefactored quotient of this and the original unit of 'unit' if 'unit' is a Prefactored", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let quot1 = new UnitDiv(unitA, unitB);
+            let unitC = new Unit({}, "test unit 3", "_", 3.0);
+            let pref = new Prefactored(4.0, unitC);
+            let quot2 = quot1.div(pref);
+            expect(quot2).to.be.an.instanceOf(Prefactored);
+            expect(quot2.prefactor).to.equal(0.25);
+            expect(quot2.unit).to.be.an.instanceOf(UnitDiv);
+            expect(quot2.unit.unitA).to.equal(quot1);
+            expect(quot2.unit.unitB).to.equal(unitC);
+        });
+
+        it("should return the quotient unit of this and 'unit'", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let quot1 = new UnitDiv(unitA, unitB);
+            let unitC = new Unit({}, "test unit 3", "_", 3.0);
+            let quot2 = quot1.div(unitC);
+            expect(quot2).to.be.an.instanceOf(UnitDiv);
+            expect(quot2.unitA).to.equal(quot1);
+            expect(quot2.unitB).to.equal(unitC);
+        });
+    });
+
+    describe("#pow(power)", () => {
+        it("should return the product of the powered units by 'power'", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let quot = new UnitDiv(unitA, unitB);
+            let pow = quot.pow(3);
+            expect(pow).to.be.an.instanceOf(UnitDiv);
+            expect(pow.unitA).to.be.an.instanceOf(UnitPow);
+            expect(pow.unitA.power).to.equal(3);
+            expect(pow.unitA.unit).to.equal(unitA);
+            expect(pow.unitB).to.be.an.instanceOf(UnitPow);
+            expect(pow.unitB.power).to.equal(3);
+            expect(pow.unitB.unit).to.equal(unitB);
+        });
+    });
+});
