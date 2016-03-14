@@ -3219,4 +3219,93 @@ describe("UnitMul", () => {
             expect(prefixed.unitB).to.equal(unitB);
         });
     });
+
+    describe("#autoPrefixFor(quantity)", () => {
+        it("should return the auto-prefixed version of the unit reasonable for 'quantity'", () => {
+            for (let e = -24; e <= 26; e++) {
+                for (let i = 1; i <= 9; i++) {
+                    let unitA = new Unit({}, "test unit 1", "?", 0.5);
+                    let unitB = new Unit({}, "test unit 2", "!", 2.0);
+                    let prod = new UnitMul(unitA, unitB);
+                    let x = new Quantity(i * Math.pow(10.0, e), {});
+                    let prefixed = prod.autoPrefixFor(x);
+                    let v = x.in(prefixed);
+                    expect(v).to.be.at.least(1.0).and.below(1.0e3);
+                }
+            }
+        });
+
+        it("should throw DimensionalError if the dimensions are consistent", () => {
+            {
+                let unitA = new Unit({}, "test unit 1", "?", 1.0);
+                let unitB = new Unit({}, "test unit 2", "!", 2.0);
+                let prod = new UnitMul(unitA, unitB);
+                let x = new Quantity(3.14, { [Dimension.AMOUNT]: 1 });
+                expect(() => { prod.autoPrefixFor(x); }).to.throw(DimensionalError);
+            }
+            {
+                let unitA = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit 1", "?", 1.0);
+                let unitB = new Unit({}, "test unit 2", "!", 2.0);
+                let prod = new UnitMul(unitA, unitB);
+                let x = new Quantity(3.14, {});
+                expect(() => { prod.autoPrefixFor(x); }).to.throw(DimensionalError);
+            }
+            {
+                let unitA = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit 1", "?", 1.0);
+                let unitB = new Unit({ [Dimension.MASS]  : 1 }, "test unit 2", "!", 2.0);
+                let prod = new UnitMul(unitA, unitB);
+                let x = new Quantity(3.14, {});
+                expect(() => { prod.autoPrefixFor(x); }).to.throw(DimensionalError);
+            }
+            {
+                let unitA = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit 1", "?", 1.0);
+                let unitB = new Unit({}, "test unit 2", "!", 2.0);
+                let prod = new UnitMul(unitA, unitB);
+                let x = new Quantity(3.14, { [Dimension.AMOUNT]: 2 });
+                expect(() => { prod.autoPrefixFor(x); }).to.throw(DimensionalError);
+            }
+            {
+                let unitA = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit 1", "?", 1.0);
+                let unitB = new Unit({}, "test unit 2", "!", 2.0);
+                let prod = new UnitMul(unitA, unitB);
+                let x = new Quantity(3.14, { [Dimension.MASS]: 1 });
+                expect(() => { prod.autoPrefixFor(x); }).to.throw(DimensionalError);
+            }
+            {
+                let unitA = new Unit(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    "test unit 1", "?", 1.0
+                );
+                let unitB = new Unit(
+                    {
+                        [Dimension.AMOUNT]     : 1,
+                        [Dimension.MASS]       : 0,
+                        [Dimension.LENGTH]     : 0,
+                        [Dimension.TIME]       : 0,
+                        [Dimension.TEMPERATURE]: 1,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    "test unit 2", "!", 2.0
+                );
+                let prod = new UnitMul(unitA, unitB);
+                let x = new Quantity(
+                    3.14,
+                    {
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 1,
+                        [Dimension.TIME]       : -2
+                    });
+                expect(() => { prod.autoPrefixFor(x); }).to.throw(DimensionalError);
+            }
+        });
+    });
 });
