@@ -3386,8 +3386,8 @@ describe("UnitMul", () => {
             let unitB = new Unit({}, "test unit 2", "!", 2.0);
             let prod = new UnitMul(unitA, unitB);
             let unitC = new Unit({}, "test unit 3", "_", 3.0);
-            let quot = prod.mul(unitC);
-            expect(quot).to.be.an.instanceOf(UnitMul);
+            let quot = prod.div(unitC);
+            expect(quot).to.be.an.instanceOf(UnitDiv);
             expect(quot.unitA).to.equal(prod);
             expect(quot.unitB).to.equal(unitC);
         });
