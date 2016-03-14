@@ -3133,4 +3133,75 @@ describe("UnitMul", () => {
             expect(prod.toString()).to.equal("test unit 1 test unit 2");
         });
     });
+
+    describe("#value(value)", () => {
+        it("should return a quantity in the unit", () => {
+            {
+                let unitA = new Unit({}, "test unit 1", "?", 1.0);
+                let unitB = new Unit({}, "test unit 2", "!", 2.0);
+                let prod = new UnitMul(unitA, unitB);
+                let x = prod.value(3.0);
+                expect(x).to.instanceOf(Quantity);
+                expect(x.value).to.equal(6.0);
+                expect(Dimension.equal(x.dimension, {})).to.be.true;
+            }
+            {
+                let unitA = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit 1", "?", 2.0);
+                let unitB = new Unit({ [Dimension.MASS]  : 1 }, "test unit 2", "!", 3.0);
+                let prod = new UnitMul(unitA, unitB);
+                let x = prod.value(4.0);
+                expect(x).to.instanceOf(Quantity);
+                expect(x.value).to.equal(24.0);
+                expect(Dimension.equal(
+                    x.dimension,
+                    {
+                        [Dimension.AMOUNT]: 1,
+                        [Dimension.MASS]  : 1
+                    }
+                )).to.be.true;
+            }
+            {
+                let unitA = new Unit(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    "test unit 1", "?", 1.0
+                );
+                let unitB = new Unit(
+                    {
+                        [Dimension.AMOUNT]     : 1,
+                        [Dimension.MASS]       : 0,
+                        [Dimension.LENGTH]     : 0,
+                        [Dimension.TIME]       : 0,
+                        [Dimension.TEMPERATURE]: 1,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    "test unit 2", "!", 2.0
+                );
+                let prod = new UnitMul(unitA, unitB);
+                let x = prod.value(3.0);
+                expect(x).to.instanceOf(Quantity);
+                expect(x.value).to.equal(6.0);
+                expect(Dimension.equal(
+                    x.dimension,
+                    {
+                        [Dimension.AMOUNT]     : 1,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 1,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    }
+                )).to.be.true;
+            }
+        });
+    });
 });
