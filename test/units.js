@@ -3392,4 +3392,20 @@ describe("UnitMul", () => {
             expect(quot.unitB).to.equal(unitC);
         });
     });
+
+    describe("#pow(power)", () => {
+        it("should return the product of the powered units by 'power'", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let prod = new UnitMul(unitA, unitB);
+            let pow = prod.pow(3);
+            expect(pow).to.be.an.instanceOf(UnitMul);
+            expect(pow.unitA).to.be.an.instanceOf(UnitPow);
+            expect(pow.unitA.power).to.equal(3);
+            expect(pow.unitA.unit).to.equal(unitA);
+            expect(pow.unitB).to.be.an.instanceOf(UnitPow);
+            expect(pow.unitB.power).to.equal(3);
+            expect(pow.unitB.unit).to.equal(unitB);
+        });
+    });
 });
