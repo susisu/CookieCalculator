@@ -3204,4 +3204,19 @@ describe("UnitMul", () => {
             }
         });
     });
+
+    describe("#addPrefix(prefix)", () => {
+        it("should return the prefixed version of the unit", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let prod = new UnitMul(unitA, unitB);
+            let prefix = new Prefix("test prefix", "_", 3.0);
+            let prefixed = prod.addPrefix(prefix);
+            expect(prefixed).to.be.an.instanceOf(UnitMul);
+            expect(prefixed.unitA).to.be.an.instanceOf(Prefixed);
+            expect(prefixed.unitA.prefix).to.equal(prefix);
+            expect(prefixed.unitA.unit).to.equal(unitA);
+            expect(prefixed.unitB).to.equal(unitB);
+        });
+    });
 });
