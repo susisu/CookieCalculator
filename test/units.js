@@ -3045,7 +3045,7 @@ describe("UnitMul", () => {
     let Prefixed         = units.Prefixed;
 
     describe("constructor(prefactor, unit)", () => {
-        it("should create a new Prefactored instance", () => {
+        it("should create a new UnitMul instance", () => {
             {
                 let unitA = new UnitBase({}, "test unit 1", "?", 1.0, 1);
                 let unitB = new UnitBase({}, "test unit 2", "!", 2.0, 2);
@@ -3425,7 +3425,7 @@ describe("UnitDiv", () => {
     let Prefixed         = units.Prefixed;
 
     describe("constructor(prefactor, unit)", () => {
-        it("should create a new Prefactored instance", () => {
+        it("should create a new UnitDiv instance", () => {
             {
                 let unitA = new UnitBase({}, "test unit 1", "?", 1.0, 1);
                 let unitB = new UnitBase({}, "test unit 2", "!", 2.0, 2);
