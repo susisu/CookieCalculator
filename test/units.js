@@ -3855,4 +3855,12 @@ describe("UnitPow", () => {
             }
         });
     });
+
+    describe("#toString()", () => {
+        it("should return its name", () => {
+            let unit = new Unit({}, "test unit", "?", 2.0);
+            let pow = new UnitPow(unit, 3);
+            expect(pow.toString()).to.equal("test unit^3");
+        });
+    });
 });
