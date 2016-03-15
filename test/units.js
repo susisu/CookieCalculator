@@ -3863,4 +3863,58 @@ describe("UnitPow", () => {
             expect(pow.toString()).to.equal("test unit^3");
         });
     });
+
+    describe("#value(value)", () => {
+        it("should return a quantity in the unit", () => {
+            {
+                let unit = new Unit({}, "test unit", "?", 1.0);
+                let pow = new UnitPow(unit, 3);
+                let x = pow.value(2.0);
+                expect(x).to.instanceOf(Quantity);
+                expect(x.value).to.equal(2.0);
+                expect(Dimension.equal(x.dimension, {})).to.be.true;
+            }
+            {
+                let unit = new Unit({}, "test unit", "?", 3.0);
+                let pow = new UnitPow(unit, 3);
+                let x = pow.value(2.0);
+                expect(x).to.instanceOf(Quantity);
+                expect(x.value).to.equal(54.0);
+                expect(Dimension.equal(x.dimension, {})).to.be.true;
+            }
+            {
+                let unit = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit", "?", 1.0);
+                let pow = new UnitPow(unit, 3);
+                let x = pow.value(2.0);
+                expect(x).to.instanceOf(Quantity);
+                expect(x.value).to.equal(2.0);
+                expect(Dimension.equal(x.dimension, { [Dimension.AMOUNT]: 3 })).to.be.true;
+            }
+            {
+                let unit = new Unit(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    "test unit", "?", 1.0);
+                let pow = new UnitPow(unit, 3);
+                let x = pow.value(2.0);
+                expect(x).to.instanceOf(Quantity);
+                expect(x.value).to.equal(2.0);
+                expect(Dimension.equal(
+                    x.dimension,
+                    {
+                        [Dimension.MASS]       : 3,
+                        [Dimension.LENGTH]     : 6,
+                        [Dimension.TIME]       : -6
+                    }
+                )).to.be.true;
+            }
+        });
+    });
 });
