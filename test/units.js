@@ -3789,3 +3789,70 @@ describe("UnitDiv", () => {
         });
     });
 });
+
+describe("UnitPow", () => {
+    let UnitPow      = units.UnitPow;
+    let Dimension        = units.Dimension;
+    let DimensionalError = units.DimensionalError;
+    let Quantity         = units.Quantity;
+    let UnitBase         = units.UnitBase;
+    let Unit             = units.Unit;
+    let One              = units.One;
+    let Prefactored      = units.Prefactored;
+    let UnitMul          = units.UnitMul;
+    let UnitDiv          = units.UnitDiv;
+    let Prefix           = units.Prefix;
+    let Prefixed         = units.Prefixed;
+
+    describe("constructor(unit, power)", () => {
+        it("should create a new UnitPow instance", () => {
+            {
+                let unit = new UnitBase({}, "test unit", "?", 1.0, 1);
+                let pow = new UnitPow(unit, 3);
+                expect(pow).to.be.an.instanceOf(UnitPow);
+                expect(Dimension.equal(pow.dimension, {})).to.be.true;
+                expect(pow.name).to.equal("test unit^3");
+                expect(pow.symbol).to.equal("?^3");
+                expect(pow.factor).to.equal(1.0);
+                expect(pow.prefixPower).to.equal(3);
+            }
+            {
+                let unit = new UnitBase({ [Dimension.AMOUNT]: 1 }, "test unit 2", "!", 2.0, 2);
+                let pow = new UnitPow(unit, 4);
+                expect(pow).to.be.an.instanceOf(UnitPow);
+                expect(Dimension.equal(pow.dimension, { [Dimension.AMOUNT]: 4 })).to.be.true;
+                expect(pow.name).to.equal("test unit 2^4");
+                expect(pow.symbol).to.equal("!^4");
+                expect(pow.factor).to.equal(16.0);
+                expect(pow.prefixPower).to.equal(8);
+            }
+            {
+                let unit = new UnitBase(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    "test unit", "?", 1.0, 1);
+                let pow = new UnitPow(unit, 3);
+                expect(pow).to.be.an.instanceOf(UnitPow);
+                expect(Dimension.equal(
+                    pow.dimension,
+                    {
+                        [Dimension.MASS]       : 3,
+                        [Dimension.LENGTH]     : 6,
+                        [Dimension.TIME]       : -6
+                    }
+                )).to.be.true;
+                expect(pow.name).to.equal("test unit^3");
+                expect(pow.symbol).to.equal("?^3");
+                expect(pow.factor).to.equal(1.0);
+                expect(pow.prefixPower).to.equal(3);
+            }
+        });
+    });
+});
