@@ -2071,13 +2071,14 @@ describe("Unit", () => {
 
     describe("#autoPrefixFor(quantity)", () => {
         it("should return the auto-prefixed version of the unit reasonable for 'quantity'", () => {
+            let unit = new Unit({}, "test unit", "?", 1.0);
             for (let e = -24; e <= 26; e++) {
                 for (let i = 1; i <= 9; i++) {
-                    let unit = new Unit({}, "test unit", "?", 1.0);
                     let x = new Quantity(i * Math.pow(10.0, e), {});
                     let prefixed = unit.autoPrefixFor(x);
                     let v = x.in(prefixed);
-                    expect(v).to.be.at.least(1.0).and.below(1.0e3);
+                    expect(v).to.be.at.least(1.0)
+                    expect(Math.round(v)).to.be.at.most(1.0e3);
                 }
             }
         });
@@ -2262,13 +2263,14 @@ describe("One", () => {
 
     describe("#autoPrefixFor(quantity)", () => {
         it("should return the auto-prefixed version of the unit reasonable for 'quantity'", () => {
+            let one = new One();
             for (let e = -24; e <= 26; e++) {
                 for (let i = 1; i <= 9; i++) {
-                    let one = new One();
                     let x = new Quantity(i * Math.pow(10.0, e), {});
                     let prefixed = one.autoPrefixFor(x);
                     let v = x.in(prefixed);
-                    expect(v).to.be.at.least(1.0).and.below(1.0e3);
+                    expect(v).to.be.at.least(1.0)
+                    expect(Math.round(v)).to.be.at.most(1.0e3);
                 }
             }
         });
@@ -2545,14 +2547,15 @@ describe("Synonym", () => {
 
     describe("#autoPrefixFor(quantity)", () => {
         it("should return the auto-prefixed version of the unit reasonable for 'quantity'", () => {
+            let unit = new Unit({}, "test unit", "?", 1.0);
+            let syn = new Synonym("synonym", "!", unit);
             for (let e = -24; e <= 26; e++) {
                 for (let i = 1; i <= 9; i++) {
-                    let unit = new Unit({}, "test unit", "?", 1.0);
-                    let syn = new Synonym("synonym", "!", unit);
                     let x = new Quantity(i * Math.pow(10.0, e), {});
                     let prefixed = syn.autoPrefixFor(x);
                     let v = x.in(prefixed);
-                    expect(v).to.be.at.least(1.0).and.below(1.0e3);
+                    expect(v).to.be.at.least(1.0)
+                    expect(Math.round(v)).to.be.at.most(1.0e3);
                 }
             }
         });
@@ -2872,14 +2875,15 @@ describe("Prefactored", () => {
 
     describe("#autoPrefixFor(quantity)", () => {
         it("should return the auto-prefixed version of the unit reasonable for 'quantity'", () => {
+            let unit = new Unit({}, "test unit", "?", 0.5);
+            let pref = new Prefactored(2.0, unit);
             for (let e = -24; e <= 26; e++) {
                 for (let i = 1; i <= 9; i++) {
-                    let unit = new Unit({}, "test unit", "?", 0.5);
-                    let pref = new Prefactored(2.0, unit);
                     let x = new Quantity(i * Math.pow(10.0, e), {});
                     let prefixed = pref.autoPrefixFor(x);
                     let v = x.in(prefixed);
-                    expect(v).to.be.at.least(1.0).and.below(1.0e3);
+                    expect(v).to.be.at.least(1.0)
+                    expect(Math.round(v)).to.be.at.most(1.0e3);
                 }
             }
         });
@@ -3222,15 +3226,16 @@ describe("UnitMul", () => {
 
     describe("#autoPrefixFor(quantity)", () => {
         it("should return the auto-prefixed version of the unit reasonable for 'quantity'", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 0.5);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let prod = new UnitMul(unitA, unitB);
             for (let e = -24; e <= 26; e++) {
                 for (let i = 1; i <= 9; i++) {
-                    let unitA = new Unit({}, "test unit 1", "?", 0.5);
-                    let unitB = new Unit({}, "test unit 2", "!", 2.0);
-                    let prod = new UnitMul(unitA, unitB);
                     let x = new Quantity(i * Math.pow(10.0, e), {});
                     let prefixed = prod.autoPrefixFor(x);
                     let v = x.in(prefixed);
-                    expect(v).to.be.at.least(1.0).and.below(1.0e3);
+                    expect(v).to.be.at.least(1.0)
+                    expect(Math.round(v)).to.be.at.most(1.0e3);
                 }
             }
         });
@@ -3602,15 +3607,16 @@ describe("UnitDiv", () => {
 
     describe("#autoPrefixFor(quantity)", () => {
         it("should return the auto-prefixed version of the unit reasonable for 'quantity'", () => {
+                let unitA = new Unit({}, "test unit 1", "?", 2.0);
+                let unitB = new Unit({}, "test unit 2", "!", 2.0);
+                let quot = new UnitDiv(unitA, unitB);
             for (let e = -24; e <= 26; e++) {
                 for (let i = 1; i <= 9; i++) {
-                    let unitA = new Unit({}, "test unit 1", "?", 2.0);
-                    let unitB = new Unit({}, "test unit 2", "!", 2.0);
-                    let quot = new UnitDiv(unitA, unitB);
                     let x = new Quantity(i * Math.pow(10.0, e), {});
                     let prefixed = quot.autoPrefixFor(x);
                     let v = x.in(prefixed);
-                    expect(v).to.be.at.least(1.0).and.below(1.0e3);
+                    expect(v).to.be.at.least(1.0)
+                    expect(Math.round(v)).to.be.at.most(1.0e3);
                 }
             }
         });
