@@ -3931,4 +3931,69 @@ describe("UnitPow", () => {
             expect(prefixed.unit.prefix).to.equal(prefix);
         });
     });
+
+    describe("#autoPrefixFor(quantity)", () => {
+        it("should return the auto-prefixed version of the unit reasonable for 'quantity'", () => {
+            let unit = new Unit({}, "test unit", "?", 1.0);
+            let pow = new UnitPow(unit, 3);
+            for (let e = -72; e < 81; e++) {
+                for (let i = 1; i <= 9; i++) {
+                    let x = new Quantity(i * Math.pow(10.0, e), {});
+                    let prefixed = pow.autoPrefixFor(x);
+                    let v = x.in(prefixed);
+                    expect(v).to.be.at.least(1.0);
+                    expect(Math.round(v)).to.be.at.most(1.0e+9);
+                }
+            }
+        });
+
+        it("should throw DimensionalError if the dimensions are consistent", () => {
+            {
+                let unit = new Unit({}, "test unit", "?", 1.0);
+                let pow = new UnitPow(unit, 3);
+                let x = new Quantity(3.14, { [Dimension.AMOUNT]: 1 });
+                expect(() => { pow.autoPrefixFor(x); }).to.throw(DimensionalError);
+            }
+            {
+                let unit = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit", "?", 1.0);
+                let pow = new UnitPow(unit, 3);
+                let x = new Quantity(3.14, {});
+                expect(() => { pow.autoPrefixFor(x); }).to.throw(DimensionalError);
+            }
+            {
+                let unit = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit", "?", 1.0);
+                let pow = new UnitPow(unit, 3);
+                let x = new Quantity(3.14, { [Dimension.AMOUNT]: 2 });
+                expect(() => { pow.autoPrefixFor(x); }).to.throw(DimensionalError);
+            }
+            {
+                let unit = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit", "?", 1.0);
+                let pow = new UnitPow(unit, 3);
+                let x = new Quantity(3.14, { [Dimension.MASS]: 3 });
+                expect(() => { pow.autoPrefixFor(x); }).to.throw(DimensionalError);
+            }
+            {
+                let unit = new Unit(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    }
+                    , "test unit", "?", 1.0);
+                let pow = new UnitPow(unit, 3);
+                let x = new Quantity(
+                    3.14,
+                    {
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2
+                    });
+                expect(() => { pow.autoPrefixFor(x); }).to.throw(DimensionalError);
+            }
+        });
+    });
 });
