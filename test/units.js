@@ -4046,4 +4046,37 @@ describe("UnitPow", () => {
             expect(prod.unitB).to.equal(unitB);
         });
     });
+
+    describe("#div(unit)", () => {
+        it("should return the unit if 'unit' is a One", () => {
+            let unit = new Unit({}, "test unit", "?", 1.0);
+            let pow = new UnitPow(unit, 3);
+            let one = new One();
+            let quot = pow.div(one);
+            expect(quot).to.equal(pow);
+        });
+
+        it("should return the prefactored quotient of this and the original unit of 'unit' if 'unit' is a Prefactored", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let pow = new UnitPow(unitA, 3);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let pref = new Prefactored(4.0, unitB);
+            let quot = pow.div(pref);
+            expect(quot).to.be.an.instanceOf(Prefactored);
+            expect(quot.prefactor).to.equal(0.25);
+            expect(quot.unit).to.be.an.instanceOf(UnitDiv);
+            expect(quot.unit.unitA).to.equal(pow);
+            expect(quot.unit.unitB).to.equal(unitB);
+        });
+
+        it("should return the quotient unit of this and 'unit'", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let pow = new UnitPow(unitA, 3);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let quot = pow.div(unitB);
+            expect(quot).to.be.an.instanceOf(UnitDiv);
+            expect(quot.unitA).to.equal(pow);
+            expect(quot.unitB).to.equal(unitB);
+        });
+    });
 });
