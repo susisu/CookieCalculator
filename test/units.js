@@ -3917,4 +3917,18 @@ describe("UnitPow", () => {
             }
         });
     });
+
+    describe("#addPrefix(prefix)", () => {
+        it("should return the prefixed version of the unit", () => {
+            let unit = new Unit({}, "test unit", "?", 2.0);
+            let pow = new UnitPow(unit, 3);
+            let prefix = new Prefix("test prefix", "!", 3.0);
+            let prefixed = pow.addPrefix(prefix);
+            expect(prefixed).to.be.an.instanceOf(UnitPow);
+            expect(prefixed.power).to.equal(3);
+            expect(prefixed.unit).to.be.an.instanceOf(Prefixed);
+            expect(prefixed.unit.unit).to.equal(unit);
+            expect(prefixed.unit.prefix).to.equal(prefix);
+        });
+    });
 });
