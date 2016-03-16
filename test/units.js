@@ -4002,4 +4002,15 @@ describe("UnitPow", () => {
             }
         });
     });
+
+    describe("#scale(factor)", () => {
+        it("should return the scaled version of the unit", () => {
+            let unit = new Unit({}, "test unit", "?", 1.0);
+            let pow = new UnitPow(unit, 3);
+            let scaled = pow.scale(3.0);
+            expect(scaled).to.be.an.instanceOf(Prefactored);
+            expect(scaled.prefactor).to.equal(3.0);
+            expect(scaled.unit).to.equal(pow);
+        });
+    });
 });
