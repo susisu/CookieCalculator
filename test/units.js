@@ -4079,4 +4079,15 @@ describe("UnitPow", () => {
             expect(quot.unitB).to.equal(unitB);
         });
     });
+
+    describe("#pow(power)", () => {
+        it("should return the powered unit by 'power'", () => {
+            let unit = new Unit({}, "test unit", "?", 1.0);
+            let powA = new UnitPow(unit, 2);
+            let powB = powA.pow(3);
+            expect(powB).to.be.an.instanceOf(UnitPow);
+            expect(powB.unit).to.equal(unit);
+            expect(powB.power).to.equal(6);
+        });
+    });
 });
