@@ -4013,4 +4013,37 @@ describe("UnitPow", () => {
             expect(scaled.unit).to.equal(pow);
         });
     });
+
+    describe("#mul(unit)", () => {
+        it("should return the unit if 'unit' is a One", () => {
+            let unit = new Unit({}, "test unit", "?", 1.0);
+            let pow = new UnitPow(unit, 3);
+            let one = new One();
+            let prod = pow.mul(one);
+            expect(prod).to.equal(pow);
+        });
+
+        it("should return the prefactored product of this and the original unit of 'unit' if 'unit' is a Prefactored", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let pow = new UnitPow(unitA, 3);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let pref = new Prefactored(3.0, unitB);
+            let prod = pow.mul(pref);
+            expect(prod).to.be.an.instanceOf(Prefactored);
+            expect(prod.prefactor).to.equal(3.0);
+            expect(prod.unit).to.be.an.instanceOf(UnitMul);
+            expect(prod.unit.unitA).to.equal(pow);
+            expect(prod.unit.unitB).to.equal(unitB);
+        });
+
+        it("should return the product unit of this and 'unit'", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let pow = new UnitPow(unitA, 3);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let prod = pow.mul(unitB);
+            expect(prod).to.be.an.instanceOf(UnitMul);
+            expect(prod.unitA).to.equal(pow);
+            expect(prod.unitB).to.equal(unitB);
+        });
+    });
 });
