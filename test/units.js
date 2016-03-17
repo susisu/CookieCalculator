@@ -4170,4 +4170,62 @@ describe("Prefixed", () => {
             expect(prefixed.toString()).to.equal("test prefixtest unit");
         });
     });
+
+    describe("#value(value)", () => {
+        it("should return a quantity in the unit", () => {
+            {
+                let unit = new Unit({}, "test unit", "?", 1.0);
+                let prefix = new Prefix("test prefix", "!", 3.0);
+                let prefixed = new Prefixed(prefix, unit);
+                let x = prefixed.value(2.0);
+                expect(x).to.instanceOf(Quantity);
+                expect(x.value).to.equal(6.0);
+                expect(Dimension.equal(x.dimension, {})).to.be.true;
+            }
+            {
+                let unit = new Unit({}, "test unit", "?", 3.0);
+                let prefix = new Prefix("test prefix", "!", 4.0);
+                let prefixed = new Prefixed(prefix, unit);
+                let x = prefixed.value(2.0);
+                expect(x).to.instanceOf(Quantity);
+                expect(x.value).to.equal(24.0);
+                expect(Dimension.equal(x.dimension, {})).to.be.true;
+            }
+            {
+                let unit = new Unit({ [Dimension.AMOUNT]: 1 }, "test unit", "?", 1.0);
+                let prefix = new Prefix("test prefix", "!", 3.0);
+                let prefixed = new Prefixed(prefix, unit);
+                let x = prefixed.value(2.0);
+                expect(x).to.instanceOf(Quantity);
+                expect(x.value).to.equal(6.0);
+                expect(Dimension.equal(x.dimension, { [Dimension.AMOUNT]: 1 })).to.be.true;
+            }
+            {
+                let unit = new Unit(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    "test unit", "?", 1.0);
+                let prefix = new Prefix("test prefix", "!", 3.0);
+                let prefixed = new Prefixed(prefix, unit);
+                let x = prefixed.value(2.0);
+                expect(x).to.instanceOf(Quantity);
+                expect(x.value).to.equal(6.0);
+                expect(Dimension.equal(
+                    x.dimension,
+                    {
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2
+                    }
+                )).to.be.true;
+            }
+        });
+    });
 });
