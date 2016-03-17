@@ -4091,3 +4091,74 @@ describe("UnitPow", () => {
         });
     });
 });
+
+
+describe("Prefixed", () => {
+    let Prefix           = units.Prefix;
+    let Prefixed         = units.Prefixed;
+    let Dimension        = units.Dimension;
+    let DimensionalError = units.DimensionalError;
+    let Quantity         = units.Quantity;
+    let UnitBase         = units.UnitBase;
+    let Unit             = units.Unit;
+    let One              = units.One;
+    let Prefactored      = units.Prefactored;
+    let UnitMul          = units.UnitMul;
+    let UnitDiv          = units.UnitDiv;
+    let UnitPow          = units.UnitPow;
+
+    describe("constructor(unit, power)", () => {
+        it("should create a new Prefixed instance", () => {
+            {
+                let unit = new UnitBase({}, "test unit", "?", 1.0, 1);
+                let prefix = new Prefix("test prefix", "!", 3.0);
+                let prefixed = new Prefixed(prefix, unit);
+                expect(prefixed).to.be.an.instanceOf(Prefixed);
+                expect(Dimension.equal(prefixed.dimension, {})).to.be.true;
+                expect(prefixed.name).to.equal("test prefixtest unit");
+                expect(prefixed.symbol).to.equal("!?");
+                expect(prefixed.factor).to.equal(3.0);
+                expect(prefixed.prefixPower).to.equal(1);
+            }
+            {
+                let unit = new UnitBase({ [Dimension.AMOUNT]: 1 }, "test unit 2", "!", 2.0, 2);
+                let prefix = new Prefix("foo", "_", 4.0);
+                let prefixed = new Prefixed(prefix, unit);
+                expect(prefixed).to.be.an.instanceOf(Prefixed);
+                expect(Dimension.equal(prefixed.dimension, { [Dimension.AMOUNT]: 1 })).to.be.true;
+                expect(prefixed.name).to.equal("footest unit 2");
+                expect(prefixed.symbol).to.equal("_!");
+                expect(prefixed.factor).to.equal(8.0);
+                expect(prefixed.prefixPower).to.equal(2);
+            }
+            {
+                let unit = new UnitBase(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    "test unit", "?", 1.0, 1);
+                let prefix = new Prefix("test prefix", "!", 3.0);
+                let prefixed = new Prefixed(prefix, unit);
+                expect(prefixed).to.be.an.instanceOf(Prefixed);
+                expect(Dimension.equal(
+                    prefixed.dimension,
+                    {
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2
+                    }
+                )).to.be.true;
+                expect(prefixed.name).to.equal("test prefixtest unit");
+                expect(prefixed.symbol).to.equal("!?");
+                expect(prefixed.factor).to.equal(3.0);
+                expect(prefixed.prefixPower).to.equal(1);
+            }
+        });
+    });
+});
