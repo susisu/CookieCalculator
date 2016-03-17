@@ -533,14 +533,21 @@ class Prefixed extends UnitBase {
         if (appPrefix === undefined) {
             appPrefix = AUTO_PREFIX_LIST[AUTO_PREFIX_LIST.length - 1];
         }
-        if (appPrefix.name === "") {
-            return this.unit;
-        }
-        if (factor / appPrefix.factor !== 1.0) {
-            return new Prefactored(factor / appPrefix.factor, new Prefixed(appPrefix, this.unit));
+        if (factor / appPrefix.factor === 1.0) {
+            if (appPrefix.name === "") {
+                return this.unit;
+            }
+            else {
+                return this.unit.addPrefix(appPrefix);
+            }
         }
         else {
-            return new Prefixed(appPrefix, this.unit);
+            if (appPrefix.name === "") {
+                return this.unit.scale(factor / appPrefix.factor);
+            }
+            else {
+                return this.unit.addPrefix(appPrefix).scale(factor / appPrefix.factor);
+            }
         }
     }
 }
