@@ -4228,4 +4228,43 @@ describe("Prefixed", () => {
             }
         });
     });
+
+    describe("#addPrefix(prefix)", () => {
+        it("should calculate the total prefactor and return the auto-prefixed version of the unit", () => {
+            {
+                let unit = new Unit({}, "test unit", "?", 1.0);
+                let prefixA = new Prefix("test prefix 1", "a", 1.0e+1);
+                let prefixedA = new Prefixed(prefixA, unit);
+                let prefixB = new Prefix("test prefix 2", "b", 1.0e+2);
+                let prefixedB = prefixedA.addPrefix(prefixB);
+                expect(prefixedB).to.be.an.instanceOf(Prefixed);
+                expect(prefixedB.prefix).to.be.an.instanceOf(Prefix);
+                expect(prefixedB.prefix.name).to.equal("kilo");
+                expect(prefixedB.unit).to.equal(unit);
+            }
+            {
+                let unit = new Unit({}, "test unit", "?", 1.0);
+                let prefixA = new Prefix("test prefix 1", "a", 3.0e+2);
+                let prefixedA = new Prefixed(prefixA, unit);
+                let prefixB = new Prefix("test prefix 2", "b", 1.0e+4);
+                let prefixedB = prefixedA.addPrefix(prefixB);
+                expect(prefixedB).to.be.an.instanceOf(Prefactored);
+                expect(prefixedB.prefactor).to.equal(3.0);
+                expect(prefixedB.unit).to.be.an.instanceOf(Prefixed);
+                expect(prefixedB.unit.prefix).to.be.an.instanceOf(Prefix);
+                expect(prefixedB.unit.prefix.name).to.equal("mega");
+                expect(prefixedB.unit.unit).to.equal(unit);
+            }
+            {
+                let unit = new Unit({}, "test unit", "?", 1.0);
+                let prefixA = new Prefix("test prefix 1", "a", 1.0e+1);
+                let prefixedA = new Prefixed(prefixA, unit);
+                let prefixB = new Prefix("test prefix 2", "b", 2.0e+1);
+                let prefixedB = prefixedA.addPrefix(prefixB);
+                expect(prefixedB).to.be.an.instanceOf(Prefactored);
+                expect(prefixedB.prefactor).to.equal(200.0);
+                expect(prefixedB.unit).to.equal(unit);
+            }
+        });
+    });
 });
