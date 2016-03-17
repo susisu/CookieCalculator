@@ -4161,4 +4161,13 @@ describe("Prefixed", () => {
             }
         });
     });
+
+    describe("#toString()", () => {
+        it("should return its name", () => {
+            let unit = new Unit({}, "test unit", "?", 2.0);
+            let prefix = new Prefix("test prefix", "!", 3.0);
+            let prefixed = new Prefixed(prefix, unit);
+            expect(prefixed.toString()).to.equal("test prefixtest unit");
+        });
+    });
 });
