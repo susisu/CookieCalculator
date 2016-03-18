@@ -674,6 +674,12 @@ SIUnit.ASTRONOMICAL_UNIT = new Synonym("astoronomical unit", "au",
 SIUnit.ELECTRON_VOLT = new Synonym("electron volt", "eV",
     SIUnit.JOULES.scale(1.602176565e-19)
 );
+SIUnit.DALTON = new Synonym("dalton", "Da",
+    SIUnit.KILOGRAM.scale(1.660538921e-27)
+);
+SIUnit.DALTON = new Synonym("unified atomic mass unit", "u",
+    SIUnit.KILOGRAM.scale(1.660538921e-27)
+);
 Object.freeze(SIUnit);
 
 endModule();
