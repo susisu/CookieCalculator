@@ -971,9 +971,10 @@ describe("Dimension", () => {
 });
 
 describe("Quantity", () => {
-    let Quantity = units.Quantity;
-    let Dimension = units.Dimension;
+    let Quantity         = units.Quantity;
+    let Dimension        = units.Dimension;
     let DimensionalError = units.DimensionalError;
+    let UnitBase         = units.UnitBase;
 
     describe(".add(x, y)", () => {
         it("should return the sum of 'x' and 'y'", () => {
@@ -1888,8 +1889,68 @@ describe("Quantity", () => {
     });
 
     describe("#in(unit)", () => {
-        it("should return the converted value in 'unit'");
-        it("should throw DimensionalError if the dimension of 'unit' is inconsistent");
+        it("should return the converted value in 'unit'", () => {
+            {
+                let x = new Quantity(2.0, {});
+                let unit = new UnitBase({}, "test unit", "?", 4.0, 1);
+                expect(x.in(unit)).to.equal(0.5);
+            }
+            {
+                let x = new Quantity(40000.0, {});
+                let unit = new UnitBase({}, "test unit 2", "!", 1000.0, 2);
+                expect(x.in(unit)).to.equal(40.0);
+            }
+        });
+
+        it("should throw DimensionalError if the dimension of 'unit' is inconsistent", () => {
+            {
+                let x = new Quantity(2.0, {});
+                let unit = new UnitBase({ [Dimension.AMOUNT]: 1 }, "test unit", "?", 4.0, 1);
+                expect(() => { x.in(unit); }).to.throw(DimensionalError);
+            }
+            {
+                let x = new Quantity(2.0, { [Dimension.AMOUNT]: 1 });
+                let unit = new UnitBase({}, "test unit", "?", 4.0, 1);
+                expect(() => { x.in(unit); }).to.throw(DimensionalError);
+            }
+            {
+                let x = new Quantity(2.0, { [Dimension.AMOUNT]: 1 });
+                let unit = new UnitBase({ [Dimension.AMOUNT]: 2 }, "test unit", "?", 4.0, 1);
+                expect(() => { x.in(unit); }).to.throw(DimensionalError);
+            }
+            {
+                let x = new Quantity(2.0, { [Dimension.AMOUNT]: 1 });
+                let unit = new UnitBase({ [Dimension.MASS]: 1 }, "test unit", "?", 4.0, 1);
+                expect(() => { x.in(unit); }).to.throw(DimensionalError);
+            }
+            {
+                let x = new Quantity(
+                    2.0,
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    }
+                );
+                let unit = new UnitBase(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 1,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    "test unit", "?", 4.0, 1
+                );
+                expect(() => { x.in(unit); }).to.throw(DimensionalError);
+            }
+        });
     });
 
     describe("#inAutoPrefixed(unit)", () => {
