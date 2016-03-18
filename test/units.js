@@ -4386,4 +4386,40 @@ describe("Prefixed", () => {
             expect(prod.unitB).to.equal(unitB);
         });
     });
+
+    describe("#div(unit)", () => {
+        it("should return the unit if 'unit' is a One", () => {
+            let unit = new Unit({}, "test unit", "?", 1.0);
+            let prefix = new Prefix("test prefix", "!", 3.0);
+            let prefixed = new Prefixed(prefix, unit);
+            let one = new One();
+            let quot = prefixed.div(one);
+            expect(quot).to.equal(prefixed);
+        });
+
+        it("should return the prefactored quotient of this and the original unit of 'unit' if 'unit' is a Prefactored", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let prefix = new Prefix("test prefix", "!", 3.0);
+            let prefixed = new Prefixed(prefix, unitA);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let pref = new Prefactored(4.0, unitB);
+            let quot = prefixed.div(pref);
+            expect(quot).to.be.an.instanceOf(Prefactored);
+            expect(quot.prefactor).to.equal(0.25);
+            expect(quot.unit).to.be.an.instanceOf(UnitDiv);
+            expect(quot.unit.unitA).to.equal(prefixed);
+            expect(quot.unit.unitB).to.equal(unitB);
+        });
+
+        it("should return the quotient unit of this and 'unit'", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let prefix = new Prefix("test prefix", "!", 3.0);
+            let prefixed = new Prefixed(prefix, unitA);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let quot = prefixed.div(unitB);
+            expect(quot).to.be.an.instanceOf(UnitDiv);
+            expect(quot.unitA).to.equal(prefixed);
+            expect(quot.unitB).to.equal(unitB);
+        });
+    });
 });
