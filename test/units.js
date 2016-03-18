@@ -4338,4 +4338,16 @@ describe("Prefixed", () => {
             }
         });
     });
+
+    describe("#scale(factor)", () => {
+        it("should return the scaled version of the unit", () => {
+            let unit = new Unit({}, "test unit", "?", 1.0);
+            let prefix = new Prefix("test prefix", "!", 3.0);
+            let prefixed = new Prefixed(prefix, unit);
+            let scaled = prefixed.scale(4.0);
+            expect(scaled).to.be.an.instanceOf(Prefactored);
+            expect(scaled.prefactor).to.equal(4.0);
+            expect(scaled.unit).to.equal(prefixed);
+        });
+    });
 });
