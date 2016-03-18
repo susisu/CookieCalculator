@@ -4350,4 +4350,40 @@ describe("Prefixed", () => {
             expect(scaled.unit).to.equal(prefixed);
         });
     });
+
+    describe("#mul(unit)", () => {
+        it("should return the unit if 'unit' is a One", () => {
+            let unit = new Unit({}, "test unit", "?", 1.0);
+            let prefix = new Prefix("test prefix", "!", 3.0);
+            let prefixed = new Prefixed(prefix, unit);
+            let one = new One();
+            let prod = prefixed.mul(one);
+            expect(prod).to.equal(prefixed);
+        });
+
+        it("should return the prefactored product of this and the original unit of 'unit' if 'unit' is a Prefactored", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let prefix = new Prefix("test prefix", "!", 3.0);
+            let prefixed = new Prefixed(prefix, unitA);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let pref = new Prefactored(4.0, unitB);
+            let prod = prefixed.mul(pref);
+            expect(prod).to.be.an.instanceOf(Prefactored);
+            expect(prod.prefactor).to.equal(4.0);
+            expect(prod.unit).to.be.an.instanceOf(UnitMul);
+            expect(prod.unit.unitA).to.equal(prefixed);
+            expect(prod.unit.unitB).to.equal(unitB);
+        });
+
+        it("should return the product unit of this and 'unit'", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let prefix = new Prefix("test prefix", "!", 3.0);
+            let prefixed = new Prefixed(prefix, unitA);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let prod = prefixed.mul(unitB);
+            expect(prod).to.be.an.instanceOf(UnitMul);
+            expect(prod.unitA).to.equal(prefixed);
+            expect(prod.unitB).to.equal(unitB);
+        });
+    });
 });
