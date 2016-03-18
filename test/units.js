@@ -4422,4 +4422,16 @@ describe("Prefixed", () => {
             expect(quot.unitB).to.equal(unitB);
         });
     });
+
+    describe("#pow(power)", () => {
+        it("should return the powered unit by 'power'", () => {
+            let unit = new Unit({}, "test unit", "?", 1.0);
+            let prefix = new Prefix("test prefix", "!", 3.0);
+            let prefixed = new Prefixed(prefix, unit);
+            let pow = prefixed.pow(3);
+            expect(pow).to.be.an.instanceOf(UnitPow);
+            expect(pow.unit).to.equal(prefixed);
+            expect(pow.power).to.equal(3);
+        });
+    });
 });
