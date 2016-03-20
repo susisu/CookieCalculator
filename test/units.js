@@ -2035,7 +2035,7 @@ describe("Quantity", () => {
         });
 
         it("should throw DimensionalError if the dimension of 'unit' is inconsistent", () => {
-                        {
+            {
                 let x = new Quantity(2.0, {});
                 let unit = new UnitBase({ [Dimension.AMOUNT]: 1 }, "test unit", "?", 4.0, 1);
                 expect(() => { x.toStringIn(unit); }).to.throw(DimensionalError);
@@ -2086,8 +2086,68 @@ describe("Quantity", () => {
     });
 
     describe("#toStringInAutoPrefixed(unit)", () => {
-        it("should return a string describing the quantity in the auto-prefixed 'unit'");
-        it("should throw DimensionalError if the dimension of 'unit' is inconsistent");
+        it("should return a string describing the quantity in the auto-prefixed 'unit'", () => {
+            {
+                let x = new Quantity(2.0, {});
+                let unit = new UnitBase({}, "test unit", "?", 2.0, 1);
+                expect(x.toStringInAutoPrefixed(unit)).to.equal("1 ?");
+            }
+            {
+                let x = new Quantity(40000.0, {});
+                let unit = new UnitBase({}, "test unit 2", "!", 1.0, 1);
+                expect(x.toStringInAutoPrefixed(unit)).to.equal("40 k!");
+            }
+        });
+
+        it("should throw DimensionalError if the dimension of 'unit' is inconsistent", () => {
+            {
+                let x = new Quantity(2.0, {});
+                let unit = new UnitBase({ [Dimension.AMOUNT]: 1 }, "test unit", "?", 4.0, 1);
+                expect(() => { x.toStringInAutoPrefixed(unit); }).to.throw(DimensionalError);
+            }
+            {
+                let x = new Quantity(2.0, { [Dimension.AMOUNT]: 1 });
+                let unit = new UnitBase({}, "test unit", "?", 4.0, 1);
+                expect(() => { x.toStringInAutoPrefixed(unit); }).to.throw(DimensionalError);
+            }
+            {
+                let x = new Quantity(2.0, { [Dimension.AMOUNT]: 1 });
+                let unit = new UnitBase({ [Dimension.AMOUNT]: 2 }, "test unit", "?", 4.0, 1);
+                expect(() => { x.toStringInAutoPrefixed(unit); }).to.throw(DimensionalError);
+            }
+            {
+                let x = new Quantity(2.0, { [Dimension.AMOUNT]: 1 });
+                let unit = new UnitBase({ [Dimension.MASS]: 1 }, "test unit", "?", 4.0, 1);
+                expect(() => { x.toStringInAutoPrefixed(unit); }).to.throw(DimensionalError);
+            }
+            {
+                let x = new Quantity(
+                    2.0,
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 2,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    }
+                );
+                let unit = new UnitBase(
+                    {
+                        [Dimension.AMOUNT]     : 0,
+                        [Dimension.MASS]       : 1,
+                        [Dimension.LENGTH]     : 1,
+                        [Dimension.TIME]       : -2,
+                        [Dimension.TEMPERATURE]: 0,
+                        [Dimension.CURRENT]    : 0,
+                        [Dimension.LUMINOUS]   : 0
+                    },
+                    "test unit", "?", 4.0, 1
+                );
+                expect(() => { x.toStringInAutoPrefixed(unit); }).to.throw(DimensionalError);
+            }
+        });
     });
 });
 
