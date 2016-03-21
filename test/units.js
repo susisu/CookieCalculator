@@ -4324,7 +4324,7 @@ describe("UnitPow", () => {
     });
 
     describe("#pow(power)", () => {
-        it("should return the powered unit by 'power'", () => {
+        it("should return the powered unit by 'power'; the power is multiplied", () => {
             let unit = new Unit({}, "test unit", "?", 1.0);
             let powA = new UnitPow(unit, 2);
             let powB = powA.pow(3);
