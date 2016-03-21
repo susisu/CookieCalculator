@@ -2443,6 +2443,12 @@ describe("Unit", () => {
     });
 
     describe("#pow(power)", () => {
+        it("should return the unit itself if 'power' is 1", () => {
+            let unit = new Unit({}, "test unit", "?", 1.0);
+            let pow = unit.pow(1);
+            expect(pow).to.equal(unit);
+        });
+
         it("should return the powered unit by 'power'", () => {
             let unit = new Unit({}, "test unit", "?", 1.0);
             let pow = unit.pow(3);
@@ -2932,6 +2938,13 @@ describe("Synonym", () => {
     });
 
     describe("#pow(power)", () => {
+        it("should return the unit itself if 'power' is 1", () => {
+            let unit = new Unit({}, "test unit", "?", 1.0);
+            let syn = new Synonym("synonym", "!", unit);
+            let pow = syn.pow(1);
+            expect(pow).to.equal(syn);
+        });
+
         it("should return the powered unit by 'power'", () => {
             let unit = new Unit({}, "test unit", "?", 1.0);
             let syn = new Synonym("synonym", "!", unit);
@@ -3264,6 +3277,13 @@ describe("Prefactored", () => {
     });
 
     describe("#pow(power)", () => {
+        it("should return the unit itself if 'power' is 1", () => {
+            let unit = new Unit({}, "test unit", "?", 1.0);
+            let pref = new Prefactored(3.0, unit);
+            let pow = pref.pow(1);
+            expect(pow).to.equal(pref);
+        });
+
         it("should return the powered unit by 'power'", () => {
             let unit = new Unit({}, "test unit", "?", 1.0);
             let pref = new Prefactored(3.0, unit);
@@ -3642,6 +3662,14 @@ describe("UnitMul", () => {
     });
 
     describe("#pow(power)", () => {
+        it("should return the unit itself if 'power' is 1", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let prod = new UnitMul(unitA, unitB);
+            let pow = prod.pow(1);
+            expect(pow).to.equal(prod);
+        });
+
         it("should return the product of the powered units by 'power'", () => {
             let unitA = new Unit({}, "test unit 1", "?", 1.0);
             let unitB = new Unit({}, "test unit 2", "!", 2.0);
@@ -4023,6 +4051,14 @@ describe("UnitDiv", () => {
     });
 
     describe("#pow(power)", () => {
+        it("should return the unit itself if 'power' is 1", () => {
+            let unitA = new Unit({}, "test unit 1", "?", 1.0);
+            let unitB = new Unit({}, "test unit 2", "!", 2.0);
+            let quot = new UnitDiv(unitA, unitB);
+            let pow = quot.pow(1);
+            expect(pow).to.equal(quot);
+        });
+
         it("should return the product of the powered units by 'power'", () => {
             let unitA = new Unit({}, "test unit 1", "?", 1.0);
             let unitB = new Unit({}, "test unit 2", "!", 2.0);
@@ -4667,6 +4703,14 @@ describe("Prefixed", () => {
     });
 
     describe("#pow(power)", () => {
+        it("should return the unit itself if 'power' is 1", () => {
+            let unit = new Unit({}, "test unit", "?", 1.0);
+            let prefix = new Prefix("test prefix", "!", 3.0);
+            let prefixed = new Prefixed(prefix, unit);
+            let pow = prefixed.pow(1);
+            expect(pow).to.equal(prefixed);
+        });
+
         it("should return the powered unit by 'power'", () => {
             let unit = new Unit({}, "test unit", "?", 1.0);
             let prefix = new Prefix("test prefix", "!", 3.0);
