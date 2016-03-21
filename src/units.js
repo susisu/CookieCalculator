@@ -22,7 +22,8 @@ function endModule() {
         Prefixed,
         SIPrefix,
         ONE,
-        SIUnit
+        SIUnit,
+        UnitSystem
     });
 }
 
@@ -681,5 +682,82 @@ SIUnit.DALTON = new Synonym("unified atomic mass unit", "u",
     SIUnit.KILOGRAM.scale(1.660538921e-27)
 );
 Object.freeze(SIUnit);
+
+
+class UnitSystem {
+    constructor(bases, synonyms) {
+        for (let b of DIMENSION_ORDER) {
+            if (!(bases[b] instanceof UnitBase)) {
+                throw new Error("no base unit for " + DIMENSION_SYMBOL[b]);
+            }
+            if (!Dimension.equal(bases[b].dimension, { [b]: 1 })) {
+                throw new DimensionalError("incorrect dimension " + Dimension.toString(bases[b].dimension));
+            }
+        }
+        this.bases    = bases;
+        this.synonyms = synonyms;
+    }
+
+    unitFor(dimension) {
+        for (let s of this.synonyms) {
+            if (Dimension.equal(s.dimension, dimension)) {
+                return s;
+            }
+        }
+        let basis = Object.getOwnPropertySymbols(dimension);
+        let unit = ONE;
+        for (let b of basis) {
+            let power = dimension[b];
+            unit = unit.mul(this.bases[b].pow(power));
+        }
+        return unit;
+    }
+
+    unitForQuantity(quantity) {
+        return this.unitFor(quantity.dimension).autoPrefixFor(quantity);
+    }
+}
+
+const StdUnitSystem = new UnitSystem(
+    {
+        [Dimension.AMOUNT]     : new Unit({ [Dimension.AMOUNT]     : 1 },      "#amount",      "#amount", 1.0), // mol
+        [Dimension.MASS]       : new Unit({ [Dimension.MASS]       : 1 },        "#mass",        "#mass", 1.0), // kg
+        [Dimension.LENGTH]     : new Unit({ [Dimension.LENGTH]     : 1 },      "#length",      "#length", 1.0), // m
+        [Dimension.TIME]       : new Unit({ [Dimension.TIME]       : 1 },        "#time",        "#time", 1.0), // s
+        [Dimension.TEMPERATURE]: new Unit({ [Dimension.TEMPERATURE]: 1 }, "#temperature", "#temperature", 1.0), // K
+        [Dimension.CURRENT]    : new Unit({ [Dimension.CURRENT]    : 1 },     "#current",     "#current", 1.0), // A
+        [Dimension.LUMINOUS]   : new Unit({ [Dimension.LUMINOUS]   : 1 },    "#luminous",    "#luminous", 1.0)  // cd
+    },
+    []
+);
+
+const SIUnitSystem = new UnitSystem(
+    {
+        [Dimension.AMOUNT]     : SIUnit.MOLE,
+        [Dimension.MASS]       : SIUnit.KILOGRAM,
+        [Dimension.LENGTH]     : SIUnit.METRE,
+        [Dimension.TIME]       : SIUnit.SECOND,
+        [Dimension.TEMPERATURE]: SIUnit.KELVIN,
+        [Dimension.CURRENT]    : SIUnit.AMPERE,
+        [Dimension.LUMINOUS]   : SIUnit.CANDELA
+    },
+    [
+        SIUnit.SQUARE_METRE,
+        SIUnit.CUBIC_METRE,
+        SIUnit.HERTZ,
+        SIUnit.NEWTON,
+        SIUnit.PASCAL,
+        SIUnit.JOULES,
+        SIUnit.WATT,
+        SIUnit.COULOMB,
+        SIUnit.VOLT,
+        SIUnit.FARAD,
+        SIUnit.OHM,
+        SIUnit.SIEMENS,
+        SIUnit.WEBER,
+        SIUnit.TESLA,
+        SIUnit.HENRY
+    ]
+);
 
 endModule();

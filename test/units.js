@@ -4678,3 +4678,19 @@ describe("Prefixed", () => {
         });
     });
 });
+
+describe("UnitSystem", () => {
+    describe("constructor(base, synonyms)", () => {
+        it("should create a new UnitSystem instance");
+        it("should throw an Error if 'bases' lacks a base unit");
+        it("shoud throw a DimensionalError if a base unit has incorrect dimension");
+    });
+
+    describe("#unitFor(dimension)", () => {
+        it("should return a unit that matches to 'dimension'");
+    });
+
+    describe("#unitForQuantity(quantity)", () => {
+        it("should return a unit that matches to 'quantity'");
+    });
+});
