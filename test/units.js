@@ -4680,10 +4680,65 @@ describe("Prefixed", () => {
 });
 
 describe("UnitSystem", () => {
+    let UnitSystem       = units.UnitSystem;
+    let Dimension        = units.Dimension;
+    let DimensionalError = units.DimensionalError;
+    let Unit             = units.Unit;
+    let Synonym          = units.Synonym;
+
     describe("constructor(base, synonyms)", () => {
-        it("should create a new UnitSystem instance");
-        it("should throw an Error if 'bases' lacks a base unit");
-        it("shoud throw a DimensionalError if a base unit has incorrect dimension");
+        it("should create a new UnitSystem instance", () => {
+            let bases = {
+                [Dimension.AMOUNT]     : new Unit({ [Dimension.AMOUNT]     : 1 },      "#amount", "N", 1.0),
+                [Dimension.MASS]       : new Unit({ [Dimension.MASS]       : 1 },        "#mass", "M", 1.0),
+                [Dimension.LENGTH]     : new Unit({ [Dimension.LENGTH]     : 1 },      "#length", "L", 1.0),
+                [Dimension.TIME]       : new Unit({ [Dimension.TIME]       : 1 },        "#time", "T", 1.0),
+                [Dimension.TEMPERATURE]: new Unit({ [Dimension.TEMPERATURE]: 1 }, "#temperature", "Θ", 1.0),
+                [Dimension.CURRENT]    : new Unit({ [Dimension.CURRENT]    : 1 },     "#current", "I", 1.0),
+                [Dimension.LUMINOUS]   : new Unit({ [Dimension.LUMINOUS]   : 1 },    "#luminous", "J", 1.0)
+            };
+            let synonyms = [
+                new Synonym("#foo", "f",
+                    new Unit(
+                        {
+                            [Dimension.MASS]  : 1,
+                            [Dimension.LENGTH]: 2,
+                            [Dimension.TIME]  : -2
+                        },
+                        "#energy", "E"
+                    )
+                )
+            ];
+            let us = new UnitSystem(bases, synonyms);
+            expect(us).to.be.an.instanceOf(UnitSystem);
+            expect(us.bases).to.deep.equal(bases);
+            expect(us.synonyms).to.deep.equal(synonyms);
+        });
+
+        it("should throw an Error if 'bases' lacks a base unit", () => {
+            let bases = {
+                [Dimension.AMOUNT]     : new Unit({ [Dimension.AMOUNT]     : 1 },      "#amount", "N", 1.0),
+                [Dimension.LENGTH]     : new Unit({ [Dimension.LENGTH]     : 1 },      "#length", "L", 1.0),
+                [Dimension.TIME]       : new Unit({ [Dimension.TIME]       : 1 },        "#time", "T", 1.0),
+                [Dimension.TEMPERATURE]: new Unit({ [Dimension.TEMPERATURE]: 1 }, "#temperature", "Θ", 1.0),
+                [Dimension.CURRENT]    : new Unit({ [Dimension.CURRENT]    : 1 },     "#current", "I", 1.0),
+                [Dimension.LUMINOUS]   : new Unit({ [Dimension.LUMINOUS]   : 1 },    "#luminous", "J", 1.0)
+            };
+            expect(() => { new UnitSystem(bases, []); }).to.throw(Error);
+        });
+
+        it("shoud throw a DimensionalError if a base unit has incorrect dimension", () => {
+            let bases = {
+                [Dimension.AMOUNT]     : new Unit({ [Dimension.AMOUNT]     : 1 },      "#amount", "N", 1.0),
+                [Dimension.MASS]       : new Unit({ [Dimension.MASS]       : 2 },        "#mass", "M", 1.0),
+                [Dimension.LENGTH]     : new Unit({ [Dimension.LENGTH]     : 1 },      "#length", "L", 1.0),
+                [Dimension.TIME]       : new Unit({ [Dimension.TIME]       : 1 },        "#time", "T", 1.0),
+                [Dimension.TEMPERATURE]: new Unit({ [Dimension.TEMPERATURE]: 1 }, "#temperature", "Θ", 1.0),
+                [Dimension.CURRENT]    : new Unit({ [Dimension.CURRENT]    : 1 },     "#current", "I", 1.0),
+                [Dimension.LUMINOUS]   : new Unit({ [Dimension.LUMINOUS]   : 1 },    "#luminous", "J", 1.0)
+            };
+            expect(() => { new UnitSystem(bases, []); }).to.throw(DimensionalError);
+        });
     });
 
     describe("#unitFor(dimension)", () => {
