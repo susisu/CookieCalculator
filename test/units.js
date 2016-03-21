@@ -3281,7 +3281,9 @@ describe("Prefactored", () => {
             let unit = new Unit({}, "test unit", "?", 1.0);
             let pref = new Prefactored(3.0, unit);
             let pow = pref.pow(1);
-            expect(pow).to.equal(pref);
+            expect(pow).to.be.an.instanceOf(Prefactored);
+            expect(pow.prefactor).to.equal(3.0);
+            expect(pow.unit).to.equal(unit);
         });
 
         it("should return the powered unit by 'power'", () => {
@@ -3667,7 +3669,9 @@ describe("UnitMul", () => {
             let unitB = new Unit({}, "test unit 2", "!", 2.0);
             let prod = new UnitMul(unitA, unitB);
             let pow = prod.pow(1);
-            expect(pow).to.equal(prod);
+            expect(pow).to.be.an.instanceOf(UnitMul);
+            expect(pow.unitA).to.equal(unitA);
+            expect(pow.unitB).to.equal(unitB);
         });
 
         it("should return the product of the powered units by 'power'", () => {
@@ -4056,7 +4060,9 @@ describe("UnitDiv", () => {
             let unitB = new Unit({}, "test unit 2", "!", 2.0);
             let quot = new UnitDiv(unitA, unitB);
             let pow = quot.pow(1);
-            expect(pow).to.equal(quot);
+            expect(pow).to.be.an.instanceOf(UnitDiv);
+            expect(pow.unitA).to.equal(unitA);
+            expect(pow.unitB).to.equal(unitB);
         });
 
         it("should return the product of the powered units by 'power'", () => {
