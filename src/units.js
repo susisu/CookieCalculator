@@ -23,7 +23,9 @@ function endModule() {
         SIPrefix,
         ONE,
         SIUnit,
-        UnitSystem
+        UnitSystem,
+        StdUnitSystem,
+        SIUnitSystem
     });
 }
 
