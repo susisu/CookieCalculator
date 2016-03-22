@@ -4734,7 +4734,10 @@ describe("UnitSystem", () => {
     let Dimension        = units.Dimension;
     let DimensionalError = units.DimensionalError;
     let Unit             = units.Unit;
+    let One              = units.One;
     let Synonym          = units.Synonym;
+    let UnitMul          = units.UnitMul;
+    let UnitPow          = units.UnitPow;
 
     describe("constructor(base, synonyms)", () => {
         it("should create a new UnitSystem instance", () => {
@@ -4792,7 +4795,87 @@ describe("UnitSystem", () => {
     });
 
     describe("#unitFor(dimension)", () => {
-        it("should return a unit that matches to 'dimension'");
+        it("should return a unit that matches to 'dimension'", () => {
+            let bases = {
+                [Dimension.AMOUNT]     : new Unit({ [Dimension.AMOUNT]     : 1 },      "#amount", "N", 1.0),
+                [Dimension.MASS]       : new Unit({ [Dimension.MASS]       : 1 },        "#mass", "M", 1.0),
+                [Dimension.LENGTH]     : new Unit({ [Dimension.LENGTH]     : 1 },      "#length", "L", 1.0),
+                [Dimension.TIME]       : new Unit({ [Dimension.TIME]       : 1 },        "#time", "T", 1.0),
+                [Dimension.TEMPERATURE]: new Unit({ [Dimension.TEMPERATURE]: 1 }, "#temperature", "Θ", 1.0),
+                [Dimension.CURRENT]    : new Unit({ [Dimension.CURRENT]    : 1 },     "#current", "I", 1.0),
+                [Dimension.LUMINOUS]   : new Unit({ [Dimension.LUMINOUS]   : 1 },    "#luminous", "J", 1.0)
+            };
+            let f = new Synonym("#foo", "f",
+                new Unit(
+                    {
+                        [Dimension.MASS]  : 1,
+                        [Dimension.LENGTH]: 1,
+                        [Dimension.TIME]  : -2
+                    },
+                    "#force", "F"
+                )
+            );
+            let e = new Synonym("#bar", "r",
+                new Unit(
+                    {
+                        [Dimension.MASS]  : 1,
+                        [Dimension.LENGTH]: 2,
+                        [Dimension.TIME]  : -2
+                    },
+                    "#energy", "E"
+                )
+            );
+            let p = new Synonym("#baz", "z",
+                new Unit(
+                    {
+                        [Dimension.MASS]  : 1,
+                        [Dimension.LENGTH]: 2,
+                        [Dimension.TIME]  : -3
+                    },
+                    "#power", "P"
+                )
+            );
+            let synonyms = [f, e, p];
+            let us = new UnitSystem(bases, synonyms);
+            {
+                let unit = us.unitFor({});
+                expect(unit).to.be.an.instanceOf(One);
+            }
+            {
+                let unit = us.unitFor({ [Dimension.MASS]: 1 });
+                expect(unit).to.equal(bases[Dimension.MASS]);
+            }
+            {
+                let unit = us.unitFor({ [Dimension.MASS]: 3 });
+                expect(unit).to.be.an.instanceOf(UnitPow);
+                expect(unit.power).to.equal(3);
+                expect(unit.unit).to.equal(bases[Dimension.MASS]);
+            }
+            {
+                let unit = us.unitFor({
+                    [Dimension.MASS]  : 1,
+                    [Dimension.LENGTH]: 2,
+                    [Dimension.TIME]  : -1
+                });
+                expect(unit).to.be.an.instanceOf(UnitMul);
+                expect(Dimension.equal(
+                    unit.dimension,
+                    {
+                        [Dimension.MASS]  : 1,
+                        [Dimension.LENGTH]: 2,
+                        [Dimension.TIME]  : -1
+                    }
+                )).to.be.true;
+            }
+            {
+                let unit = us.unitFor({
+                    [Dimension.MASS]  : 1,
+                    [Dimension.LENGTH]: 2,
+                    [Dimension.TIME]  : -2
+                });
+                expect(unit).to.equal(e);
+            }
+        });
     });
 
     describe("#unitForQuantity(quantity)", () => {
