@@ -345,7 +345,12 @@ class UnitBase {
     }
 
     pow(power) {
-        return new UnitPow(this, power);
+        if (power === 1) {
+            return this;
+        }
+        else {
+            return new UnitPow(this, power);
+        }
     }
 }
 
