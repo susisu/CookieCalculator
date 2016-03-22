@@ -439,7 +439,12 @@ class Prefactored extends UnitBase {
     }
 
     pow(power) {
-        return new Prefactored(Math.pow(this.prefactor, power), this.unit.pow(power));
+        if (power === 1) {
+            return this;
+        }
+        else {
+            return new Prefactored(Math.pow(this.prefactor, power), this.unit.pow(power));
+        }
     }
 }
 
@@ -461,7 +466,12 @@ class UnitMul extends UnitBase {
     }
 
     pow(power) {
-        return new UnitMul(this.unitA.pow(power), this.unitB.pow(power));
+        if (power === 1) {
+            return this;
+        }
+        else {
+            return new UnitMul(this.unitA.pow(power), this.unitB.pow(power));
+        }
     }
 }
 
@@ -483,7 +493,12 @@ class UnitDiv extends UnitBase {
     }
 
     pow(power) {
-        return new UnitDiv(this.unitA.pow(power), this.unitB.pow(power));
+        if (power === 1) {
+            return this;
+        }
+        else {
+            return new UnitDiv(this.unitA.pow(power), this.unitB.pow(power));
+        }
     }
 }
 
