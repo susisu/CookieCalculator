@@ -4812,7 +4812,7 @@ describe("UnitSystem", () => {
                         [Dimension.LENGTH]: 1,
                         [Dimension.TIME]  : -2
                     },
-                    "#force", "F"
+                    "#force", "F", 1.0
                 )
             );
             let e = new Synonym("#bar", "r",
@@ -4822,7 +4822,7 @@ describe("UnitSystem", () => {
                         [Dimension.LENGTH]: 2,
                         [Dimension.TIME]  : -2
                     },
-                    "#energy", "E"
+                    "#energy", "E", 1.0
                 )
             );
             let p = new Synonym("#baz", "z",
@@ -4832,7 +4832,7 @@ describe("UnitSystem", () => {
                         [Dimension.LENGTH]: 2,
                         [Dimension.TIME]  : -3
                     },
-                    "#power", "P"
+                    "#power", "P", 1.0
                 )
             );
             let synonyms = [f, e, p];
