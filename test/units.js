@@ -4733,11 +4733,13 @@ describe("UnitSystem", () => {
     let UnitSystem       = units.UnitSystem;
     let Dimension        = units.Dimension;
     let DimensionalError = units.DimensionalError;
+    let Quantity         = units.Quantity;
     let Unit             = units.Unit;
     let One              = units.One;
     let Synonym          = units.Synonym;
     let UnitMul          = units.UnitMul;
     let UnitPow          = units.UnitPow;
+    let Prefixed         = units.Prefixed;
 
     describe("constructor(base, synonyms)", () => {
         it("should create a new UnitSystem instance", () => {
@@ -4879,6 +4881,95 @@ describe("UnitSystem", () => {
     });
 
     describe("#unitForQuantity(quantity)", () => {
-        it("should return a unit that matches to 'quantity'");
+        it("should return a unit that matches to 'quantity'", () => {
+            let bases = {
+                [Dimension.AMOUNT]     : new Unit({ [Dimension.AMOUNT]     : 1 },      "#amount", "N", 1.0),
+                [Dimension.MASS]       : new Unit({ [Dimension.MASS]       : 1 },        "#mass", "M", 1.0),
+                [Dimension.LENGTH]     : new Unit({ [Dimension.LENGTH]     : 1 },      "#length", "L", 1.0),
+                [Dimension.TIME]       : new Unit({ [Dimension.TIME]       : 1 },        "#time", "T", 1.0),
+                [Dimension.TEMPERATURE]: new Unit({ [Dimension.TEMPERATURE]: 1 }, "#temperature", "Θ", 1.0),
+                [Dimension.CURRENT]    : new Unit({ [Dimension.CURRENT]    : 1 },     "#current", "I", 1.0),
+                [Dimension.LUMINOUS]   : new Unit({ [Dimension.LUMINOUS]   : 1 },    "#luminous", "J", 1.0)
+            };
+            let f = new Synonym("#foo", "f",
+                new Unit(
+                    {
+                        [Dimension.MASS]  : 1,
+                        [Dimension.LENGTH]: 1,
+                        [Dimension.TIME]  : -2
+                    },
+                    "#force", "F", 1.0
+                )
+            );
+            let e = new Synonym("#bar", "r",
+                new Unit(
+                    {
+                        [Dimension.MASS]  : 1,
+                        [Dimension.LENGTH]: 2,
+                        [Dimension.TIME]  : -2
+                    },
+                    "#energy", "E", 1.0
+                )
+            );
+            let p = new Synonym("#baz", "z",
+                new Unit(
+                    {
+                        [Dimension.MASS]  : 1,
+                        [Dimension.LENGTH]: 2,
+                        [Dimension.TIME]  : -3
+                    },
+                    "#power", "P", 1.0
+                )
+            );
+            let synonyms = [f, e, p];
+            let us = new UnitSystem(bases, synonyms);
+            {
+                let x = new Quantity(2.0, {});
+                let unit = us.unitForQuantity(x);
+                expect(unit).to.be.an.instanceOf(One);
+            }
+            {
+                let x = new Quantity(2.0e+4, {});
+                let unit = us.unitForQuantity(x);
+                expect(unit).to.be.an.instanceOf(Prefixed);
+                expect(unit.prefix.name).to.equal("kilo");
+                expect(unit.unit).to.be.an.instanceOf(One);
+            }
+            {
+                let x = new Quantity(2.0, { [Dimension.AMOUNT]: 1 });
+                let unit = us.unitForQuantity(x);
+                expect(unit).to.equal(bases[Dimension.AMOUNT]);
+            }
+            {
+                let x = new Quantity(
+                    2.0,
+                    {
+                        [Dimension.LENGTH]: 1,
+                        [Dimension.TIME]  : -1
+                    }
+                );
+                let unit = us.unitForQuantity(x);
+                expect(unit).to.be.an.instanceOf(UnitMul);
+                expect(Dimension.equal(
+                    unit.dimension,
+                    {
+                        [Dimension.LENGTH]: 1,
+                        [Dimension.TIME]  : -1
+                    }
+                )).to.be.true;
+            }
+            {
+                let x = new Quantity(
+                    2.0,
+                    {
+                        [Dimension.MASS]  : 1,
+                        [Dimension.LENGTH]: 2,
+                        [Dimension.TIME]  : -2
+                    }
+                );
+                let unit = us.unitForQuantity(x);
+                expect(unit).to.equal(e);
+            }
+        });
     });
 });
