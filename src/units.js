@@ -25,7 +25,8 @@ function endModule() {
         SIUnit,
         UnitSystem,
         StdUnitSystem,
-        SIUnitSystem
+        SIUnitSystem,
+        CONSTANT
     });
 }
 
@@ -781,5 +782,15 @@ const SIUnitSystem = new UnitSystem(
         SIUnit.HENRY
     ]
 );
+
+
+const CONSTANT = {
+    SPEED_OF_LIGHT   : SIUnit.METRE.div(SIUnit.SECOND).value(2.99792458e+8),
+    PLANCK           : SIUnit.JOULES.mul(SIUnit.SECOND).value(6.62606957e-34),
+    ELEMENTARY_CHARGE: SIUnit.COULOMB.value(1.602176565e-19),
+    BOLTZMANN        : SIUnit.JOULES.div(SIUnit.KELVIN).value(1.3806488e-23),
+    AVOGADRO         : SIUnit.MOLE.pow(-1).value(6.02214129e+23)
+};
+Object.freeze(CONSTANT);
 
 endModule();
