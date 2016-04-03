@@ -5,7 +5,7 @@
 
 "use strict";
 
-function endModule() {
+function end() {
     module.exports = Object.freeze({
         Dimension,
         DimensionalError,
@@ -793,4 +793,4 @@ const CONSTANT = {
 };
 Object.freeze(CONSTANT);
 
-endModule();
+end();
