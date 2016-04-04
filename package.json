@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/units.js"
+    "test": "mocha test/units.js",
+    "build": "npm run build:release",
+    "build:release": "webpack",
+    "build:debug": "DEBUG=true webpack",
+    "start": "DEBUG=true node app.js"
   },
   "repository": {
     "type": "git",
