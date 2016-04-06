@@ -4558,7 +4558,7 @@ describe("Prefixed", () => {
             let unit = new Unit({}, "test unit", "?", 1.0);
             let prefix = new Prefix("test prefix", "!", 1000.0);
             let prefixedA = new Prefixed(prefix, unit);
-            for (let e = -21; e < 30; e++) {
+            for (let e = -24; e < 27; e++) {
                 for (let i = 1; i <= 9; i++) {
                     let x = new Quantity(i * Math.pow(10.0, e), {});
                     let prefixedB = prefixedA.autoPrefixFor(x);

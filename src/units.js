@@ -574,6 +574,21 @@ class Prefixed extends UnitBase {
             }
         }
     }
+
+    autoPrefixFor(quantity) {
+        let value = quantity.in(this.unit);
+        if (value === 0.0) {
+            return this.unit;
+        }
+        let prefix = AUTO_PREFIX_LIST.find(prefix => Math.pow(prefix.factor, this.unit.prefixPower) <= value);
+        if (prefix === undefined) {
+            prefix = AUTO_PREFIX_LIST[AUTO_PREFIX_LIST.length - 1];
+        }
+        if (prefix.name === "") {
+            return this.unit;
+        }
+        return this.unit.addPrefix(prefix);
+    }
 }
 
 const SIPrefix = Object.freeze({
