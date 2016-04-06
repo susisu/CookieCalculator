@@ -278,6 +278,59 @@ class Quantity {
         let prefixedUnit = unit.autoPrefixFor(this);
         return this.in(prefixedUnit).toString() + " " + prefixedUnit.symbol;
     }
+
+    toStringInUnitSystem(unitSystem) {
+        let unit = unitSystem.unitForQuantity(this);
+        return this.toStringIn(unit);
+    }
+
+    toFixedIn(unit, digits) {
+        if (!Dimension.equal(this.dimension, unit.dimension)) {
+            throw new DimensionalError(
+                "cannot convert " + Dimension.toString(this.dimension) + " into " + Dimension.toString(unit.dimension)
+            );
+        }
+        return this.in(unit).toFixed(digits) + " " + unit.symbol;
+    }
+
+    toFixedInAutoPrefixed(unit, digits) {
+        if (!Dimension.equal(this.dimension, unit.dimension)) {
+            throw new DimensionalError(
+                "cannot convert " + Dimension.toString(this.dimension) + " into " + Dimension.toString(unit.dimension)
+            );
+        }
+        let prefixedUnit = unit.autoPrefixFor(this);
+        return this.in(prefixedUnit).toFixed(digits) + " " + prefixedUnit.symbol;
+    }
+
+    toFixedInUnitSystem(unitSystem, digits) {
+        let unit = unitSystem.unitForQuantity(this);
+        return this.toFixedIn(unit, digits);
+    }
+
+    toPrecisionIn(unit, precision) {
+        if (!Dimension.equal(this.dimension, unit.dimension)) {
+            throw new DimensionalError(
+                "cannot convert " + Dimension.toString(this.dimension) + " into " + Dimension.toString(unit.dimension)
+            );
+        }
+        return this.in(unit).toPrecision(precision) + " " + unit.symbol;
+    }
+
+    toPrecisionInAutoPrefixed(unit, precision) {
+        if (!Dimension.equal(this.dimension, unit.dimension)) {
+            throw new DimensionalError(
+                "cannot convert " + Dimension.toString(this.dimension) + " into " + Dimension.toString(unit.dimension)
+            );
+        }
+        let prefixedUnit = unit.autoPrefixFor(this);
+        return this.in(prefixedUnit).toPrecision(precision) + " " + prefixedUnit.symbol;
+    }
+
+    toPrecisionInUnitSystem(unitSystem, precision) {
+        let unit = unitSystem.unitForQuantity(this);
+        return this.toPrecisionIn(unit, precision);
+    }
 }
 
 
