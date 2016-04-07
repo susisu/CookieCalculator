@@ -15,6 +15,8 @@ import {
 
 const MOLE        = SIUnit.MOLE;
 const GRAM        = SIUnit.GRAM;
+const KILOGRAM    = SIUnit.KILOGRAM;
+const METRE       = SIUnit.METRE;
 const CENTIMETER  = SIPrefix.CENTI.add(SIUnit.METRE);
 const CUBIC_METRE = SIUnit.CUBIC_METRE;
 const AVOGADRO    = Constant.AVOGADRO;
@@ -60,13 +62,52 @@ window.addEventListener("load", () => {
         let totalVolume  = cookiesNumber.mul(cookieVolume);
         let totalLength  = cookiesNumber.mul(cookieThickness);
 
-        totalAmountOutput.innerText   = totalAmount.toPrecisionInUnitSystem(SIUnitSystem, 3)
-            + " (" + totalAmount.toPrecisionIn(MOLE, 3) + ")";
-        totalMassOutput.innerText   = totalMass.toPrecisionInUnitSystem(SIUnitSystem, 3)
-            + " (" + totalMass.toPrecisionIn(GRAM, 3) + ")";
-        totalVolumeOutput.innerText = totalVolume.toPrecisionInUnitSystem(SIUnitSystem, 3)
-            + " (" + totalVolume.toPrecisionIn(CUBIC_METRE, 3) + ")";
-        totalLengthOutput.innerText = totalLength.toPrecisionInUnitSystem(SIUnitSystem, 3)
-            + " (" + totalLength.toPrecisionIn(CENTIMETER, 3) + ")";
+        totalAmountOutput.innerHTML = toSuper(
+            totalAmount.toPrecisionInUnitSystem(SIUnitSystem, 3)
+            + " (" + totalAmount.toPrecisionIn(MOLE, 3) + ")"
+        );
+        totalMassOutput.innerHTML   = toSuper(
+            totalMass.toPrecisionInUnitSystem(SIUnitSystem, 3)
+            + " (" + totalMass.toPrecisionIn(KILOGRAM, 3) + ")"
+        );
+        totalVolumeOutput.innerHTML = toSuper(
+            totalVolume.toPrecisionInUnitSystem(SIUnitSystem, 3)
+            + " (" + totalVolume.toPrecisionIn(CUBIC_METRE, 3) + ")"
+        );
+        totalLengthOutput.innerHTML = toSuper(
+            totalLength.toPrecisionInUnitSystem(SIUnitSystem, 3)
+            + " (" + totalLength.toPrecisionIn(METRE, 3) + ")"
+        );
+    }
+
+    function toSuper(str) {
+        let result = "";
+        let sup    = 0;
+        for (let i = 0; i < str.length; i++) {
+            if (str[i] === "^") {
+                sup    += 1;
+                result += "<sup>";
+            }
+            else {
+                if (sup > 0) {
+                    let code = str.charCodeAt(i);
+                    if (48 <= code && code <= 57) {
+                        result += str[i];
+                    }
+                    else {
+                        result += "</sup>" + str[i];
+                        sup    -= 1;
+                    }
+                }
+                else {
+                    result += str[i];
+                }
+            }
+        }
+        while (sup > 0) {
+            result += "</sup>";
+            sup    -= 1;
+        }
+        return result;
     }
 });
