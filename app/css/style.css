@@ -1,0 +1,40 @@
+@charset "utf-8";
+
+body {
+    background-color: #000000;
+    color           : #ffffff;
+}
+
+body > header {
+    width     : 800px;
+    margin    : 16px auto;
+    text-align: center;
+}
+
+body > header h1 {
+    border-top    : 1px solid #808080;
+    border-bottom : 1px solid #808080;
+    padding-top   : 8px;
+    padding-bottom: 8px;
+}
+
+body > section {
+    background-color: #303030;
+    border-radius   : 8px;
+    width           : 784px;
+    margin          : 16px auto;
+    padding         : 8px;
+}
+
+body > section > header {
+    border-bottom: 1px solid #808080;
+    margin-bottom: 8px;
+}
+
+h1 {
+    font-family: Merriweather, Georgia, serif;
+}
+
+#cookies-input label {
+    color: #c0c0c0;
+}
