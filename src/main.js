@@ -62,25 +62,22 @@ window.addEventListener("load", () => {
         let totalVolume  = cookiesNumber.mul(cookieVolume);
         let totalLength  = cookiesNumber.mul(cookieThickness);
 
-        totalAmountOutput.innerHTML = toSuper(
-            totalAmount.toPrecisionInUnitSystem(SIUnitSystem, 3)
-            + " (" + totalAmount.toPrecisionIn(MOLE, 3) + ")"
-        );
-        totalMassOutput.innerHTML   = toSuper(
-            totalMass.toPrecisionInUnitSystem(SIUnitSystem, 3)
-            + " (" + totalMass.toPrecisionIn(KILOGRAM, 3) + ")"
-        );
-        totalVolumeOutput.innerHTML = toSuper(
-            totalVolume.toPrecisionInUnitSystem(SIUnitSystem, 3)
-            + " (" + totalVolume.toPrecisionIn(CUBIC_METRE, 3) + ")"
-        );
-        totalLengthOutput.innerHTML = toSuper(
-            totalLength.toPrecisionInUnitSystem(SIUnitSystem, 3)
-            + " (" + totalLength.toPrecisionIn(METRE, 3) + ")"
-        );
+        totalAmountOutput.innerHTML =
+            prettify(totalAmount.toPrecisionInUnitSystem(SIUnitSystem, 3))
+            + " (" + prettify(totalAmount.toPrecisionIn(MOLE, 3)) + ")";
+        totalMassOutput.innerHTML   =
+            prettify(totalMass.toPrecisionInUnitSystem(SIUnitSystem, 3))
+            + " (" + prettify(totalMass.toPrecisionIn(KILOGRAM, 3)) + ")";
+        totalVolumeOutput.innerHTML =
+            prettify(totalVolume.toPrecisionInUnitSystem(SIUnitSystem, 3))
+            + " (" + prettify(totalVolume.toPrecisionIn(CUBIC_METRE, 3)) + ")";
+        totalLengthOutput.innerHTML =
+            prettify(totalLength.toPrecisionInUnitSystem(SIUnitSystem, 3))
+            + " (" + prettify(totalLength.toPrecisionIn(METRE, 3)) + ")";
     }
 
-    function toSuper(str) {
+    function prettify(str) {
+        str = str.replace(/[Ee]\+?(\-?\d+)/g, "×10<sup>$1</sup>");
         let result = "";
         let sup    = 0;
         for (let i = 0; i < str.length; i++) {
