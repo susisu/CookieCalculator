@@ -24,6 +24,7 @@ body > section {
     width           : 784px;
     margin          : 16px auto;
     padding         : 8px;
+    font-size       : 10pt;
 }
 
 body > section > header {
@@ -37,4 +38,22 @@ h1 {
 
 #cookies-input label {
     color: #c0c0c0;
+}
+
+a {
+    color: #f0f0f0;
+}
+
+p {
+    font-size: 10pt;
+}
+
+p.prev {
+    font-size: 8pt;
+    color    : rgba(255, 255, 255, .75);
+}
+
+p.next {
+    font-size: 8pt;
+    color    : rgba(255, 255, 255, .75);
 }

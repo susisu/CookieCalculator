@@ -13,6 +13,8 @@ import {
     Constant
 } from "./units.js";
 
+import scales from "./scales.js";
+
 const MOLE        = SIUnit.MOLE;
 const GRAM        = SIUnit.GRAM;
 const KILOGRAM    = SIUnit.KILOGRAM;
@@ -43,15 +45,29 @@ window.addEventListener("load", () => {
     cookieRadiusInput.addEventListener("change", update);
     cookieThicknessInput.addEventListener("change", update);
 
-    let totalAmountOutput = document.getElementById("total-amount");
-    let totalMassOutput   = document.getElementById("total-mass");
-    let totalVolumeOutput = document.getElementById("total-volume");
-    let totalLengthOutput = document.getElementById("total-length");
-    let outputElems = {
-        amount: totalAmountOutput,
-        mass  : totalMassOutput,
-        volume: totalVolumeOutput,
-        length: totalLengthOutput
+    let totalOutput = {
+        amount: document.getElementById("total-amount"),
+        mass  : document.getElementById("total-mass"),
+        volume: document.getElementById("total-volume"),
+        length: document.getElementById("total-length")
+    };
+    let prevOutput = {
+        amount: document.getElementById("prev-amount"),
+        mass  : document.getElementById("prev-mass"),
+        volume: document.getElementById("prev-volume"),
+        length: document.getElementById("prev-length")
+    };
+    let approxOutput = {
+        amount: document.getElementById("approx-amount"),
+        mass  : document.getElementById("approx-mass"),
+        volume: document.getElementById("approx-volume"),
+        length: document.getElementById("approx-length")
+    };
+    let nextOutput = {
+        amount: document.getElementById("next-amount"),
+        mass  : document.getElementById("next-mass"),
+        volume: document.getElementById("next-volume"),
+        length: document.getElementById("next-length")
     };
 
     update();
@@ -68,16 +84,71 @@ window.addEventListener("load", () => {
         let totalVolume  = cookiesNumber.mul(cookieVolume);
         let totalLength  = cookiesNumber.mul(cookieThickness);
 
-        output("amount", totalAmount, MOLE);
-        output("mass", totalMass, KILOGRAM);
-        output("volume", totalVolume, CUBIC_METRE);
-        output("length", totalLength, METRE);
+        let lengthApprox = approxScale(totalLength, scales.LENGTH);
+
+        output("amount", totalAmount, MOLE, {});
+        output("mass", totalMass, KILOGRAM, {});
+        output("volume", totalVolume, CUBIC_METRE, {});
+        output("length", totalLength, METRE, lengthApprox);
     }
 
-    function output(name, quantity, defaultUnit) {
-        outputElems[name].innerHTML =
+    function output(name, quantity, defaultUnit, approx) {
+        totalOutput[name].innerHTML =
             prettify(quantity.toPrecisionInUnitSystem(SIUnitSystem, 3))
             + " (" + prettify(quantity.toPrecisionIn(defaultUnit, 3)) + ")";
+        prevOutput[name].innerHTML = !approx.prev ? "-" :
+            prettify(approx.prev.quantity.toPrecisionInUnitSystem(SIUnitSystem, 3))
+            + " (" + prettify(approx.prev.quantity.toPrecisionIn(defaultUnit, 3)) + ")<br>"
+            + approx.prev.description;
+        approxOutput[name].innerHTML = !approx.approx ? "-" :
+            prettify(approx.approx.quantity.toPrecisionInUnitSystem(SIUnitSystem, 3))
+            + " (" + prettify(approx.approx.quantity.toPrecisionIn(defaultUnit, 3)) + ")<br>"
+            + approx.approx.description;
+        nextOutput[name].innerHTML = !approx.next ? "-" :
+            prettify(approx.next.quantity.toPrecisionInUnitSystem(SIUnitSystem, 3))
+            + " (" + prettify(approx.next.quantity.toPrecisionIn(defaultUnit, 3)) + ")<br>"
+            + approx.next.description;
+    }
+
+    function approxScale(x, scales) {
+        // NOTE: check dimensions?
+        let len = scales.length;
+        for (let i = 0; i < len; i++) {
+            if (x.value < scales[i].quantity.value) {
+                if (i === 0) {
+                    return {
+                        next  : scales[i]
+                    };
+                }
+                else if (i === 1) {
+                    return {
+                        approx: scales[i - 1],
+                        next  : scales[i]
+                    };
+                }
+                else {
+                    return {
+                        prev  : scales[i - 2],
+                        approx: scales[i - 1],
+                        next  : scales[i]
+                    };
+                }
+            }
+        }
+        if (len === 0) {
+            return {};
+        }
+        else if (len === 1) {
+            return {
+                approx: scales[len - 1]
+            };
+        }
+        else {
+            return {
+                prev  : scales[len - 2],
+                approx: scales[len - 1]
+            };
+        }
     }
 
     function prettify(str) {
