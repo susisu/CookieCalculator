@@ -47,7 +47,13 @@ window.addEventListener("load", () => {
     let totalMassOutput   = document.getElementById("total-mass");
     let totalVolumeOutput = document.getElementById("total-volume");
     let totalLengthOutput = document.getElementById("total-length");
-    
+    let outputElems = {
+        amount: totalAmountOutput,
+        mass  : totalMassOutput,
+        volume: totalVolumeOutput,
+        length: totalLengthOutput
+    };
+
     update();
 
     function update() {
@@ -62,18 +68,16 @@ window.addEventListener("load", () => {
         let totalVolume  = cookiesNumber.mul(cookieVolume);
         let totalLength  = cookiesNumber.mul(cookieThickness);
 
-        totalAmountOutput.innerHTML =
-            prettify(totalAmount.toPrecisionInUnitSystem(SIUnitSystem, 3))
-            + " (" + prettify(totalAmount.toPrecisionIn(MOLE, 3)) + ")";
-        totalMassOutput.innerHTML   =
-            prettify(totalMass.toPrecisionInUnitSystem(SIUnitSystem, 3))
-            + " (" + prettify(totalMass.toPrecisionIn(KILOGRAM, 3)) + ")";
-        totalVolumeOutput.innerHTML =
-            prettify(totalVolume.toPrecisionInUnitSystem(SIUnitSystem, 3))
-            + " (" + prettify(totalVolume.toPrecisionIn(CUBIC_METRE, 3)) + ")";
-        totalLengthOutput.innerHTML =
-            prettify(totalLength.toPrecisionInUnitSystem(SIUnitSystem, 3))
-            + " (" + prettify(totalLength.toPrecisionIn(METRE, 3)) + ")";
+        output("amount", totalAmount, MOLE);
+        output("mass", totalMass, KILOGRAM);
+        output("volume", totalVolume, CUBIC_METRE);
+        output("length", totalLength, METRE);
+    }
+
+    function output(name, quantity, defaultUnit) {
+        outputElems[name].innerHTML =
+            prettify(quantity.toPrecisionInUnitSystem(SIUnitSystem, 3))
+            + " (" + prettify(quantity.toPrecisionIn(defaultUnit, 3)) + ")";
     }
 
     function prettify(str) {
