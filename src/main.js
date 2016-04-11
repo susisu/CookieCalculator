@@ -84,11 +84,13 @@ window.addEventListener("load", () => {
         let totalVolume  = cookiesNumber.mul(cookieVolume);
         let totalLength  = cookiesNumber.mul(cookieThickness);
 
+        let massApprox   = approxScale(totalMass, scales.MASS);
+        let volumeApprox = approxScale(totalVolume, scales.VOLUME);
         let lengthApprox = approxScale(totalLength, scales.LENGTH);
 
         output("amount", totalAmount, MOLE, {});
-        output("mass", totalMass, KILOGRAM, {});
-        output("volume", totalVolume, CUBIC_METRE, {});
+        output("mass", totalMass, KILOGRAM, massApprox);
+        output("volume", totalVolume, CUBIC_METRE, volumeApprox);
         output("length", totalLength, METRE, lengthApprox);
     }
 
