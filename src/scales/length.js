@@ -55,6 +55,36 @@ let values = [
         value: 1e-12,
         description:
             `Longest wavelength of <a href="https://en.wikipedia.org/wiki/Gamma_ray">gamma rays</a>`
+    },
+    {
+        value: 5e-12,
+        description:
+            `Shortest wavelength of <a href="https://en.wikipedia.org/wiki/X-ray">X-rays</a>`
+    },
+    {
+        value: 2.5e-11,
+        description:
+            `Radius of <a href="https://en.wikipedia.org/wiki/Hydrogen_atom">hydrogen atom</a>`
+    },
+    {
+        value: 5.3e-11,
+        description:
+            `<a href="https://en.wikipedia.org/wiki/Bohr_radius">Bohr radius</a>`
+    },
+    {
+        value: 1e-10,
+        description:
+            `1 <a href="https://en.wikipedia.org/wiki/Ångström">Ångström</a>`
+    },
+    {
+        value: 5e-10,
+        description:
+            `Width of <a href="https://en.wikipedia.org/wiki/Alpha_helix">α helix</a>`
+    },
+    {
+        value: 1e-9,
+        description:
+            `Diameter of a <a href="https://en.wikipedia.org/wiki/Carbon_nanotube">carbon nanotube</a>`
     }
 ];
 
