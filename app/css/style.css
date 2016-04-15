@@ -48,12 +48,18 @@ p {
     font-size: 10pt;
 }
 
-p.prev {
+table.prev-next {
+    width: 100%;
+}
+
+td.prev {
+    width    : 50%;
     font-size: 8pt;
     color    : rgba(255, 255, 255, .75);
 }
 
-p.next {
+td.next {
+    width    : 50%;
     font-size: 8pt;
     color    : rgba(255, 255, 255, .75);
 }
