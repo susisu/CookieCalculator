@@ -85,6 +85,26 @@ let values = [
         value: 1e-9,
         description:
             `Diameter of a <a href="https://en.wikipedia.org/wiki/Carbon_nanotube">carbon nanotube</a>`
+    },
+    {
+        value: 4e-8,
+        description:
+            `Wavelength of extreme ultraviolet`
+    },
+    {
+        value: 4e-7,
+        description:
+            `Wavelength of violet light`
+    },
+    {
+        value: 7e-7,
+        description:
+            `Wavelength of red light`
+    },
+    {
+        value: 7e-6,
+        description:
+            `Diameter of a red blood cell`
     }
 ];
 
