@@ -105,6 +105,51 @@ let values = [
         value: 7e-6,
         description:
             `Diameter of a red blood cell`
+    },
+    {
+        value: 1e-5,
+        description:
+            `Typical size of fog water droplet`
+    },
+    {
+        value: 1e-4,
+        description:
+            `Average width of a human hair`
+    },
+    {
+        value: 5e-3,
+        description:
+            `Ant`
+    },
+    {
+        value: 1.5e-2,
+        description:
+            `Mosquito`
+    },
+    {
+        value: 2.54e-2,
+        description:
+            `1 inch`
+    },
+    {
+        value: 1e-1,
+        description:
+            `Wavelength of the highest UHF radio frequency`
+    },
+    {
+        value: 3.048e-1,
+        description:
+            `1 foot`
+    },
+    {
+        value: 9.144e-1,
+        description:
+            `1 yard`
+    },
+    {
+        value: 1.7,
+        description:
+            `Human`
     }
 ];
 
