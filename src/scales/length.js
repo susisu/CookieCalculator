@@ -150,6 +150,41 @@ let values = [
         value: 1.7,
         description:
             `Human`
+    },
+    {
+        value: 3.3e+1,
+        description:
+            `Blue whale, the largest animal`
+    },
+    {
+        value: 9.347e+1,
+        description:
+            `Height of the Statue of Liberty`
+    },
+    {
+        value: 1.37e+2,
+        description:
+            `Height of the Great Pyramid of Giza`
+    },
+    {
+        value: 8.848e+3,
+        description:
+            `Height of the highest mountain on Earth, Mount Everest`
+    },
+    {
+        value: 1.0911e+4,
+        description:
+            `Depth of the deepest part of the Ocean, Mariana Trench`
+    },
+    {
+        value: 9.0e+4,
+        description:
+            `Width of the Bering Strait`
+    },
+    {
+        value: 9.746e+5,
+        description:
+            `Greatest diameter of the dwarf planet Ceres`
     }
 ];
 
