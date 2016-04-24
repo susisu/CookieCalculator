@@ -219,12 +219,47 @@ let values = [
     {
         value: 2.99792458e+8,
         description:
-            `Distance traveled by light in one second`
+            `1 light-second (distance traveled by light in one second)`
     },
     {
         value: 3.84e+8,
         description:
             `Moon's orbital distance from Earth`
+    },
+    {
+        value: 1.39e+9,
+        description:
+            `Diameter of the Sun`
+    },
+    {
+        value: 1.8e+10,
+        description:
+            `1 light-minute`
+    },
+    {
+        value: 1.5e+11,
+        description:
+            `1 astronomical unit (AU, mean distance between Earth and Sun)`
+    },
+    {
+        value: 1.4e+12,
+        description:
+            `Orbital distance of Saturn from Sun`
+    },
+    {
+        value: 5.9e+12,
+        description:
+            `Orbital distance of Pluto from Sun`
+    },
+    {
+        value: 7.5e+12,
+        description:
+            `Outer boundary of the Kuiper belt, inner boundary of the Oort cloud`
+    },
+    {
+        value: 1e+13,
+        description:
+            `Diameter of the Solar System`
     }
 ];
 
