@@ -185,6 +185,46 @@ let values = [
         value: 9.746e+5,
         description:
             `Greatest diameter of the dwarf planet Ceres`
+    },
+    {
+        value: 2.39e+6,
+        description:
+            `Diameter of Pluto`
+    },
+    {
+        value: 3.48e+6,
+        description:
+            `Diameter of the Moon`
+    },
+    {
+        value: 6.4e+6,
+        description:
+            `Length of the Great Wall of China`
+    },
+    {
+        value: 1.2756e+7,
+        description:
+            `Equatorial diameter of Earth`
+    },
+    {
+        value: 4.0075e+7,
+        description:
+            `Length of Earth's equator`
+    },
+    {
+        value: 1.42984e+8,
+        description:
+            `Diameter of Jupiter`
+    },
+    {
+        value: 2.99792458e+8,
+        description:
+            `Distance traveled by light in one second`
+    },
+    {
+        value: 3.84e+8,
+        description:
+            `Moon's orbital distance from Earth`
     }
 ];
 
