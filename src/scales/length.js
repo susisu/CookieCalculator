@@ -260,6 +260,26 @@ let values = [
         value: 1e+13,
         description:
             `Diameter of the Solar System`
+    },
+    {
+        value: 2e+14,
+        description:
+            `Total length of DNA molecules in all cells of an adult human`
+    },
+    {
+        value: 7.5e+15,
+        description:
+            `Outer boundary of the Oort cloud`
+    },
+    {
+        value: 9.46e+15,
+        description:
+            `1 light-year`
+    },
+    {
+        value: 3.0857e+16,
+        description:
+            `1 parsec`
     }
 ];
 
