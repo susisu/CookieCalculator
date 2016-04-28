@@ -280,6 +280,31 @@ let values = [
         value: 3.0857e+16,
         description:
             `1 parsec`
+    },
+    {
+        value: 3.99e+16,
+        description:
+            `Distance to the nearest fixed star Proxima Centauri`
+    },
+    {
+        value: 9.46e+18,
+        description:
+            `Average thickness of Milky Way Galaxy`
+    },
+    {
+        value: 9.5e+20,
+        description:
+            `Diameter of Milky Way Galaxy`
+    },
+    {
+        value: 2.4e+22,
+        description:
+            `Distance to Andromeda Galaxy`
+    },
+    {
+        value: 1.2e+27,
+        description:
+            `Lower bound of the radius of the universe`
     }
 ];
 
