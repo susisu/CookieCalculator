@@ -72,6 +72,46 @@ let values = [
         value: 2e-7,
         description:
             `Fruit fly`
+    },
+    {
+        value: 2.5e-6,
+        description:
+            `Mosquito`
+    },
+    {
+        value: 2e-5,
+        description:
+            `Housefly`
+    },
+    {
+        value: 2e-4,
+        description:
+            `1 carat`
+    },
+    {
+        value: 5e-3,
+        description:
+            `Raisin`
+    },
+    {
+        value: 2e-2,
+        description:
+            `Mouse`
+    },
+    {
+        value: 2.8e-2,
+        description:
+            `1 ounce`
+    },
+    {
+        value: 1e-1,
+        description:
+            `Orange`
+    },
+    {
+        value: 4.54e-1,
+        description:
+            `1 pound`
     }
 ];
 
