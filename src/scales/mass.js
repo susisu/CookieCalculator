@@ -112,6 +112,46 @@ let values = [
         value: 4.54e-1,
         description:
             `1 pound`
+    },
+    {
+        value: 1,
+        description:
+            `Laptop computer`
+    },
+    {
+        value: 3,
+        description:
+            `Human baby`
+    },
+    {
+        value: 4,
+        description:
+            `Housecat`
+    },
+    {
+        value: 1e+1,
+        description:
+            `Medium-sized dog`
+    },
+    {
+        value: 6e+1,
+        description:
+            `Adult human`
+    },
+    {
+        value: 3e+2,
+        description:
+            `Grand piano`
+    },
+    {
+        value: 1e+3,
+        description:
+            `1 tonne`
+    },
+    {
+        value: 3e+3,
+        description:
+            `Elephant`
     }
 ];
 
