@@ -152,6 +152,36 @@ let values = [
         value: 3e+3,
         description:
             `Elephant`
+    },
+    {
+        value: 1.1e+4,
+        description:
+            `Hubble Space Telescope`
+    },
+    {
+        value: 1.8e+5,
+        description:
+            `Blue whale`
+    },
+    {
+        value: 1e+6,
+        description:
+            `Trunk of a giant sequoia tree`
+    },
+    {
+        value: 5.2e+7,
+        description:
+            `RMS Titanic`
+    },
+    {
+        value: 6e+9,
+        description:
+            `Great Pyramid of Giza`
+    },
+    {
+        value: 4e+11,
+        description:
+            `Total mass of the world's human population`
     }
 ];
 
