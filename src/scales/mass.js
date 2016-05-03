@@ -182,6 +182,66 @@ let values = [
         value: 4e+11,
         description:
             `Total mass of the world's human population`
+    },
+    {
+        value: 4e+12,
+        description:
+            `Global annual human food production`
+    },
+    {
+        value: 4e+13,
+        description:
+            `Global annual human carbon dioxide emission`
+    },
+    {
+        value: 1.6e+17,
+        description:
+            `Prometheus (a satellite of Saturn)`
+    },
+    {
+        value: 5.1e+18,
+        description:
+            `Earth's atmosphere`
+    },
+    {
+        value: 5.6e+18,
+        description:
+            `Hyperion (a satellite of Saturn)`
+    },
+    {
+        value: 9.4e+20,
+        description:
+            `Ceres`
+    },
+    {
+        value: 1.4e+21,
+        description:
+            `Earth's ocean`
+    },
+    {
+        value: 1.5e+21,
+        description:
+            `Charon`
+    },
+    {
+        value: 1.3e+22,
+        description:
+            `Pluto`
+    },
+    {
+        value: 7.3e+22,
+        description:
+            `The Moon`
+    },
+    {
+        value: 3.3e+23,
+        description:
+            `Mercury`
+    },
+    {
+        value: 6.4e+23,
+        description:
+            `Mars`
     }
 ];
 
