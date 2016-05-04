@@ -242,6 +242,66 @@ let values = [
         value: 6.4e+23,
         description:
             `Mars`
+    },
+    {
+        value: 4.9e+24,
+        description:
+            `Venus`
+    },
+    {
+        value: 6.0e+24,
+        description:
+            `Earth`
+    },
+    {
+        value: 8.7e+25,
+        description:
+            `Uranus`
+    },
+    {
+        value: 1.0e+26,
+        description:
+            `Neptune`
+    },
+    {
+        value: 5.7e+26,
+        description:
+            `Saturn`
+    },
+    {
+        value: 1.9e+27,
+        description:
+            `Jupiter`
+    },
+    {
+        value: 1.989e+30,
+        description:
+            `The Sun`
+    },
+    {
+        value: 4.1e+31,
+        description:
+            `Betelgeuse`
+    },
+    {
+        value: 1.6e+33,
+        description:
+            `Pleiades star cluster`
+    },
+    {
+        value: 7e+36,
+        description:
+            `The black hole at the center of the Milky Way`
+    },
+    {
+        value: 1.2e+42,
+        description:
+            `Milky Way Galaxy`
+    },
+    {
+        value: 4.4506e+52,
+        description:
+            `Mass of the observable universe`
     }
 ];
 
