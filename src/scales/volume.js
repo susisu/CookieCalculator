@@ -87,6 +87,81 @@ let values = [
         value: 2e-1,
         description:
             `Drum`
+    },
+    {
+        value: 1e0,
+        description:
+            `Domestic refrigerator`
+    },
+    {
+        value: 3.31e+1,
+        description:
+            `20-foot cargo container`
+    },
+    {
+        value: 6.75e+1,
+        description:
+            `40-foot cargo container`
+    },
+    {
+        value: 2.5e+3,
+        description:
+            `Olympic size swimming pool`
+    },
+    {
+        value: 2.11890e+5,
+        description:
+            `Gas in the Hindenburg zeppelin`
+    },
+    {
+        value: 2.6006e+6,
+        description:
+            `The Great Pyramid of Giza`
+    },
+    {
+        value: 4.3e+7,
+        description:
+            `Aswan Dam`
+    },
+    {
+        value: 5e+8,
+        description:
+            `volume of Sydney Harbour`
+    },
+    {
+        value: 3.2e+11,
+        description:
+            `Annual inflow of freshwater to the Black Sea`
+    },
+    {
+        value: 1.1e+12,
+        description:
+            `Aral Sea (as of 1960)`
+    },
+    {
+        value: 5.5e+14,
+        description:
+            `Black Sea`
+    },
+    {
+        value: 3.7e+15,
+        description:
+            `Mediterranean Sea`
+    },
+    {
+        value: 3e+17,
+        description:
+            `Atlantic Ocean`
+    },
+    {
+        value: 4.5e+17,
+        description:
+            `Ceres`
+    },
+    {
+        value: 1e+18,
+        description:
+            `Pacific Ocean`
     }
 ];
 
