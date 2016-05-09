@@ -162,6 +162,61 @@ let values = [
         value: 1e+18,
         description:
             `Pacific Ocean`
+    },
+    {
+        value: 6.4e+18,
+        description:
+            `Pluto`
+    },
+    {
+        value: 2.2e+19,
+        description:
+            `The Moon`
+    },
+    {
+        value: 6.1e+19,
+        description:
+            `Mercury`
+    },
+    {
+        value: 1.6e+20,
+        description:
+            `Mars`
+    },
+    {
+        value: 9.28e+20,
+        description:
+            `Venus`
+    },
+    {
+        value: 1.08e+21,
+        description:
+            `Earth`
+    },
+    {
+        value: 6.38e+22,
+        description:
+            `Neptune`
+    },
+    {
+        value: 7.02e+22,
+        description:
+            `Uranus`
+    },
+    {
+        value: 9.23e+23,
+        description:
+            `Saturn`
+    },
+    {
+        value: 1.53e+24,
+        description:
+            `Jupiter`
+    },
+    {
+        value: 1.41e+27,
+        description:
+            `The Sun`
     }
 ];
 
