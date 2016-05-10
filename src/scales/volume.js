@@ -217,6 +217,61 @@ let values = [
         value: 1.41e+27,
         description:
             `The Sun`
+    },
+    {
+        value: 3.4e+32,
+        description:
+            `Rigel`
+    },
+    {
+        value: 1e+34,
+        description:
+            `Deneb`
+    },
+    {
+        value: 2.75e+35,
+        description:
+            `Betelgeuse`
+    },
+    {
+        value: 2.7e+46,
+        description:
+            `Bright inner nebula of the Cat's Eye Nebula`
+    },
+    {
+        value: 8.47e+47,
+        description:
+            `1 cubic light-year`
+    },
+    {
+        value: 1.7e+48,
+        description:
+            `Oort cloud`
+    },
+    {
+        value: 3.3e+55,
+        description:
+            `Local bubble`
+    },
+    {
+        value: 3.3e+61,
+        description:
+            `A galaxy like the Milky Way`
+    },
+    {
+        value: 5e+68,
+        description:
+            `Local group`
+    },
+    {
+        value: 1.2e+72,
+        description:
+            `Local void`
+    },
+    {
+        value: 3.4e+80,
+        description:
+            `Volume of the observable universe`
     }
 ];
 
