@@ -79,16 +79,17 @@ window.addEventListener("load", () => {
         cookieThickness = CENTIMETER.value(parseFloat(cookieThicknessInput.value) || 0.0);
 
         let cookieVolume = ONE.value(Math.PI).mul(cookieRadius.pow(ONE.value(2))).mul(cookieThickness);
-        let totalAmount  = cookiesNumber.div(AVOGADRO);
+        let totalAmount  = cookiesNumber;
         let totalMass    = cookiesNumber.mul(cookieMass);
         let totalVolume  = cookiesNumber.mul(cookieVolume);
         let totalLength  = cookiesNumber.mul(cookieThickness);
 
+        let amountApprox = approxScale(totalAmount, scales.AMOUNT);
         let massApprox   = approxScale(totalMass, scales.MASS);
         let volumeApprox = approxScale(totalVolume, scales.VOLUME);
         let lengthApprox = approxScale(totalLength, scales.LENGTH);
 
-        output("amount", totalAmount, MOLE, {});
+        output("amount", totalAmount, ONE, amountApprox);
         output("mass", totalMass, KILOGRAM, massApprox);
         output("volume", totalVolume, CUBIC_METRE, volumeApprox);
         output("length", totalLength, METRE, lengthApprox);
