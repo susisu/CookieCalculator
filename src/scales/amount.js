@@ -9,9 +9,54 @@ import { ONE } from "../units.js";
 
 let values = [
     {
-        value: 6.02e+23,
+        value: 1,
         description:
-            `Avogadro number`
+            `One`
+    },
+    {
+        value: 8,
+        description:
+            `Planets in the Solar System`
+    },
+    {
+        value: 10,
+        description:
+            `Fingers on a pair of human hands`
+    },
+    {
+        value: 26,
+        description:
+            `English alphabet characters`
+    },
+    {
+        value: 42,
+        description:
+            `The Answer to the Ultimate Question of Life, the Universe, and Everything`
+    },
+    {
+        value: 128,
+        description:
+            `ASCII characters`
+    },
+    {
+        value: 690,
+        description:
+            `Population in the Vatican City (as of July 2014 estimate)`
+    },
+    {
+        value: 3500,
+        description:
+            `Approximate number of the common chinese characters used in Chinese or Japanese`
+    },
+    {
+        value: 50000,
+        description:
+            `Approximate number of all the distinct chinese characters`
+    },
+    {
+        value: 355000,
+        description:
+            `English words contained in the Oxford Dictionary of English (2005)`
     }
 ];
 
