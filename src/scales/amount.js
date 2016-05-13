@@ -57,6 +57,41 @@ let values = [
         value: 355000,
         description:
             `English words contained in the Oxford Dictionary of English (2005)`
+    },
+    {
+        value: 5e+6,
+        description:
+            `Approximate number of the articles of Wikipedia (English)`
+    },
+    {
+        value: 16777216,
+        description:
+            `Colors on computer displays represented in True color (24bit RGB)`
+    },
+    {
+        value: 1.2698e+8,
+        description:
+            `Population in Japan (as of April 2016)`
+    },
+    {
+        value: 1.381e+9,
+        description:
+            `Population in China (as of March 2016)`
+    },
+    {
+        value: 7.4e+9,
+        description:
+            `Estimated world population (as of March 2016)`
+    },
+    {
+        value: 3e+10,
+        description:
+            `Web pages indexed by Google (as of 2014)`
+    },
+    {
+        value: 1e+11,
+        description:
+            `Neurons in the human brain`
     }
 ];
 
