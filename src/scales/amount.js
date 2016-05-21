@@ -92,6 +92,31 @@ let values = [
         value: 1e+11,
         description:
             `Neurons in the human brain`
+    },
+    {
+        value: 2e+11,
+        description:
+            `Stars in the Milky Way Galaxy`
+    },
+    {
+        value: 1e+12,
+        description:
+            `Start in the Andromeda Galaxy`
+    },
+    {
+        value: 3.72e+13,
+        description:
+            `Cells in the human body`
+    },
+    {
+        value: 1e+15,
+        description:
+            `Synapses in the human brain`
+    },
+    {
+        value: 4.33e+19,
+        description:
+            `Possible positions of a 3x3x3 Rubik's cube`
     }
 ];
 
