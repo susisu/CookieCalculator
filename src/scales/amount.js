@@ -79,6 +79,11 @@ let values = [
             `Population in China (as of March 2016)`
     },
     {
+        value: 4.294967296+9,
+        description:
+            `IPv4 addresses`
+    },
+    {
         value: 7.4e+9,
         description:
             `Estimated world population (as of March 2016)`
@@ -117,6 +122,31 @@ let values = [
         value: 4.33e+19,
         description:
             `Possible positions of a 3x3x3 Rubik's cube`
+    },
+    {
+        value: 6.67e+21,
+        description:
+            `Possible grids of 9x9 sudoku`
+    },
+    {
+        value: 6.022140857e+23,
+        description:
+            `Avogadro constant (1 mole)`
+    },
+    {
+        value: 7e+27,
+        description:
+            `Atoms contained in a human body`
+    },
+    {
+        value: 5e+30,
+        description:
+            `Bacterial cells on Earth`
+    },
+    {
+        value: 3.4e+38,
+        description:
+            `IPv6 addresses`
     }
 ];
 
