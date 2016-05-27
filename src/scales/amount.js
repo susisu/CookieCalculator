@@ -147,6 +147,21 @@ let values = [
         value: 3.4e+38,
         description:
             `IPv6 addresses`
+    },
+    {
+        value: 7.40e+45,
+        description:
+            `Possible positions of a 4x4x4 Rubik's cube`
+    },
+    {
+        value: 2.83e+74,
+        description:
+            `Possible positions of a 5x5x5 Rubik's cube`
+    },
+    {
+        value: 1e+100,
+        description:
+            `1 googol`
     }
 ];
 
