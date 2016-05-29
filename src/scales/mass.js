@@ -9,7 +9,7 @@ import { SIUnit } from "../units.js";
 
 let values = [
     {
-        value: 9.11e-31,
+        value: 9.10938356e-31,
         description:
             `Electron`
     },
@@ -17,6 +17,11 @@ let values = [
         value: 1.9e-28,
         description:
             `Muon`
+    },
+    {
+        value: 1.672621898e-27,
+        description:
+            `Proton`
     },
     {
         value: 1.674e-27,
@@ -67,6 +72,11 @@ let values = [
         value: 7e-18,
         description:
             `One eyelash hair`
+    },
+    {
+        value: 2.17651e-8,
+        description:
+            `1 Planck mass`
     },
     {
         value: 2e-7,

@@ -9,6 +9,11 @@ import { SIUnit } from "../units.js";
 
 let values = [
     {
+        value: 4.224167e-105,
+        description:
+            `1 Planck volume`
+    },
+    {
         value: 2.82e-45,
         description:
             `Proton`
