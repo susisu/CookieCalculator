@@ -40,10 +40,10 @@ window.addEventListener("load", () => {
     cookieRadiusInput.value    = cookieRadius.in(CENTIMETER).toString();
     cookieThicknessInput.value = cookieThickness.in(CENTIMETER).toString();
 
-    cookiesNumberInput.addEventListener("change", update);
-    cookieMassInput.addEventListener("change", update);
-    cookieRadiusInput.addEventListener("change", update);
-    cookieThicknessInput.addEventListener("change", update);
+    cookiesNumberInput.addEventListener("input", update);
+    cookieMassInput.addEventListener("input", update);
+    cookieRadiusInput.addEventListener("input", update);
+    cookieThicknessInput.addEventListener("input", update);
 
     let totalMoleOutput = document.getElementById("total-mole");
     let totalOutput = {
