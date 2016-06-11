@@ -14,14 +14,19 @@ let values = [
             `1 Planck volume`
     },
     {
-        value: 2.82e-45,
+        value: 2.807e-45,
         description:
             `Proton`
     },
     {
-        value: 7.23e-30,
+        value: 6.5e-32,
         description:
             `Hydrogen atom`
+    },
+    {
+        value: 1e-30,
+        description:
+            `1 cubic Ångström`
     },
     {
         value: 5e-21,

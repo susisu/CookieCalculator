@@ -24,12 +24,12 @@ let values = [
             `Proton`
     },
     {
-        value: 1.674e-27,
+        value: 1.673533e-27,
         description:
             `Hydrogen atom`
     },
     {
-        value: 3.0e-26,
+        value: 2.99151e-26,
         description:
             `Water molecule`
     },
